@@ -5,33 +5,27 @@
 
 /* Style the video: 100% width and height to cover the entire window */
 #mainVideo {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  min-width: 100%; 
-  min-height: 100%;
-  z-index: -10;
-  
-  /* blur video things */
-  -o-filter: blur(5px);
-    filter: blur(5px);
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
     object-fit: fill;
-    transform: scale(1);
+    z-index: -10;
 }
 
 @font-face
-            {
-                font-family:
-                    sansation
-                    ;
+{
+    font-family:
+        sansation
+        ;
 
-                src
-                :
-                    url('assests/font.woff')
-                    ;
-            }
+    src
+    :
+        url('assests/font.woff')
+        ;
+}
 
-            body {
-                font-family: sansation;
-            }
-
+body {
+    font-family: sansation;
+}
