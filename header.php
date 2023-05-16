@@ -7,32 +7,14 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         <link href="style.css" rel="stylesheet" type="text/css">
 
-        <!-- MOVE TO HOME PAGE -->
-        <script type="text/javascript">
-            function chnagesize()
-            {
-                var height = ((window.innerHeight) - (document.getElementById('mainNavBar').offsetHeight));
-                document.getElementById('mainDiv').setAttribute("style", "height:" + height);
-            }
-
-            window.addEventListener('scroll', function () {
-                let num = (window.scrollY / window.innerHeight) * 8;
-                if (num <= 8)
-                {
-                    document.getElementById('mainVideo').style.webkitFilter = 'blur(' + num + 'px)';
-                }
-
-            }
-            );
-        </script>
-
         <script src="https://kit.fontawesome.com/d5bcc006a2.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
     </head>
 
-    <body onload="chnagesize()">
+    <body>
 
+        
         <nav class="navbar navbar-expand-lg bg-body-tertiary" id="mainNavBar">
             <div class="container-fluid">
 
@@ -189,23 +171,7 @@
             </div>
         </nav>
 
-        <!-- MOVE TO HOME PAGE -->
-        <video autoplay muted loop id="mainVideo">
-            <source src="assests/mainVideo.webm" type="video/webm">
-        </video>
+        
+        
 
-        <!-- MOVE TO HOME PAGE -->
-        <div>
-            <div id="mainDiv" style="height: 50%">
-                make this a top part (main stuff)
-            </div>
 
-            <center>
-                <div id="contentDiv" style="width: 80%; height: 1800px; background-color: rgba(0,0,0,0.6); box-shadow: 0 0 12px 10px rgba(0, 0, 0, 0.6);">
-
-                </div>
-            </center>
-        </div>
-
-    </body>
-</html>
