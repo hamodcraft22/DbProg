@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<?php include 'header.html'; ?>
 <html>
     <head>
         <title>Test Page</title>
