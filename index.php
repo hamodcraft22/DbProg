@@ -18,7 +18,8 @@ include './header.php';
             document.getElementById('mainVideo').style.webkitFilter = 'blur(' + num + 'px)';
         }
     }
-
+    
+    window.addEventListener('resize', chnageSize);
     window.addEventListener('scroll', blurVideo);
 </script>
 
