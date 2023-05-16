@@ -1,0 +1,31 @@
+/* 
+    Created on : May 8, 2023, 8:54:14 PM
+    Author     : moham
+*/
+
+/* Style the video: 100% width and height to cover the entire window */
+#mainVideo {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: fill;
+    z-index: -10;
+}
+
+@font-face
+{
+    font-family:
+        sansation
+        ;
+
+    src
+    :
+        url('assests/font.woff')
+        ;
+}
+
+body {
+    font-family: sansation;
+}
