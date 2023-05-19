@@ -14,7 +14,7 @@
 
     <body>
 
-        
+
         <nav class="navbar navbar-expand-lg bg-body-tertiary" id="mainNavBar">
             <div class="container-fluid">
 
@@ -31,23 +31,31 @@
 
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#">latest</a>
+                            <a class="nav-link" href="#">International</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#">future</a>
+                            <a class="nav-link" href="#">Local</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#">scientific</a>
+                            <a class="nav-link" href="#">Sports & Arts</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#">reviews</a>
+                            <a class="nav-link" href="#">Weather</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#">awards</a>
+                            <a class="nav-link" href="#">Advertisement</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Cars</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Electric</a></li>
+                                <li><a class="dropdown-item" href="#">Gas Monsters</a></li>
+                            </ul>
                         </li>
                     </ul>
 
@@ -171,7 +179,7 @@
             </div>
         </nav>
 
-        
-        
+
+
 
 

@@ -3,8 +3,21 @@
     Author     : moham
 */
 
+
+@font-face
+{
+    font-family:leFancy;
+    src:url('assests/font.woff');
+}
+
+body
+{
+    font-family: leFancy;
+}
+
 /* Style the video: 100% width and height to cover the entire window */
-#mainVideo {
+#mainVideo
+{
     position: fixed;
     right: 0;
     left: 0;
@@ -16,12 +29,40 @@
     transform: scale(1.08);
 }
 
-@font-face
+#contentDiv
 {
-    font-family:leFancy;
-    src:url('assests/font.woff');
+    width: 70%;
+    height: 1800px;
+    background-color: rgba(0,0,0,0.6);
+    box-shadow: 0 0 12px 10px rgba(0, 0, 0, 0.6);
+    margin-top: 20px;
+    padding: 30px;
 }
 
-body {
-    font-family: leFancy;
+#mainTitle
+{
+    position: absolute;
+    top: 5%;
+    max-width: 50%;
+    right: 25%;
+    left: 25%;
+}
+
+#mainButtons
+{
+    bottom: 5%;
+    max-width: 50%;
+    position: absolute;
+    right: 25%;
+    left: 25%;
+}
+
+#mainDiv
+{
+    position: relative;
+}
+
+#articalButton
+{
+    width: 100%;
 }
