@@ -166,7 +166,21 @@ class User {
             $db = Database::getInstance();
             // password hashing (passwords are hashed before they are sent to the server for security)
             $password = password_hash($this->getPassword(), PASSWORD_BCRYPT);
-            $q = 'update dpProj_user set username="' . $this->getUsername() . '", fullname="'.$this->getFullname().'", password="' . $password . '", email="' . $this->getEmail() . '", phone=' . $this->getPhone() . ', roleID=' . $this->getPhone() . ' where userID = ' . $this->getUserID() . ';';
+            $q = 'update dbProj_user set username="' . $this->getUsername() . '", fullname="'.$this->getFullname().'", email="' . $this->getEmail() . '", phone=' . $this->getPhone() . ', roleID=' . $this->getRoleID() . ' where userID = ' . $this->getUserID() . ';';
+            $data = $db->querySql($q);
+            return true;
+        } catch (Exception $e) {
+            echo 'Exception: ' . $e;
+            return false;
+        }
+    }
+    
+    function updateUserWpass() {
+        try {
+            $db = Database::getInstance();
+            // password hashing (passwords are hashed before they are sent to the server for security)
+            $password = password_hash($this->getPassword(), PASSWORD_BCRYPT);
+            $q = 'update dbProj_user set username="' . $this->getUsername() . '", fullname="'.$this->getFullname().'", password="' . $password . '", email="' . $this->getEmail() . '", phone=' . $this->getPhone() . ', roleID=' . $this->getRoleID() . ' where userID = ' . $this->getUserID() . ';';
             $data = $db->querySql($q);
             return true;
         } catch (Exception $e) {
@@ -188,6 +202,7 @@ class User {
 
                     $_SESSION['userID'] = $this->getUserID();
                     $_SESSION['username'] = $this->getUsername();
+                    $_SESSION['roleType'] = $this->getRole();
                     return true;
                 }
                 else
@@ -206,6 +221,7 @@ class User {
     function logout() {
         $_SESSION['userID'] = '';
         $_SESSION['username'] = '';
+        $_SESSION['roleType'] = '';
         session_destroy();
     }
 

@@ -136,6 +136,23 @@ if (isset($_POST['searchForm'])) {
                                 <li><a class="dropdown-item" href="#">Gas Monsters</a></li>
                             </ul>
                         </li>
+                        
+                        <?php
+                            if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
+                            {
+                                echo 
+                                '
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="users.php">Users</a></li>
+                                            <li><a class="dropdown-item" href="articles.php">Articles</a></li>
+                                        </ul>
+                                    </li>
+                                ';
+                            }
+                        ?>
+                        
                     </ul>
 
 
@@ -254,7 +271,7 @@ if (isset($_POST['searchForm'])) {
                                         '   <li><p class="dropdown-item">Welcome Back '.$_SESSION['username'].'!</p></li>
                                             <!--// add profile picture part here-->
                                             <li class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item" href="#"><i class="fa-regular fa-user"></i> Profile</a></li>
+                                            <li><a class="dropdown-item" href="profile.php"><i class="fa-regular fa-user"></i> Profile</a></li>
                                             <li><a class="dropdown-item" href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a></li>
                                         ';
                                     }
