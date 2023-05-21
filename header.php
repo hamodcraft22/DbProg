@@ -97,7 +97,7 @@ if (isset($_POST['searchForm'])) {
         <nav class="navbar navbar-expand-lg bg-body-tertiary" id="mainNavBar">
             <div class="container-fluid">
 
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="index.php">
                     <img src="assests/logo.png" alt="Bootstrap" height="50">
                 </a>
 
@@ -209,42 +209,6 @@ if (isset($_POST['searchForm'])) {
                         </ul>
 
 
-                        <!-- notification menu - extra if time allows -->
-                        <!--
-                        <ul class="navbar-nav">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa fa-bell-o"></i>
-                                    <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger">
-                                        99
-                                        <span class="visually-hidden">unread messages</span>
-                                    </span>
-                                </a>
-
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
-                                    <li>
-                                        <div class="row px-3" style="min-width: 500px;">
-                                            <div class="col-mx-2">
-                                                <li><a class="dropdown-item" href="#"><i class="fa-solid fa-circle-info"></i> Sign up</a></li>
-                                                <li class="dropdown-divider"></li>
-                                                
-                                                <li><a class="dropdown-item" href="#"><i class="fa-light fa-circle-exclamation"></i> Sign up</a></li>
-                                                <li class="dropdown-divider"></li>
-                                                
-                                                <li><a class="dropdown-item" href="#"><i class="fa-solid fa-rectangle-list"></i> All Notifications</a></li>
-                                                
-                                            </div>
-                                        </div>
-                                    </li>
-
-
-                                </ul>
-                            </li>
-                        </ul>
-                        -->
-
-
-
                         <!-- login menu -->
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
@@ -278,7 +242,7 @@ if (isset($_POST['searchForm'])) {
                                                     </div>
                                                 </li>
                                                 <li class="dropdown-divider"></li>
-                                                <li><a class="dropdown-item" href="#"><i class="fa-regular fa-user"></i> Sign up</a></li>';
+                                                <li><a class="dropdown-item" href="register.php"><i class="fa-regular fa-user"></i> Sign up</a></li>';
                                         }
                                     ?>
 

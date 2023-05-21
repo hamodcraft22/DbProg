@@ -4,6 +4,7 @@ class User {
 
     private $userID;
     private $username;
+    private $fullname;
     private $password;
     private $email;
     private $phone;
@@ -24,6 +25,10 @@ class User {
 
     public function getUsername() {
         return $this->username;
+    }
+    
+    public function getFullname() {
+        return $this->fullname;
     }
 
     public function getPassword() {
@@ -48,6 +53,10 @@ class User {
 
     public function setUserName($username) {
         $this->username = $username;
+    }
+    
+    public function setFullname($fullname) {
+        $this->fullname = $fullname;
     }
 
     public function setPassword($password) {
@@ -75,9 +84,10 @@ class User {
         return $data->roleName;
     }
 
-    function initUser($userID, $username, $password, $email, $phone, $roleID) {
+    function initUser($userID, $username, $fullname, $password, $email, $phone, $roleID) {
         $this->userID = $userID;
         $this->username = $username;
+        $this->fullname = $fullname;
         $this->password = $password;
         $this->email = $email;
         $this->phone = $phone;
@@ -89,7 +99,7 @@ class User {
             $db = Database::getInstance();
             $q = 'select * from dbProj_user where userID = ' . $this->getUserID() . ';';
             $data = $db->singleFetch($q);
-            $this->initUser($data->userID, $data->username, $data->password, $data->email, $data->phone, $data->roleID);
+            $this->initUser($data->userID, $data->username, $data->fullname, $data->password, $data->email, $data->phone, $data->roleID);
         } catch (Exception $e) {
             echo 'Exception: ' . $e;
         }
@@ -100,7 +110,7 @@ class User {
             $db = Database::getInstance();
             $q = 'select * from dbProj_user where username = "' . $this->getUserName() . '";';
             $data = $db->singleFetch($q);
-            $this->initUser($data->userID, $data->username, $data->password, $data->email, $data->phone, $data->roleID);
+            $this->initUser($data->userID, $data->username, $data->fullname, $data->password, $data->email, $data->phone, $data->roleID);
         } catch (Exception $e) {
             echo 'Exception: ' . $e;
         }
@@ -111,7 +121,7 @@ class User {
         try {
             $db = Database::getInstance();
             $q = 'select * from dbProj_user where username = "' . $this->getUsername() . '";';
-            $data = $db->querySql($q);
+            $data = $db->singleFetch($q);
             if ($data == null) {
                 return true;
             } else {
@@ -129,7 +139,7 @@ class User {
             $db = Database::getInstance();
             // password hashing (passwords are hashed before they are sent to the server for security)
             $password = password_hash($this->getPassword(), PASSWORD_BCRYPT);
-            $q = 'insert into dbProj_user (username, password, email, phone, roleID) values ("' . $this->getUsername() . '","' . $password . '","' . $this->getEmail() . '","' . $this->getPhone() . ',' . $this->getRoleID() . ')';
+            $q = 'insert into dbProj_user (username, fullname, password, email, phone, roleID) values ("' . $this->getUsername() . '","'.$this->getFullname().'","' . $password . '","' . $this->getEmail() . '",' . $this->getPhone() . ',' . $this->getRoleID() . ')';
             $data = $db->querySql($q);
             return true;
         } catch (Exception $e) {
@@ -156,7 +166,7 @@ class User {
             $db = Database::getInstance();
             // password hashing (passwords are hashed before they are sent to the server for security)
             $password = password_hash($this->getPassword(), PASSWORD_BCRYPT);
-            $q = 'update dpProj_user set username="' . $this->getUsername() . '", password="' . $password . '", email="' . $this->getEmail() . '", phone=' . $this->getPhone() . ', roleID=' . $this->getPhone() . ' where userID = ' . $this->getUserID() . ';';
+            $q = 'update dpProj_user set username="' . $this->getUsername() . '", fullname="'.$this->getFullname().'", password="' . $password . '", email="' . $this->getEmail() . '", phone=' . $this->getPhone() . ', roleID=' . $this->getPhone() . ' where userID = ' . $this->getUserID() . ';';
             $data = $db->querySql($q);
             return true;
         } catch (Exception $e) {
