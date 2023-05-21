@@ -1,3 +1,29 @@
+<?php
+
+include 'importClass.php';
+
+if (isset($_POST['loginForm'])) {
+    $username = $_POST['usernameInput'];
+    $password = $_POST['passwordInput'];
+    
+    $user = new User();
+    $user->setUserName($username);
+    $user->setPassword($password);
+    
+    if (!$user->login())
+    {
+        echo '<div class="alert alert-danger alert-dismissible fade show " role="alert">
+                Wrong Username or Password, Please try again.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
+    }
+}
+
+if (isset($_POST['searchForm'])) {
+    echo 'serach form was submitted';
+}
+?>
+
 <html>
     <head>
         <title>TITLE - FIX</title>
@@ -10,6 +36,59 @@
         <script src="https://kit.fontawesome.com/d5bcc006a2.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+
+
+        <!-- scripts and functions - fancy ocd stuff -->
+        <script type="text/javascript">
+            
+            function showHideSearch()
+            {
+                if (document.getElementById("ttlDesc").checked || document.getElementById("authName").checked)
+                {
+                    document.getElementById("textSearchDiv").style.display = 'block';
+                    document.getElementById("searchTextInput").setAttribute("required", "");
+
+                    document.getElementById("dateSearchDiv").style.display = 'none';
+                    document.getElementById("dateSearchInput").removeAttribute("required");
+
+                    document.getElementById("dateRangeDiv").style.display = 'none';
+                    document.getElementById("beginDateInput").removeAttribute("required");
+                    document.getElementById("endDateInput").removeAttribute("required");
+
+                    document.getElementById("dateRange").style.display = 'none';
+                    document.getElementById("dateRangeLbl").style.display = 'none';
+
+
+                } else if (document.getElementById("datePosted").checked)
+                {
+                    document.getElementById("textSearchDiv").style.display = 'none';
+                    document.getElementById("searchTextInput").removeAttribute("required");
+
+                    document.getElementById("dateSearchDiv").style.display = 'block';
+                    document.getElementById("dateSearchInput").setAttribute("required", "");
+
+                    document.getElementById("dateRangeDiv").style.display = 'none';
+                    document.getElementById("beginDateInput").removeAttribute("required");
+                    document.getElementById("endDateInput").removeAttribute("required");
+
+                    document.getElementById("dateRange").style.display = 'inline-block';
+                    document.getElementById("dateRangeLbl").style.display = 'inline-block';
+
+                    if (document.getElementById("dateRange").checked)
+                    {
+                        document.getElementById("textSearchDiv").style.display = 'none';
+                        document.getElementById("dateSearchDiv").style.display = 'none';
+                        document.getElementById("dateRangeDiv").style.display = 'block';
+
+                        document.getElementById("searchTextInput").removeAttribute("required");
+                        document.getElementById("dateSearchInput").removeAttribute("required");
+
+                        document.getElementById("beginDateInput").setAttribute("required", "");
+                        document.getElementById("endDateInput").setAttribute("required", "");
+                    }
+                }
+            }
+        </script>
     </head>
 
     <body>
@@ -67,7 +146,7 @@
                         <!-- Search menu -->
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                 </a>
 
@@ -75,22 +154,49 @@
                                     <li>
                                         <div class="row px-3" style="min-width: 500px;">
                                             <div class="col-mx-2">
-                                                <form class="form" role="form" method="post" action="login" accept-charset="UTF-8" id="login-nav">
-                                                    <div class="form-group mt-1 ">
-                                                        <label class="sr-only" for="exampleInputEmail2">Username</label>
-                                                        <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Email address" required="">
+                                                <form class="form" role="form" method="post" accept-charset="UTF-8" id="search-nav">
+
+                                                    <!-- text search -->
+                                                    <div class="form-group mt-1" id="textSearchDiv">
+                                                        <label for="searchText">Search Phrases</label><br>
+                                                        <input type="text" class="form-control" id="searchTextInput" placeholder="Text" >
                                                     </div>
-                                                    <div class="form-group mt-1 ">
-                                                          <input type="radio" id="html" name="fav_language" value="HTML">
-                                                          <label for="html">HTML</label><br>
-                                                          <input type="radio" id="css" name="fav_language" value="CSS">
-                                                          <label for="css">CSS</label><br>
-                                                          <input type="radio" id="javascript" name="fav_language" value="JavaScript">
-                                                          <label for="javascript">JavaScript</label>
+
+                                                    <!-- spescific date search -->
+                                                    <div class="form-group mt-1" id="dateSearchDiv">
+                                                        <label for="dateSearch">Date</label><br>
+                                                        <input type="date" class="form-control" id="dateSearchInput">
                                                     </div>
+
+                                                    <!-- date range search -->
+                                                    <div class="form-group mt-1" id="dateRangeDiv">
+                                                        <label for="beginDate">Begin Date</label><br>
+                                                        <input type="date" class="form-control" id="beginDateInput" placeholder="Text" >
+                                                        <label for="endDate">End Date</label><br>
+                                                        <input type="date" class="form-control" id="endDateInput" placeholder="Text" >
+                                                    </div>
+
+                                                    <div class="form-group mt-1 ">
+                                                        <p>Search By</p>
+
+                                                        <input type="radio" id="ttlDesc" name="serachBy" value="Title / Description" checked onclick="showHideSearch()">
+                                                        <label for="css">Title / Description</label><br>
+
+                                                        <input type="radio" id="authName" name="serachBy" value="Author Name" onclick="showHideSearch()">
+                                                        <label for="html">Author Name</label><br>
+
+                                                        <input type="radio" id="datePosted" name="serachBy" value="Date of Post" onclick="showHideSearch()">
+                                                        <label for="javascript">Date of Post</label>
+
+                                                        <input type="checkbox" id="dateRange" name="serachBy" value="Date Range" onclick="showHideSearch()">
+                                                        <label for="dateRange" id="dateRangeLbl">Date Range</label>
+                                                    </div>
+
                                                     <div class="form-group mt-1">
-                                                        <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                                                        <input type="hidden" name="searchForm" value="true">
+                                                        <button type="submit" class="btn btn-primary btn-block">Search</button>
                                                     </div>
+
 
                                                 </form>
                                             </div>
@@ -103,7 +209,8 @@
                         </ul>
 
 
-                        <!-- notification menu -->
+                        <!-- notification menu - extra if time allows -->
+                        <!--
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -118,7 +225,14 @@
                                     <li>
                                         <div class="row px-3" style="min-width: 500px;">
                                             <div class="col-mx-2">
-                                                notifications
+                                                <li><a class="dropdown-item" href="#"><i class="fa-solid fa-circle-info"></i> Sign up</a></li>
+                                                <li class="dropdown-divider"></li>
+                                                
+                                                <li><a class="dropdown-item" href="#"><i class="fa-light fa-circle-exclamation"></i> Sign up</a></li>
+                                                <li class="dropdown-divider"></li>
+                                                
+                                                <li><a class="dropdown-item" href="#"><i class="fa-solid fa-rectangle-list"></i> All Notifications</a></li>
+                                                
                                             </div>
                                         </div>
                                     </li>
@@ -127,47 +241,61 @@
                                 </ul>
                             </li>
                         </ul>
+                        -->
 
 
 
                         <!-- login menu -->
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
                                     Account
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink" style="min-width: 250px;">
 
 
-                                    <li>
-                                        <div class="row px-3">
-                                            <div class="col-md-12">
-                                                <form class="form" role="form" method="post" action="login" accept-charset="UTF-8" id="login-nav">
-                                                    <div class="form-group mt-1">
-                                                        <label class="sr-only" for="exampleInputEmail2">Username</label>
-                                                        <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Email address" required="">
+                                    
+                                    
+                                    <?php
+                                        if (!isset($_SESSION['userID']) || $_SESSION['userID'] == null)
+                                        {
+                                            echo '<li>
+                                                    <div class="row px-3">
+                                                        <div class="col-md-12">
+                                                            <form class="form" role="form" method="post" accept-charset="UTF-8" id="login-nav">
+                                                                <div class="form-group mt-1">
+                                                                    <input type="text" class="form-control" id="usernameInput" name="usernameInput" placeholder="Username" required="">
+                                                                </div>
+                                                                <div class="form-group mt-1">
+                                                                    <input type="password" class="form-control" id="passwordInput" name="passwordInput" placeholder="Password" required="">
+                                                                </div>
+                                                                <div class="form-group mt-1">
+                                                                    <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                                                                </div>
+                                                                <input type="hidden" name="loginForm" value="true">
+                                                            </form>
+                                                        </div>
                                                     </div>
-                                                    <div class="form-group mt-1">
-                                                        <label class="sr-only" for="exampleInputPassword2">Password</label>
-                                                        <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password" required="">
-                                                        <div class="help-block text-right mt-1"><a href="">Forget password ?</a></div>
-                                                    </div>
-                                                    <div class="form-group mt-1">
-                                                        <button type="submit" class="btn btn-primary btn-block">Sign in</button>
-                                                    </div>
+                                                </li>
+                                                <li class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" href="#"><i class="fa-regular fa-user"></i> Sign up</a></li>';
+                                        }
+                                    ?>
 
-                                                </form>
-                                            </div>
-
-                                        </div>
-                                    </li>
-
-                                    <li class="dropdown-divider"></li>
-
-                                    <li><a class="dropdown-item" href="#"><i class="fa-regular fa-user"></i> Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#"><i class="fa-solid fa-right-from-bracket"></i> Something else here</a></li>
+                                    
+                                    <?php  
+                                    if (isset($_SESSION['userID']) && $_SESSION['userID'] != null)
+                                    {
+                                        echo 
+                                        '   <li><p class="dropdown-item">Welcome Back '.$_SESSION['username'].'!</p></li>
+                                            <!--// add profile picture part here-->
+                                            <li class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="#"><i class="fa-regular fa-user"></i> Profile</a></li>
+                                            <li><a class="dropdown-item" href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a></li>
+                                        ';
+                                    }
+                                    ?>
+                                    
                                 </ul>
                             </li>
                         </ul>
@@ -179,6 +307,9 @@
             </div>
         </nav>
 
+        <script>
+            showHideSearch();
+        </script>
 
 
 
