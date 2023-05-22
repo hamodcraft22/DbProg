@@ -64,6 +64,7 @@ if (isset($_POST['registerForm'])) {
     }
     else
     {
+        // missing the bootsstrap alert (copy from header)
         echo 'errors :';
         echo $errors;
     }
