@@ -1,8 +1,7 @@
 <?php
 include './header.php';
 
-if (isset($_SESSION['roleType']) && ($_SESSION['roleType'] == 'admin' || $_SESSION['roleType'] == 'author'))
-{
+if (isset($_SESSION['roleType']) && ($_SESSION['roleType'] == 'admin' || $_SESSION['roleType'] == 'author')) {
     //article stuff - gett all articles sorted by views
 }
 ?>
@@ -19,12 +18,22 @@ if (isset($_SESSION['roleType']) && ($_SESSION['roleType'] == 'admin' || $_SESSI
 </script>
 
 
-<section <?php if(!(isset($_SESSION['roleType']) && ($_SESSION['roleType'] == 'admin' || $_SESSION['roleType'] == 'author'))){echo 'hidden';} else {echo 'id="articlesPageBody"';} ?>>
+<section <?php if (!(isset($_SESSION['roleType']) && ($_SESSION['roleType'] == 'admin' || $_SESSION['roleType'] == 'author'))) {
+    echo 'hidden';
+} else {
+    echo 'id="articlesPageBody"';
+} ?>>
     <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-xl-9">
 
                 <h1 class="text-black mb-4">All Articles (sorted by views)</h1>
+
+                
+
+                <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                    <a type="button" class="btn btn-primary btn-sm" href="addEditArticle.php">Compose a New Article</a>
+                </div>
 
                 <div class="card shadow" style="border-radius: 15px;">
                     <div class="card-body">
@@ -37,17 +46,23 @@ if (isset($_SESSION['roleType']) && ($_SESSION['roleType'] == 'admin' || $_SESSI
     </div>
 </section>
 
-<section <?php if(isset($_SESSION['roleType']) && ($_SESSION['roleType'] == 'admin' || $_SESSION['roleType'] == 'author')){echo 'hidden';} else {echo 'id="articlesPageBody"';}  ?>>
+<section <?php if (isset($_SESSION['roleType']) && ($_SESSION['roleType'] == 'admin' || $_SESSION['roleType'] == 'author')) {
+    echo 'hidden';
+} else {
+    echo 'id="articlesPageBody"';
+} ?>>
     <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-xl-10">
 
-                <h1 class="text-black mb-4">All Users</h1>
+                <h1 class="text-black mb-4">All Articles (sorted by views)</h1>
+
+
 
                 <div class="card shadow" style="border-radius: 15px;">
-                    
-                    <p class="text-center">You cannot use this page unless you are an Admin</p>
 
+                    <p class="text-center">You cannot use this page unless you are an Author</p>
+                    <!-- add login check here and login button -->
                 </div>
 
             </div>

@@ -11,7 +11,7 @@
  * @author ADMIN
  */
 include 'ArticleSection.php';
-class Media extends ArticleSection{
+class Media{
     //put your code here
     private $mediaID;
     private $mediaName;

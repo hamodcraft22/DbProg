@@ -40,7 +40,7 @@ class Database {
                 return FALSE; 
                 
             }
-            else { return TRUE;}
+            else { return $this->dblink->insert_id;}
         }
         else 
         {
