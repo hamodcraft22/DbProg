@@ -6,14 +6,8 @@ $user = new User();
 $user->setUserID($_SESSION['userID']);
 $user->initWithID();
 
-if (isset($_SESSION['roleType']) && $_SESSION['roleType'] != 'admin')
-{
-    if (isset($_GET['id']))
-    {
-        echo 'you cannot accsess others info';
-    }
-}
-else if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
+
+if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
 {
     if (isset($_GET['id']))
     {
@@ -64,14 +58,14 @@ if (isset($_POST['profileForm']))
 <!-- implemented from  mdbootstrap.com -->
 <!-- https://mdbootstrap.com/docs/standard/extended/registration/ -->
 
-<section id="profilePageBody">
+<section <?php if ((!(isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')) && (isset($_GET['id']))){echo 'hidden';} else {echo 'id="profilePageBody"';} ?>>
     <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-xl-9">
 
                 <h1 class="text-black mb-4">Profile</h1>
 
-                <div class="card" style="border-radius: 15px;">
+                <div class="card shadow" style="border-radius: 15px;">
                     <div class="card-body">
                         <form method="post">
                         <div class="row align-items-center pt-4 pb-3">
@@ -115,6 +109,24 @@ if (isset($_POST['profileForm']))
                         </div>
                         </form>
                     </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<section <?php if(!(isset($_GET['id']) && isset($_SESSION['roleType']) && $_SESSION['roleType'] != 'admin')){echo 'hidden';} else {echo 'id="profilePageBody"';}  ?>>
+    <div class="container h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-9">
+
+                <h1 class="text-black mb-4">Profile</h1>
+
+                <div class="card shadow" style="border-radius: 15px;">
+                    
+                    <p class="text-center">You cannot edit other's information</p>
+
                 </div>
 
             </div>

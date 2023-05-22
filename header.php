@@ -153,6 +153,21 @@ if (isset($_POST['searchForm'])) {
                             }
                         ?>
                         
+                        <?php
+                            if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'author')
+                            {
+                                echo 
+                                '
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Author</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="articles.php">My Articles</a></li>
+                                        </ul>
+                                    </li>
+                                ';
+                            }
+                        ?>
+                        
                     </ul>
 
 

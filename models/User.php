@@ -224,5 +224,32 @@ class User {
         $_SESSION['roleType'] = '';
         session_destroy();
     }
+    
+    function getAllUsers($option)
+    {
+        try {
+            $db = Database::getInstance();
+            
+            $q = 'select * from dbProj_user ';
+            
+            if ($option == 'admin')
+            {
+                $q .= ' where roleID = 1';
+            }
+            else if ($option == 'reader')
+            {
+                $q .= ' where roleID = 2';
+            }
+            else if ($option == 'author')
+            {
+                $q .= ' where roleID = 3';
+            }
+            
+            $data = $db->multiFetch($q);
+            return $data;
+        } catch (Exception $e) {
+            echo 'Exception: ' . $e;
+        }
+    }
 
 }
