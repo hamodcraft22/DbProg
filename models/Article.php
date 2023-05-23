@@ -138,9 +138,9 @@ class Article{
     function getCategory()
     {
         $db = Database::getInstance();
-        $q = 'select categoryName from dbProj_category where categoryID = ' . $this->getCategoryID() . ';';
+        $q = 'select catgoryName from dbProj_category where categoryID = ' . $this->getCategoryID() . ';';
         $data = $db->singleFetch($q);
-        return $data->categoryName;
+        return $data->catgoryName;
     }
     
     function getUserFullName()
@@ -218,18 +218,18 @@ class Article{
         }
     }
     
-    function getAllArtis($userIDp)
+    function getAllArtis()
     {
         try {
             $db = Database::getInstance();
-            $q = 'select * from dbProj_article';
+            $q = 'select * from dbProj_article ';
             
-            if ($userIDp != null)
+            if ($this->getUserID() != null)
             {
-                $q .= 'where userID =' . $userIDp;
+                $q .= 'where userID =' . $this->getUserID();
             }
             
-            $q .= 'order by views DESC;';
+            $q .= ' order by views DESC;';
             
             $data = $db->multiFetch($q);
             return $data;

@@ -20,7 +20,7 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
             {
                 if ($retrivedArtcl->getStatus() != 'saved')
                 {
-
+                    
                     $viewError .= 'the article has been publised, you cannot edit it. <br/>';
                     $canView = false;
                 }
@@ -59,7 +59,7 @@ else
     function chnageSize()
     {
         var height = ((window.innerHeight) - (document.getElementById('mainNavBar').offsetHeight));
-        document.getElementById('articlesMediaPageBody').setAttribute("style", "height:" + height);
+        document.getElementById('articlesDocsPageBody').setAttribute("style", "height:" + height);
     }
 
 
@@ -70,7 +70,7 @@ else
 <section <?php
 if ($canView)
 {
-    echo 'id="articlesMediaPageBody"';
+    echo 'id="articlesDocsPageBody"';
 }
 else
 {
@@ -81,22 +81,13 @@ else
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-xl-9">
 
-                <h1 class="text-black mb-4">Article "<?php if ($canView)
-    {
-        echo $retrivedArtcl->getHeader();
-    } ?>" Media</h1>
+                <h1 class="text-black mb-4">Article "<?php if($canView){echo $retrivedArtcl->getHeader();} ?>" Documents</h1>
 
 
 
                 <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                    <a type="button" class="btn btn-primary btn-sm" href="addEditMedia.php?artiID=<?php if ($canView)
-    {
-        echo $articleID;
-    } ?>">Add new Media</a>
-                    <a type="button" class="btn btn-secondary btn-sm" href="addEditArticle.php?artiID=<?php if ($canView)
-    {
-        echo $articleID;
-    } ?>">Back to Article</a>
+                    <a type="button" class="btn btn-primary btn-sm" href="addEditDoc.php?artiID=<?php if($canView){echo $articleID;} ?>">Add new Documents</a>
+                    <a type="button" class="btn btn-secondary btn-sm" href="addEditArticle.php?artiID=<?php if($canView){echo $articleID;} ?>">Back to Article</a>
                 </div>
 
                 <div class="card shadow" style="border-radius: 15px;">
@@ -105,8 +96,7 @@ else
                             <thead class="thead-dark">
                                 <tr>
                                     <th class="text-center" scope="col">ID</th>
-                                    <th scope="col">Media Name</th>
-                                    <th class="text-center" scope="col">Preview</th>
+                                    <th scope="col">Document Name</th>
                                     <th class="text-center" scope="col">Type</th>
                                     <th class="text-center" scope="col">Actions</th>
                                 </tr>
@@ -149,6 +139,7 @@ else
                         </table>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -157,7 +148,7 @@ else
 <section <?php
 if (!$canView)
 {
-    echo 'id="articlesMediaPageBody"';
+    echo 'id="articlesDocsPageBody"';
 }
 else
 {
