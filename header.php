@@ -19,6 +19,15 @@ if (isset($_POST['loginForm'])) {
     }
 }
 
+if ($user-> logout()){
+    
+    echo '<div class="alert alert-danger alert-dismissible fade show " role="alert">
+                You have been loged out.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
+    
+}
+
 if (isset($_POST['searchForm'])) {
     echo 'serach form was submitted';
 }
