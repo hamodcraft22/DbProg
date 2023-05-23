@@ -2,14 +2,17 @@
 
 include 'importClass.php';
 
+// getting username and password from the log in form 
 if (isset($_POST['loginForm'])) {
     $username = $_POST['usernameInput'];
     $password = $_POST['passwordInput'];
     
+// setting the username and password to a user obj  
     $user = new User();
     $user->setUserName($username);
     $user->setPassword($password);
     
+// if users login isnt successful display error message 
     if (!$user->login())
     {
         echo '<div class="alert alert-danger alert-dismissible fade show " role="alert">
@@ -19,10 +22,11 @@ if (isset($_POST['loginForm'])) {
     }
 }
 
-if ($user-> logout()){
+// An error message incase log out was unsucceful. 
+if (!$user-> logout()){
     
     echo '<div class="alert alert-danger alert-dismissible fade show " role="alert">
-                You have been loged out.
+                You have not been loged out, Try again.
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>';
     
@@ -33,15 +37,19 @@ if (isset($_POST['searchForm'])) {
 }
 ?>
 
+<!-- start of html code -->
 <html>
     <head>
-        <title>TITLE - FIX</title>
+        <!--title of the website-->
+        <title>TITLE - FIX</title> 
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+        <!--link to stylesheet and boostrap link-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         <link href="style.css" rel="stylesheet" type="text/css">
-
+        
+        <!--link to font file-->
         <script src="https://kit.fontawesome.com/d5bcc006a2.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
@@ -102,7 +110,7 @@ if (isset($_POST['searchForm'])) {
 
     <body>
 
-
+        <!--navigation bar -->
         <nav class="navbar navbar-expand-lg bg-body-tertiary" id="mainNavBar">
             <div class="container-fluid">
 
@@ -147,6 +155,7 @@ if (isset($_POST['searchForm'])) {
                         </li>
                         
                         <?php
+                        // function to check if the role of the user is admin then he has the admin menue                         
                             if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
                             {
                                 echo 
@@ -162,7 +171,9 @@ if (isset($_POST['searchForm'])) {
                             }
                         ?>
                         
+                        
                         <?php
+                            // function to check if the role of the user is an author then he has the author menue
                             if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'author')
                             {
                                 echo 
