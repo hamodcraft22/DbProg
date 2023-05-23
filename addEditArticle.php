@@ -101,6 +101,41 @@ else if (isset($_POST['media']))
 
 
     window.addEventListener('resize', chnageSize);
+    
+    function DetailsValidation(){
+        let header = document.getElementById("headerInput");
+        let category = document.getElementById("categoryInput");
+        if(header.value == ""){
+            header.style.borderColor = "red";
+            header.placeholder = "Required";
+        }else{
+            header.style.borderColor = "green";
+            header.placeholder = "Main Header";
+        }
+        if(category.value == ""){
+            category.style.borderColor = "red";
+        }else{
+            category.style.borderColor = "green";
+        }
+    }
+    function BodyValidation(){
+        let title = document.getElementById("titleInput");
+        let body = document.getElementById("bodyInput");
+        if(title.value == ""){
+            title.style.borderColor = "red";
+            title.placeholder = "Required";
+        }else{
+            title.style.borderColor = "green";
+            title.placeholder = "SUB Header";
+        }
+        if(body.value == ""){
+            body.style.borderColor = "red";
+            body.placeholder = "Required";
+        }else{
+            body.style.borderColor = "green";
+        }
+        
+    }
 </script>
 
 
@@ -124,13 +159,13 @@ else if (isset($_POST['media']))
                                     <!-- Text input -->
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="headerInput">Header</label>
-                                        <input type="text" id="headerInput" name="headerInput" class="form-control" placeholder="Main Header" required <?php if($isEdit){echo 'value = "'.$article->getHeader().'"';}else if (isset ($_POST['headerInput'])){echo 'value = "'.$_POST['headerInput'].'"';} ?>/>
+                                        <input type="text" id="headerInput" name="headerInput" class="form-control" placeholder="Main Header" required <?php if($isEdit){echo 'value = "'.$article->getHeader().'"';}else if (isset ($_POST['headerInput'])){echo 'value = "'.$_POST['headerInput'].'"';} ?> onblur="DetailsValidation()"/>
                                     </div>
 
 
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="form7Example3">Category</label>
-                                        <select name="categoryInput" id="categoryInput" class="form-control" required >
+                                        <select name="categoryInput" id="categoryInput" class="form-control" required onblur="DetailsValidation()">
                                             <option disabled selected=""></option>
                                             <?php
                                                 $arcObj = new Article();
@@ -180,13 +215,13 @@ else if (isset($_POST['media']))
                                     <!-- Text input -->
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="titleInput">Title</label>
-                                        <input type="text" id="titleInput" name="titleInput" class="form-control" placeholder="Sub Header" required <?php if($isEdit){echo 'value = "'.$article->getTitle().'"';} ?>/> 
+                                        <input type="text" id="titleInput" name="titleInput" class="form-control" placeholder="Sub Header" required <?php if($isEdit){echo 'value = "'.$article->getTitle().'"';} ?> onblur="BodyValidation()"/> 
                                     </div>
 
                                     <!-- Message input -->
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="bodyInput">Body</label>
-                                        <textarea class="form-control" id="bodyInput" name="bodyInput" rows="5" required> <?php if($isEdit){echo $article->getBody();} ?> </textarea>
+                                        <textarea class="form-control" id="bodyInput" name="bodyInput" rows="5" required onblur="BodyValidation()"> <?php if($isEdit){echo $article->getBody();} ?> </textarea>
                                     </div>
 
                                     <button type="submit" name="media" id="media" class="btn btn-info btn-block" formnovalidate>
