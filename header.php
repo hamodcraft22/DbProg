@@ -88,6 +88,82 @@ if (isset($_POST['searchForm'])) {
                     }
                 }
             }
+            function SearchValidation(){
+                if(document.getElementById("ttlDesc").checked || document.getElementById("authName").checked){
+                    let text = document.getElementById("searchTextInput");
+                    if(document.getElementById("ttlDesc").checked){
+                        if(text.value == ""){
+                            text.style.borderColor = "red";
+                            text.placeholder = "Required";
+                        }else{
+                            text.style.borderColor = "green";
+                            text.placeholder = "TEXT";
+                        }
+                    }else{
+                        let text = document.getElementById("searchTextInput");
+                        if(text.value == ""){
+                            text.style.borderColor = "red";
+                            text.placeholder = "Required";
+                        }else{
+                            text.style.borderColor = "green";
+                            text.placeholder = "TEXT";
+                        }
+                    }
+                }else if (document.getElementById("datePosted").checked){
+                    let text = document.getElementById("dateSearchInput");
+                    if(text.value == ""){
+                        text.style.borderColor = "red";
+                        text.placeholder = "Required";
+                     }else{
+                        text.style.borderColor = "green";
+                        text.placeholder = "TEXT";
+                    }
+                    if (document.getElementById("dateRange").checked){
+                        let text = document.getElementById("beginDateInput");
+                        let text2 = document.getElementById("endDateInput");
+                        if(text.value == ""){
+                            text.style.borderColor = "red";
+                            text.placeholder = "Required";
+                        }else{
+                            text.style.borderColor = "green";
+                            text.placeholder = "TEXT";
+                        }
+                        if(text2.value == ""){
+                            text2.style.borderColor = "red";
+                            text2.placeholder = "Required";
+                        }else{
+                            text2.style.borderColor = "green";
+                            text2.placeholder = "TEXT";
+                        }
+                    }
+                }
+            }
+            
+            function LoginValidation(){
+                let userName = document.getElementById("usernameInput");
+                let password = document.getElementById("passwordInput");
+                if(userName.value == "" &&  password.value == ""){
+                    userName.style.borderColor = "red";
+                    userName.placeholder = "Required";
+                    password.style.borderColor = "red";
+                    password.placeholder = "Required";
+                }else if(userName.value == "" && password.value.length > 0){
+                    userName.style.borderColor = "red";
+                    userName.placeholder = "Required";
+                    password.style.borderColor = "green";
+                    password.placeholder = "TEXT";
+                }else if(password.value == "" && userName.value.length > 0){
+                    password.style.borderColor = "red";
+                    password.placeholder = "Required";
+                    userName.style.borderColor = "green";
+                    userName.placeholder = "TEXT";
+                }else{
+                    userName.style.borderColor = "green";
+                    password.style.borderColor = "green";
+                    userName.placeholder = "TEXT";
+                    password.placeholder = "TEXT";
+                }
+            }
         </script>
     </head>
 
@@ -191,28 +267,28 @@ if (isset($_POST['searchForm'])) {
                                                     <!-- text search -->
                                                     <div class="form-group mt-1" id="textSearchDiv">
                                                         <label for="searchText">Search Phrases</label><br>
-                                                        <input type="text" class="form-control" id="searchTextInput" placeholder="Text" >
+                                                        <input type="text" class="form-control" id="searchTextInput" placeholder="Text" onblur="SearchValidation()">
                                                     </div>
 
                                                     <!-- spescific date search -->
                                                     <div class="form-group mt-1" id="dateSearchDiv">
                                                         <label for="dateSearch">Date</label><br>
-                                                        <input type="date" class="form-control" id="dateSearchInput">
+                                                        <input type="date" class="form-control" id="dateSearchInput" onblur="Validation()">
                                                     </div>
 
                                                     <!-- date range search -->
                                                     <div class="form-group mt-1" id="dateRangeDiv">
                                                         <label for="beginDate">Begin Date</label><br>
-                                                        <input type="date" class="form-control" id="beginDateInput" placeholder="Text" >
+                                                        <input type="date" class="form-control" id="beginDateInput" placeholder="Text" onblur="SearchValidation()">
                                                         <label for="endDate">End Date</label><br>
-                                                        <input type="date" class="form-control" id="endDateInput" placeholder="Text" >
+                                                        <input type="date" class="form-control" id="endDateInput" placeholder="Text" onblur="SearchValidation()">
                                                     </div>
 
                                                     <div class="form-group mt-1 ">
                                                         <p>Search By</p>
 
                                                         <input type="radio" id="ttlDesc" name="serachBy" value="Title / Description" checked onclick="showHideSearch()">
-                                                        <label for="css">Title / Description</label><br>
+                                                        <label for="css">Title / Heading</label><br>
 
                                                         <input type="radio" id="authName" name="serachBy" value="Author Name" onclick="showHideSearch()">
                                                         <label for="html">Author Name</label><br>
@@ -260,10 +336,10 @@ if (isset($_POST['searchForm'])) {
                                                         <div class="col-md-12">
                                                             <form class="form" role="form" method="post" accept-charset="UTF-8" id="login-nav">
                                                                 <div class="form-group mt-1">
-                                                                    <input type="text" class="form-control" id="usernameInput" name="usernameInput" placeholder="Username" required="">
+                                                                    <input type="text" class="form-control" id="usernameInput" name="usernameInput" placeholder="Username" required="" onblur="LoginValidation()">
                                                                 </div>
                                                                 <div class="form-group mt-1">
-                                                                    <input type="password" class="form-control" id="passwordInput" name="passwordInput" placeholder="Password" required="">
+                                                                    <input type="password" class="form-control" id="passwordInput" name="passwordInput" placeholder="Password" required="" onblur="LoginValidation()">
                                                                 </div>
                                                                 <div class="form-group mt-1">
                                                                     <button type="submit" class="btn btn-primary btn-block">Sign in</button>
