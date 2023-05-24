@@ -144,6 +144,41 @@ else
 
 
     window.addEventListener('resize', chnageSize);
+    
+    function DetailsValidation(){
+        let header = document.getElementById("headerInput");
+        let category = document.getElementById("categoryInput");
+        if(header.value == ""){
+            header.style.borderColor = "red";
+            header.placeholder = "Required";
+        }else{
+            header.style.borderColor = "green";
+            header.placeholder = "Main Header";
+        }
+        if(category.value == ""){
+            category.style.borderColor = "red";
+        }else{
+            category.style.borderColor = "green";
+        }
+    }
+    function BodyValidation(){
+        let title = document.getElementById("titleInput");
+        let body = document.getElementById("bodyInput");
+        if(title.value == ""){
+            title.style.borderColor = "red";
+            title.placeholder = "Required";
+        }else{
+            title.style.borderColor = "green";
+            title.placeholder = "SUB Header";
+        }
+        if(body.value == ""){
+            body.style.borderColor = "red";
+            body.placeholder = "Required";
+        }else{
+            body.style.borderColor = "green";
+        }
+        
+    }
 </script>
 
 
@@ -178,7 +213,7 @@ else
                                     <!-- Text input -->
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="headerInput">Header</label>
-                                        <input type="text" id="headerInput" name="headerInput" class="form-control" placeholder="Main Header" required <?php
+                                        <input type="text" id="headerInput" name="headerInput" class="form-control" placeholder="Main Header" required onblur="DetailsValidation()" <?php
                                         if ($canView && $isEdit)
                                         {
                                             echo 'value = "' . $retrivedArtcl->getHeader() . '"';
@@ -193,7 +228,7 @@ else
 
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="form7Example3">Category</label>
-                                        <select name="categoryInput" id="categoryInput" class="form-control" required >
+                                        <select name="categoryInput" id="categoryInput" class="form-control" required onblur="DetailsValidation()">
                                             <option disabled selected=""></option>
                                             <?php
                                             if ($canView)
@@ -254,7 +289,7 @@ else
                                     <!-- Text input -->
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="titleInput">Title</label>
-                                        <input type="text" id="titleInput" name="titleInput" class="form-control" placeholder="Sub Header" required <?php
+                                        <input type="text" id="titleInput" name="titleInput" class="form-control" placeholder="Sub Header" required onblur="BodyValidation()" <?php
                                     if ($isEdit && $canView)
                                     {
                                         echo 'value = "' . $retrivedArtcl->getTitle() . '"';
@@ -265,7 +300,7 @@ else
                                     <!-- Message input -->
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="bodyInput">Body</label>
-                                        <textarea class="form-control" id="bodyInput" name="bodyInput" <?php if (isset($_GET['artiID']))
+                                        <textarea class="form-control" id="bodyInput" name="bodyInput" onblur="BodyValidation()" <?php if (isset($_GET['artiID']))
                                     {
                                         echo 'rows="10"';
                                     }
