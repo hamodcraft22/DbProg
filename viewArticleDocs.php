@@ -20,14 +20,18 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
             {
                 if ($retrivedArtcl->getStatus() != 'saved')
                 {
-                    
                     $viewError .= 'the article has been publised, you cannot edit it. <br/>';
                     $canView = false;
                 }
                 else
                 {
                     // here is where the stuff should happen
+                    $documnets = new artiDocument();
+                    $documnets->setArticleID($articleID);
+                    $data = $documnets->getAllDocument();
+                    
                     $canView = true;
+
                 }
             }
             else
@@ -106,26 +110,24 @@ else
                                 <?php
                                 for ($i = 0; $i < count($data); $i++)
                                 {
-                                    $newUser = new User();
-                                    $newUser->setUserID($data[$i]->userID);
-                                    $newUser->initWithID();
+                                    $newDoc = new artiDocument();
+                                    $newDoc->setDocumentID($data[$i]->documentID);
+                                    $newDoc->initDwithID();
 
                                     echo
                                     '
                                         <tr>
-                                            <th class="text-center" scope="row">' . $newUser->getUserID() . '</th>
-                                            <td>' . $newUser->getFullname() . '</td>
-                                            <td class="text-center">' . $newUser->getUsername() . '</td>
+                                            <th class="text-center" scope="row">' . $newDoc->getDocumentID() . '</th>
+                                            <td>' . $newDoc->getDocumentName() . '</td>
+                                            <td class="text-center">' . $newDoc->getDocumentType() . '</td>
                                             <td class="text-center">';
 
-                                    if ($newUser->getRole() != 'reader')
-                                    {
                                         echo '
-                                                <a type="button" class="btn btn-primary" href="articles.php?userID=' . $newUser->getUserID() . '"><i class="fa-solid fa-clipboard"></i></a>';
-                                    }
+                                                <a type="button" class="btn btn-primary" href="' . $newDoc->getDocumentPath() . '"><i class="fa-solid fa-file"></i></a>';
+                                    
 
                                     echo '
-                                                <a type="button" class="btn btn-success" href="profile.php?id=' . $newUser->getUserID() . '"><i class="fas fa-edit"></i></a>
+                                                <a type="button" class="btn btn-success" href="addEditDoc.php?artiID='.$articleID.'&docID='.$newDoc->getDocumentID().'"><i class="fas fa-edit"></i></a>
                                                 <a type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></a>
                                             </td>
                                         </tr>

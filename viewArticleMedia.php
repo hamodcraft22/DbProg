@@ -20,14 +20,18 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
             {
                 if ($retrivedArtcl->getStatus() != 'saved')
                 {
-
                     $viewError .= 'the article has been publised, you cannot edit it. <br/>';
                     $canView = false;
                 }
                 else
                 {
                     // here is where the stuff should happen
-                    $canView = true;
+                    
+                    $media = new Media();
+                    $media->setArticleID($articleID);
+                    $data = $media->getAllMedia();
+                    
+                    $canView = true;                   
                 }
             }
             else
@@ -116,26 +120,31 @@ else
                                 <?php
                                 for ($i = 0; $i < count($data); $i++)
                                 {
-                                    $newUser = new User();
-                                    $newUser->setUserID($data[$i]->userID);
-                                    $newUser->initWithID();
+                                    $newMedia = new Media();
+                                    $newMedia->setMediaID($data[$i]->mediaID);
+                                    $newMedia->initMwithID();
 
                                     echo
                                     '
                                         <tr>
-                                            <th class="text-center" scope="row">' . $newUser->getUserID() . '</th>
-                                            <td>' . $newUser->getFullname() . '</td>
-                                            <td class="text-center">' . $newUser->getUsername() . '</td>
+                                            <th class="text-center" scope="row">' . $newMedia->getMediaID() . '</th>
+                                            <td>' . $newMedia->getMediaName() . '</td>';
+                                            
+                                            if ($newMedia->getMediaType() != 'ogm' && $newMedia->getMediaType() != 'wmv' && $newMedia->getMediaType() != 'mpg' && $newMedia->getMediaType() != 'webm' && $newMedia->getMediaType() != 'ogv' && $newMedia->getMediaType() != 'mov' && $newMedia->getMediaType() != 'asx' && $newMedia->getMediaType() != 'mpeg' && $newMedia->getMediaType() != 'mp4' && $newMedia->getMediaType() != 'm4v' && $newMedia->getMediaType() != 'avi')
+                                            {
+                                                echo '<td class="text-center"><a href="'.$newMedia->getMediaPath().'"><img style="height:50px" src="' . $newMedia->getMediaPath() . '"></a></td>';
+                                            }
+                                            else
+                                            {
+                                                echo '<td class="text-center"><a href="'.$newMedia->getMediaPath().'"><video autoplay muted loop style="height:50px"><source src="' . $newMedia->getMediaPath() . '"></video></a></td>';
+                                            }
+                                    
+                                    echo
+                                            '<td class="text-center">' . $newMedia->getMediaType() . '</td>
                                             <td class="text-center">';
 
-                                    if ($newUser->getRole() != 'reader')
-                                    {
-                                        echo '
-                                                <a type="button" class="btn btn-primary" href="articles.php?userID=' . $newUser->getUserID() . '"><i class="fa-solid fa-clipboard"></i></a>';
-                                    }
-
                                     echo '
-                                                <a type="button" class="btn btn-success" href="profile.php?id=' . $newUser->getUserID() . '"><i class="fas fa-edit"></i></a>
+                                                <a type="button" class="btn btn-success" href="addEditMedia.php?artiID='.$articleID.'&mediaID='.$newMedia->getMediaID().'"><i class="fas fa-edit"></i></a>
                                                 <a type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></a>
                                             </td>
                                         </tr>
@@ -153,6 +162,7 @@ else
         </div>
     </div>
 </section>
+
 
 <section <?php
 if (!$canView)

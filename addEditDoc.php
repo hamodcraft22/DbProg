@@ -20,24 +20,87 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
         {
             if ($_SESSION['userID'] == $retrivedArtcl->getUserID() || ($_SESSION['roleType'] == 'admin'))
             {
-                //check the status if it is published u cant edit
-                $canView = true;
-                
-                if (isset($_GET['docID'])) 
+                if ($retrivedArtcl->getStatus() != 'saved')
                 {
-                    $isEdit = true;
-                    
-                    // extra validartion comes in from here for editiing media
-                    
-                    //save method is diifrent here 
-                    if (isset($_POST['docSave']))
-                    {
-                        echo 'its a save from an edit';
-                    }
+                    $viewError .= 'the article has been publised, you cannot edit it. <br/>';
+                    $canView = false;
                 }
-                else if (isset($_POST['docSave']))
+                else
                 {
-                    //save is here now
+                    if (isset($_GET['docID']))
+                    {
+                        $retrivedDoc = new artiDocument();
+                        $retrivedDoc->setDocumentID($_GET['docID']);
+                        $retrivedDoc->initDwithID();
+                        $docID = $retrivedDoc->getDocumentID();
+                        
+                        if ($docID != null)
+                        {
+                            if ($retrivedDoc->getDocumentID() == $docID)
+                            {
+                                $canView = true;
+                                $isEdit = true;
+                                
+                                // extra validartion comes in from here for editiing documents 
+                                //save method is diifrent here 
+                                if (isset($_POST['docSave']))
+                                {
+                                    $name = $_POST['nameInput'];
+                                    $retrivedDoc->setDocumentName($name);
+                                    $retrivedDoc->updateDocument();
+                                    
+                                    echo 'update slayed';
+                                }
+                            }
+                            else
+                            {
+                                $viewError .= 'Document is not a part of the Same Article .<br/>';
+                                $canView = false;
+                            }
+                        }
+                        else
+                        {
+                            $viewError .= 'Document was not found .<br/>';
+                            $canView = false;
+                        }
+
+                    }
+                    else if (isset($_POST['docSave']))
+                    {
+                        // here is where the actual save of the document and the image happens
+
+                        $name = $_POST['nameInput'];
+
+                        // add image errors and validation (upload errors missing from mid dont forget
+                        $path = "docs//" . $_FILES['fileInput']['name']; //unix path uses forward slash
+                        move_uploaded_file($_FILES['fileInput']['tmp_name'], $path);
+
+                        $type = end((explode(".", $path)));
+
+                        $newDoc = new artiDocument();
+
+                        $newDoc->setDocumentName($name);
+                        $newDoc->setDocumentPath($path);
+                        $newDoc->setDocumentType($type);
+                        $newDoc->setArticleID($articleID);
+
+                        $docID = $newDoc->saveDocument();
+
+                        if ($docID != false)
+                        {
+                            // go to edit mode - removes image link allowes only name chnage
+
+                            $isEdit = true;
+
+                            echo "<script>window.location.href='addEditDoc.php?artiID=$articleID" . "&docID=$docID';</script>";
+                            exit;
+                        }
+                        else
+                        {
+                            $isEdit = false;
+                            echo 'FEE SAVE ERRORRR TRY AGAIN';
+                        }
+                    }
                 }
             }
             else
@@ -99,14 +162,14 @@ else
 
                             <!-- Text input -->
                             <div class="form-outline mb-4">
-                                <label class="form-label" for="titleInput">Title</label>
-                                <input type="text" id="titleInput" name="titleInput" class="form-control" placeholder="Sub Header" required <?php if ($canView && $isEdit){echo 'value = "' . $retrivedArtcl->getTitle() . '"';} ?>/> 
+                                <label class="form-label" for="nameInput">Title</label>
+                                <input type="text" id="nameInput" name="nameInput" class="form-control" placeholder="Document Name" required <?php if ($canView && $isEdit){echo 'value = "' . $retrivedDoc->getDocumentName() . '"';} ?>/> 
                             </div>
 
-                            <!-- Text input -->
-                            <div class="form-outline mb-4">
+                            <!-- file input -->
+                            <div class="form-outline mb-4" <?php if ($isEdit){echo 'hidden';} ?>>
                                 <label class="form-label" for="fileInput">File</label>
-                                <input type="file" id="fileInput" name="fileInput" class="form-control" required/> 
+                                <input type="file" id="fileInput" name="fileInput" class="form-control" <?php if (!$isEdit){echo 'required';} ?>/> 
                             </div>
 
 

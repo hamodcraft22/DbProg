@@ -105,7 +105,7 @@ class Media
     {
         try {
             $db = Database::getInstance();
-            $q = 'update dbProj_media set mediaName = "'.$this->getMediaName().'", mediaPath = "'.$this->getMediaPath().'", mediaType = "'.$this->getMediaType().'", articleID = '.$this->getArticleID().';';
+            $q = 'update dbProj_media set mediaName = "'.$this->getMediaName().'", mediaPath = "'.$this->getMediaPath().'", mediaType = "'.$this->getMediaType().'" where mediaID = '.$this->getMediaID().';';
             $data = $db->querySql($q);
             return true;
         } catch (Exception $e) {

@@ -1,15 +1,15 @@
 <?php
-
 include 'importClass.php';
 
-if (isset($_POST['loginForm'])) {
+if (isset($_POST['loginForm']))
+{
     $username = $_POST['usernameInput'];
     $password = $_POST['passwordInput'];
-    
+
     $user = new User();
     $user->setUserName($username);
     $user->setPassword($password);
-    
+
     if (!$user->login())
     {
         echo '<div class="alert alert-danger alert-dismissible fade show " role="alert">
@@ -19,7 +19,8 @@ if (isset($_POST['loginForm'])) {
     }
 }
 
-if (isset($_POST['searchForm'])) {
+if (isset($_POST['searchForm']))
+{
     echo 'serach form was submitted';
 }
 ?>
@@ -40,7 +41,7 @@ if (isset($_POST['searchForm'])) {
 
         <!-- scripts and functions - fancy ocd stuff -->
         <script type="text/javascript">
-            
+
             function showHideSearch()
             {
                 if (document.getElementById("ttlDesc").checked || document.getElementById("authName").checked)
@@ -88,76 +89,81 @@ if (isset($_POST['searchForm'])) {
                     }
                 }
             }
-            function SearchValidation(){
-                if(document.getElementById("ttlDesc").checked || document.getElementById("authName").checked){
+
+            function SearchValidation() {
+                if (document.getElementById("ttlDesc").checked || document.getElementById("authName").checked) 
+                {
                     let text = document.getElementById("searchTextInput");
-                    if(document.getElementById("ttlDesc").checked){
-                        if(text.value == ""){
+                    
+                    if (document.getElementById("ttlDesc").checked) 
+                    {
+                        if (text.value == "") 
+                        {
                             text.style.borderColor = "red";
                             text.placeholder = "Required";
-                        }else{
+                        } else {
                             text.style.borderColor = "green";
                             text.placeholder = "TEXT";
                         }
-                    }else{
+                    } else {
                         let text = document.getElementById("searchTextInput");
-                        if(text.value == ""){
+                        if (text.value == "") {
                             text.style.borderColor = "red";
                             text.placeholder = "Required";
-                        }else{
+                        } else {
                             text.style.borderColor = "green";
                             text.placeholder = "TEXT";
                         }
                     }
-                }else if (document.getElementById("datePosted").checked){
+                } else if (document.getElementById("datePosted").checked) {
                     let text = document.getElementById("dateSearchInput");
-                    if(text.value == ""){
+                    if (text.value == "") {
                         text.style.borderColor = "red";
                         text.placeholder = "Required";
-                     }else{
+                    } else {
                         text.style.borderColor = "green";
                         text.placeholder = "TEXT";
                     }
-                    if (document.getElementById("dateRange").checked){
+                    if (document.getElementById("dateRange").checked) {
                         let text = document.getElementById("beginDateInput");
                         let text2 = document.getElementById("endDateInput");
-                        if(text.value == ""){
+                        if (text.value == "") {
                             text.style.borderColor = "red";
                             text.placeholder = "Required";
-                        }else{
+                        } else {
                             text.style.borderColor = "green";
                             text.placeholder = "TEXT";
                         }
-                        if(text2.value == ""){
+                        if (text2.value == "") {
                             text2.style.borderColor = "red";
                             text2.placeholder = "Required";
-                        }else{
+                        } else {
                             text2.style.borderColor = "green";
                             text2.placeholder = "TEXT";
                         }
                     }
                 }
             }
-            
-            function LoginValidation(){
+
+            function LoginValidation() {
                 let userName = document.getElementById("usernameInput");
                 let password = document.getElementById("passwordInput");
-                if(userName.value == "" &&  password.value == ""){
+                if (userName.value == "" && password.value == "") {
                     userName.style.borderColor = "red";
                     userName.placeholder = "Required";
                     password.style.borderColor = "red";
                     password.placeholder = "Required";
-                }else if(userName.value == "" && password.value.length > 0){
+                } else if (userName.value == "" && password.value.length > 0) {
                     userName.style.borderColor = "red";
                     userName.placeholder = "Required";
                     password.style.borderColor = "green";
                     password.placeholder = "TEXT";
-                }else if(password.value == "" && userName.value.length > 0){
+                } else if (password.value == "" && userName.value.length > 0) {
                     password.style.borderColor = "red";
                     password.placeholder = "Required";
                     userName.style.borderColor = "green";
                     userName.placeholder = "TEXT";
-                }else{
+                } else {
                     userName.style.borderColor = "green";
                     password.style.borderColor = "green";
                     userName.placeholder = "TEXT";
@@ -212,12 +218,12 @@ if (isset($_POST['searchForm'])) {
                                 <li><a class="dropdown-item" href="#">Gas Monsters</a></li>
                             </ul>
                         </li>
-                        
+
                         <?php
-                            if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
-                            {
-                                echo 
-                                '
+                        if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
+                        {
+                            echo
+                            '
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
                                         <ul class="dropdown-menu">
@@ -226,25 +232,25 @@ if (isset($_POST['searchForm'])) {
                                         </ul>
                                     </li>
                                 ';
-                            }
+                        }
                         ?>
-                        
+
                         <?php
-                            if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'author')
-                            {
-                                $userID = $_SESSION['userID'];
-                                echo 
-                                '
+                        if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'author')
+                        {
+                            $userID = $_SESSION['userID'];
+                            echo
+                            '
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Author</a>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="articles.php?userID='.$userID.'">My Articles</a></li>
+                                            <li><a class="dropdown-item" href="articles.php?userID=' . $userID . '">My Articles</a></li>
                                         </ul>
                                     </li>
                                 ';
-                            }
+                        }
                         ?>
-                        
+
                     </ul>
 
 
@@ -274,7 +280,7 @@ if (isset($_POST['searchForm'])) {
                                                     <!-- spescific date search -->
                                                     <div class="form-group mt-1" id="dateSearchDiv">
                                                         <label for="dateSearch">Date</label><br>
-                                                        <input type="date" class="form-control" id="dateSearchInput" onblur="Validation()">
+                                                        <input type="date" class="form-control" id="dateSearchInput" onblur="SearchValidation()">
                                                     </div>
 
                                                     <!-- date range search -->
@@ -327,12 +333,12 @@ if (isset($_POST['searchForm'])) {
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink" style="min-width: 250px;">
 
 
-                                    
-                                    
+
+
                                     <?php
-                                        if (!isset($_SESSION['userID']) || $_SESSION['userID'] == null)
-                                        {
-                                            echo '<li>
+                                    if (!isset($_SESSION['userID']) || $_SESSION['userID'] == null)
+                                    {
+                                        echo '<li>
                                                     <div class="row px-3">
                                                         <div class="col-md-12">
                                                             <form class="form" role="form" method="post" accept-charset="UTF-8" id="login-nav">
@@ -352,15 +358,15 @@ if (isset($_POST['searchForm'])) {
                                                 </li>
                                                 <li class="dropdown-divider"></li>
                                                 <li><a class="dropdown-item" href="register.php"><i class="fa-regular fa-user"></i> Sign up</a></li>';
-                                        }
+                                    }
                                     ?>
 
-                                    
-                                    <?php  
+
+                                    <?php
                                     if (isset($_SESSION['userID']) && $_SESSION['userID'] != null)
                                     {
-                                        echo 
-                                        '   <li><p class="dropdown-item">Welcome Back '.$_SESSION['username'].'!</p></li>
+                                        echo
+                                        '   <li><p class="dropdown-item">Welcome Back ' . $_SESSION['username'] . '!</p></li>
                                             <!--// add profile picture part here-->
                                             <li class="dropdown-divider"></li>
                                             <li><a class="dropdown-item" href="profile.php"><i class="fa-regular fa-user"></i> Profile</a></li>
@@ -368,7 +374,7 @@ if (isset($_POST['searchForm'])) {
                                         ';
                                     }
                                     ?>
-                                    
+
                                 </ul>
                             </li>
                         </ul>

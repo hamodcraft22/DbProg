@@ -20,49 +20,87 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
         {
             if ($_SESSION['userID'] == $retrivedArtcl->getUserID() || ($_SESSION['roleType'] == 'admin'))
             {
-                //check the status if it is published u cant edit
-                $canView = true;
-
-                if (isset($_GET['mediaID'])) 
+                if ($retrivedArtcl->getStatus() != 'saved')
                 {
-                    $isEdit = true;
-                    
-                    // extra validartion comes in from here for editiing media
-                    
-                    //save method is diifrent here 
-                    if (isset($_POST['mediaSave']))
-                    {
-                        echo 'its a save from an edit';
-                    }
+                    $viewError .= 'the article has been publised, you cannot edit it. <br/>';
+                    $canView = false;
                 }
-                else if (isset($_POST['mediaSave']))
+                else
                 {
-                    // here is where the actual save of the media and the image happens
-                    
-                    $name = $_POST['nameInput'];
-                    
-                    // add image errors and validation (upload errors missing from mid dont forget
-                    $path = "assests/thumbnails//" . $_FILES['thumbnailInput']['name']; //unix path uses forward slash
-                    move_uploaded_file($_FILES['thumbnailInput']['tmp_name'], $path);
-                    
-                    $type = end((explode(".", $name)));
-                    
-                    
-                    $newMedia = new Media();
-                    
-                    $newMedia->setMediaName($name);
-                    $newMedia->setMediaPath($path);
-                    $newMedia->setMediaType($type);
-                    $newMedia->setArticleID($articleID);
-                    
-                    $mediaID = $newMedia->saveMedia();
-                    
-                    if ($mediaID != false)
+                    if (isset($_GET['mediaID']))
                     {
-                        echo "<script>window.location.href='addEditMedia.php?artiID=$articleID"."mediaID=$mediaID';</script>";
-                        exit;
+                        $retrivedMedia = new Media();
+                        $retrivedMedia->setMediaID($_GET['mediaID']);
+                        $retrivedMedia->initMwithID();
+                        $mediID = $retrivedMedia->getMediaID();
+                        
+                        if ($mediID != null)
+                        {
+                            if ($retrivedMedia->getArticleID() == $articleID)
+                            {
+                                $canView = true;
+                                $isEdit = true;
+                                
+                                // extra validartion comes in from here for editiing media 
+                                //save method is diifrent here 
+                                if (isset($_POST['mediaSave']))
+                                {
+                                    $name = $_POST['nameInput'];
+                                    $retrivedMedia->setMediaName($name);
+                                    $retrivedMedia->updateMedia();
+                                    
+                                    echo 'update slayed';
+                                }
+                            }
+                            else
+                            {
+                                $viewError .= 'Media is not a part of the Same Article .<br/>';
+                                $canView = false;
+                            }
+                        }
+                        else
+                        {
+                            $viewError .= 'Media was not found .<br/>';
+                            $canView = false;
+                        }
+
                     }
-                    
+                    else if (isset($_POST['mediaSave']))
+                    {
+                        // here is where the actual save of the media and the image happens
+
+                        $name = $_POST['nameInput'];
+
+                        // add image errors and validation (upload errors missing from mid dont forget
+                        $path = "media//" . $_FILES['fileInput']['name']; //unix path uses forward slash
+                        move_uploaded_file($_FILES['fileInput']['tmp_name'], $path);
+
+                        $type = end((explode(".", $path)));
+
+                        $newMedia = new Media();
+
+                        $newMedia->setMediaName($name);
+                        $newMedia->setMediaPath($path);
+                        $newMedia->setMediaType($type);
+                        $newMedia->setArticleID($articleID);
+
+                        $mediaID = $newMedia->saveMedia();
+
+                        if ($mediaID != false)
+                        {
+                            // go to edit mode - removes image link allowes only name chnage
+
+                            $isEdit = true;
+
+                            echo "<script>window.location.href='addEditMedia.php?artiID=$articleID" . "&mediaID=$mediaID';</script>";
+                            exit;
+                        }
+                        else
+                        {
+                            $isEdit = false;
+                            echo 'FEE SAVE ERRORRR TRY AGAIN';
+                        }
+                    }
                 }
             }
             else
@@ -125,20 +163,20 @@ else
                             <!-- Text input -->
                             <div class="form-outline mb-4">
                                 <label class="form-label" for="nameInput">Name</label>
-                                <input type="text" id="nameInput" name="nameInput" class="form-control" placeholder="Media Name" required <?php if ($canView && $isEdit){echo 'value = "' . $retrivedArtcl->getTitle() . '"';} ?>/> 
+                                <input type="text" id="nameInput" name="nameInput" class="form-control" placeholder="Media Name" required <?php if ($canView && $isEdit){echo 'value = "' . $retrivedMedia->getMediaName() . '"';} ?>/> 
                             </div>
 
                             <!-- Text input -->
-                            <div class="form-outline mb-4">
+                            <div class="form-outline mb-4" <?php if ($isEdit){echo 'hidden';} ?> >
                                 <label class="form-label" for="fileInput">File</label>
-                                <input type="file" id="fileInput" name="fileInput" class="form-control" required/> 
+                                <input type="file" id="fileInput" name="fileInput" accept="image/*,video/*" class="form-control" <?php if (!$isEdit){echo 'required';} ?>/> 
                             </div>
 
 
                             <button type="submit" name="mediaSave" id="mediaSave" value="mediaSave" class="btn btn-success btn-block">
                                 Save
                             </button>
-                            <a href="viewArticleDocs.php?artiID=<?php if ($canView){echo $retrivedArtcl->getArticleID();} ?>" name="document" id="document" class="btn btn-secondary btn-block">Back to Documents</a>
+                            <a href="viewArticleMedia.php?artiID=<?php if ($canView){echo $retrivedArtcl->getArticleID();} ?>" name="document" id="document" class="btn btn-secondary btn-block">Back to Media</a>
 
 
 
@@ -153,15 +191,15 @@ else
 
 
 <section <?php
-    if (!$canView)
-    {
-        echo 'id="articleDocFormBody"';
-    }
-    else
-    {
-        echo 'hidden';
-    }
-    ?>>
+if (!$canView)
+{
+    echo 'id="articleDocFormBody"';
+}
+else
+{
+    echo 'hidden';
+}
+?>>
     <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-xl-10">

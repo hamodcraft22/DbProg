@@ -20,32 +20,36 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
         {
             if ($_SESSION['userID'] == $retrivedArtcl->getUserID() || ($_SESSION['roleType'] == 'admin'))
             {
-                //check the status if it is published u cant edit
-                $canView = true;
-
-                // first validate the id and add the booleans for the check later
-                $isEdit = true;
-
-
-                //save method is diifrent here 
-                if (isset($_POST['save']))
+                if ($retrivedArtcl->getStatus() != 'saved')
                 {
-                    // add check to see if foto is here
-                    echo 'its a save from an edit';
+                    $viewError .= 'the article has been publised, you cannot edit it. <br/>';
+                    $canView = false;
                 }
-                else if (isset($_POST['publish']))
+                else
                 {
-                    echo 'its a publish from edit';
-                }
-                else if (isset($_POST['media']))
-                {
-                    echo "<script>window.location.href='viewArticleMedia.php?artiID=$articleID';</script>";
-                    exit;
-                }
-                else if (isset($_POST['document']))
-                {
-                    echo "<script>window.location.href='viewArticleDocs.php?artiID=$articleID';</script>";
-                    exit;
+                    $canView = true;
+                    $isEdit = true;
+
+                    //save method is diifrent here 
+                    if (isset($_POST['save']))
+                    {
+                        // add check to see if foto is here
+                        echo 'its a save from an edit';
+                    }
+                    else if (isset($_POST['publish']))
+                    {
+                        echo 'its a publish from edit';
+                    }
+                    else if (isset($_POST['media']))
+                    {
+                        echo "<script>window.location.href='viewArticleMedia.php?artiID=$articleID';</script>";
+                        exit;
+                    }
+                    else if (isset($_POST['document']))
+                    {
+                        echo "<script>window.location.href='viewArticleDocs.php?artiID=$articleID';</script>";
+                        exit;
+                    }
                 }
             }
             else
@@ -79,7 +83,7 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
         if ($errors == '')
         {
             $article = new Article();
-            
+
             $article->setHeader($header);
             $article->setTitle($title);
             $article->setBody($body);
@@ -122,11 +126,6 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
         // error to user telling him it needs to be saved first
         echo 'you need to save before you can go';
     }
-    else
-    {
-        $viewError .= 'No Article ID was provided .<br/>';
-        $canView = false;
-    }
 }
 else
 {
@@ -144,40 +143,40 @@ else
 
 
     window.addEventListener('resize', chnageSize);
-    
-    function DetailsValidation(){
+
+    function DetailsValidation() {
         let header = document.getElementById("headerInput");
         let category = document.getElementById("categoryInput");
-        if(header.value == ""){
+        if (header.value == "") {
             header.style.borderColor = "red";
             header.placeholder = "Required";
-        }else{
+        } else {
             header.style.borderColor = "green";
             header.placeholder = "Main Header";
         }
-        if(category.value == ""){
+        if (category.value == "") {
             category.style.borderColor = "red";
-        }else{
+        } else {
             category.style.borderColor = "green";
         }
     }
-    function BodyValidation(){
+    function BodyValidation() {
         let title = document.getElementById("titleInput");
         let body = document.getElementById("bodyInput");
-        if(title.value == ""){
+        if (title.value == "") {
             title.style.borderColor = "red";
             title.placeholder = "Required";
-        }else{
+        } else {
             title.style.borderColor = "green";
             title.placeholder = "SUB Header";
         }
-        if(body.value == ""){
+        if (body.value == "") {
             body.style.borderColor = "red";
             body.placeholder = "Required";
-        }else{
+        } else {
             body.style.borderColor = "green";
         }
-        
+
     }
 </script>
 
@@ -214,15 +213,15 @@ else
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="headerInput">Header</label>
                                         <input type="text" id="headerInput" name="headerInput" class="form-control" placeholder="Main Header" required onblur="DetailsValidation()" <?php
-                                        if ($canView && $isEdit)
-                                        {
-                                            echo 'value = "' . $retrivedArtcl->getHeader() . '"';
-                                        }
-                                        else if (isset($_POST['headerInput']))
-                                        {
-                                            echo 'value = "' . $_POST['headerInput'] . '"';
-                                        }
-                                        ?>/>
+if ($canView && $isEdit)
+{
+    echo 'value = "' . $retrivedArtcl->getHeader() . '"';
+}
+else if (isset($_POST['headerInput']))
+{
+    echo 'value = "' . $_POST['headerInput'] . '"';
+}
+?>/>
                                     </div>
 
 
@@ -230,40 +229,44 @@ else
                                         <label class="form-label" for="form7Example3">Category</label>
                                         <select name="categoryInput" id="categoryInput" class="form-control" required onblur="DetailsValidation()">
                                             <option disabled selected=""></option>
-                                            <?php
-                                            if ($canView)
-                                            {
-                                                $arcObj = new Article();
-                                                $categories = $arcObj->getAllCategories();
+<?php
+if ($canView)
+{
+    $arcObj = new Article();
+    $categories = $arcObj->getAllCategories();
 
-                                                for ($i = 0; $i < count($categories); $i++)
-                                                {
-                                                    if ($isEdit && ($retrivedArtcl->getCategoryID() == $categories[$i]->categoryID))
-                                                    {
-                                                        echo '<option selected value="' . $categories[$i]->categoryID . '">' . $categories[$i]->catgoryName . '</option>';
-                                                    }
-                                                    else
-                                                    {
-                                                        echo '<option value="' . $categories[$i]->categoryID . '">' . $categories[$i]->catgoryName . '</option>';
-                                                    }
-                                                }
-                                            }
-                                            ?>
+    for ($i = 0; $i < count($categories); $i++)
+    {
+        if ($isEdit && ($retrivedArtcl->getCategoryID() == $categories[$i]->categoryID))
+        {
+            echo '<option selected value="' . $categories[$i]->categoryID . '">' . $categories[$i]->catgoryName . '</option>';
+        }
+        else
+        {
+            echo '<option value="' . $categories[$i]->categoryID . '">' . $categories[$i]->catgoryName . '</option>';
+        }
+    }
+}
+?>
 
                                         </select>
                                     </div>
 
-                                    <?php if (isset($_GET['artiID']))
-                                    {
-                                        echo '<div class="form-outline mb-4"><img style="max-height:100px"  src=\'' . $retrivedArtcl->getThumbnail() . '\'></div>';
-                                    } ?>
+<?php
+if (isset($_GET['artiID']))
+{
+    echo '<div class="form-outline mb-4"><img style="max-height:100px"  src=\'' . $retrivedArtcl->getThumbnail() . '\'></div>';
+}
+?>
 
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="thumbnailInput">Thumbnail</label>
-                                        <input class="form-control" type="file" accept="image/*"  id="thumbnailInput" name="thumbnailInput" <?php if (!(isset($_GET['artiID'])))
-                                    {
-                                        echo 'required';
-                                    } ?>/>
+                                        <input class="form-control" type="file" accept="image/*"  id="thumbnailInput" name="thumbnailInput" <?php
+                                        if (!(isset($_GET['artiID'])))
+                                        {
+                                            echo 'required';
+                                        }
+                                        ?>/>
                                     </div>
 
                                     <button type="submit" name="save" id="save" class="btn btn-primary btn-lg btn-block">
@@ -290,29 +293,31 @@ else
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="titleInput">Title</label>
                                         <input type="text" id="titleInput" name="titleInput" class="form-control" placeholder="Sub Header" required onblur="BodyValidation()" <?php
-                                    if ($isEdit && $canView)
-                                    {
-                                        echo 'value = "' . $retrivedArtcl->getTitle() . '"';
-                                    }
-                                    ?>/> 
+                                        if ($isEdit && $canView)
+                                        {
+                                            echo 'value = "' . $retrivedArtcl->getTitle() . '"';
+                                        }
+                                        ?>/> 
                                     </div>
 
                                     <!-- Message input -->
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="bodyInput">Body</label>
-                                        <textarea class="form-control" id="bodyInput" name="bodyInput" onblur="BodyValidation()" <?php if (isset($_GET['artiID']))
-                                    {
-                                        echo 'rows="10"';
-                                    }
-                                    else
-                                    {
-                                        echo 'rows="5"';
-                                    } ?> required> <?php
-                                    if ($isEdit && $canView)
-                                    {
-                                        echo $retrivedArtcl->getBody();
-                                    }
-                                    ?> </textarea>
+                                        <textarea class="form-control" id="bodyInput" name="bodyInput" onblur="BodyValidation()" <?php
+                                        if (isset($_GET['artiID']))
+                                        {
+                                            echo 'rows="10"';
+                                        }
+                                        else
+                                        {
+                                            echo 'rows="5"';
+                                        }
+                                        ?> required> <?php
+                                            if ($isEdit && $canView)
+                                            {
+                                                echo $retrivedArtcl->getBody();
+                                            }
+                                            ?> </textarea>
                                     </div>
 
                                     <button type="submit" name="media" id="media" class="btn btn-info btn-block" formnovalidate>
@@ -339,15 +344,15 @@ else
 </section>
 
 <section <?php
-                                    if (!$canView)
-                                    {
-                                        echo 'id="articleFormBody"';
-                                    }
-                                    else
-                                    {
-                                        echo 'hidden';
-                                    }
-                                    ?>>
+if (!$canView)
+{
+    echo 'id="articleFormBody"';
+}
+else
+{
+    echo 'hidden';
+}
+?>>
     <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-xl-10">
