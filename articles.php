@@ -127,7 +127,7 @@ else
                                             <td class="text-center">' . $newArtcl->getTitle() . '</td>
                                             <td class="text-center">' . $newArtcl->getCategory() . '</td>
                                             <td class="text-center">
-                                                <a type="button" class="btn btn-primary"><i class="far fa-eye"></i></a>';
+                                                <a type="button" href="viewArticle.php?artiID=' . $newArtcl->getArticleID() . '" class="btn btn-primary"><i class="far fa-eye"></i></a>';
 
                                 if ($newArtcl->getStatus() == 'saved')
                                 {

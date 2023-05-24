@@ -150,7 +150,8 @@ class Article{
         $data = $db->singleFetch($q);
         return $data->fullname;
     }
-
+    
+    
         
     public function initArticle($articleID, $header, $title, $body, $date, $thumbnail, $rating, $rates, $views, $statusID, $categoryID, $userID) {
         $this->articleID = $articleID;
@@ -246,6 +247,45 @@ class Article{
             $q = 'select * from dbProj_category';
             $data = $db->multiFetch($q);
             return $data;
+        } catch (Exception $e) {
+            echo 'Exception: ' . $e;
+            return false;
+        }
+    }
+    
+    public function setPubDate()
+    {
+        try {
+            $db = Database::getInstance();
+            $q ='CALL dbProj_setPubDate('.$this->getArticleID().')';
+            $data = $db->querySql($q);
+            return true;
+        } catch (Exception $e) {
+            echo 'Exception: ' . $e;
+            return false;
+        }
+    }
+    
+    public function increaseRate()
+    {
+        try {
+            $db = Database::getInstance();
+            $q ='CALL dbProj_incRate('.$this->getArticleID().')';
+            $data = $db->querySql($q);
+            return true;
+        } catch (Exception $e) {
+            echo 'Exception: ' . $e;
+            return false;
+        }
+    }
+    
+    public function decreaseRate()
+    {
+        try {
+            $db = Database::getInstance();
+            $q ='CALL dbProj_decRate('.$this->getArticleID().')';
+            $data = $db->querySql($q);
+            return true;
         } catch (Exception $e) {
             echo 'Exception: ' . $e;
             return false;

@@ -119,6 +119,7 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                             
                             $article->setStatusID(2);
                             $article->updateArti();
+                            $article->setPubDate();
                             echo 'its a publish from edit all done';
                             
                             $userID = $_SESSION['userID'];
