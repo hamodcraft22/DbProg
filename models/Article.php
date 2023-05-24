@@ -196,7 +196,7 @@ class Article{
     {
         try {
             $db = Database::getInstance();
-            $q = 'update dbProj_article set header = "'.$this->getHeader().'", title = "'.$this->getTitle().'", body = "'.$this->getBody().'", date = '.$this->getDate().', thumbnail = "'.$this->getThumbnail().'", rating = '.$this->getRating().', rates = '.$this->getRates().', views = '.$this->getViews().', statusID = '.$this->getStatusID().', categoryID = '.$this->getCategoryID().', userID = '.$this->getUserID().';';
+            $q = 'update dbProj_article set header = "'.$this->getHeader().'", title = "'.$this->getTitle().'", body = "'.$this->getBody().'", thumbnail = "'.$this->getThumbnail().'", rating = '.$this->getRating().', rates = '.$this->getRates().', views = '.$this->getViews().', statusID = '.$this->getStatusID().', categoryID = '.$this->getCategoryID().', userID = '.$this->getUserID().' where articleID ='.$this->getArticleID().';';
             $data = $db->querySql($q);
             return true;
         } catch (Exception $e) {

@@ -22,16 +22,6 @@ if (isset($_POST['loginForm'])) {
 }
 
 
-// An error message incase log out was unsucceful. 
-if (!$user-> logout()){
-    
-    echo '<div class="alert alert-danger alert-dismissible fade show " role="alert">
-                You have not been loged out, Try again.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>';
-    
-}
-
 if (isset($_POST['searchForm'])) {
 
     echo 'serach form was submitted';
@@ -258,9 +248,11 @@ if (isset($_POST['searchForm'])) {
                         
                         
                         <?php
+                            
                             // function to check if the role of the user is an author then he has the author menue
                             if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'author')
                             {
+                                $userID = $_SESSION['userID'];
                                 echo 
                                 '
                                     <li class="nav-item dropdown">
