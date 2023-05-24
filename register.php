@@ -1,6 +1,7 @@
 <?php
 include './header.php';
 
+// if the reg form is submitted create new user with following attributes 
 if (isset($_POST['registerForm'])) {
     $isAuthor = false;
     $errors = '';
@@ -14,6 +15,7 @@ if (isset($_POST['registerForm'])) {
     $password = $_POST['passwordInput'];
     $passwordRpt = $_POST['passwordReInput'];
 
+    // if the user checks author option make him an author 
     if (isset($_POST['authorChoice'])) {
         $isAuthor = true;
     }
@@ -22,16 +24,23 @@ if (isset($_POST['registerForm'])) {
 
     $user->setUserName($username);
 
+    // checks if the name is available 
     if (!$user->checkUsername()) 
     {
-        $errors .= 'username already used, use another name.</br>';
+        //error message if name isnt available 
+        echo  ' <div class="alert alert-danger alert-dismissible fade show " role="alert">'.
+        $errors.'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+        
     }
     
+    // checks if the password matches the pssword in the repeat field 
     if ($password != $passwordRpt) 
     {
+        //error message if password doesnt match
         $errors .= 'passwords are not matching.</br>';
     }
     
+    // if there is no error create user 
     if ($errors == '')
     {
         $user->setFullname($fullname);
@@ -40,17 +49,20 @@ if (isset($_POST['registerForm'])) {
         $user->setPhone($phone);
         $user->setPassword($password);
         
+        // set role as an author if its selected 
         if ($isAuthor)
         {
             $user->setRoleID(3);
         }
-        else
+        else // else just give him a noremal user role
         {
             $user->setRoleID(2);
         }
         
+        // checks if registration is succesful 
         if ($user->register())
         {
+            // if it is succesful log in the user and redirect him to the index page
             if ($user->login())
             {
                 echo "<script>window.location.href='index.php';</script>";
@@ -60,6 +72,11 @@ if (isset($_POST['registerForm'])) {
         else
         {
             echo 'issue no reg';
+                
+            
+            
+            
+            
         }
     }
     else
@@ -71,6 +88,7 @@ if (isset($_POST['registerForm'])) {
 }
 ?>
 
+<!-- function to change size of the body -->
 <script type="text/javascript">
     function chnageSize()
     {

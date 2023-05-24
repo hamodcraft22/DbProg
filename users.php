@@ -1,6 +1,7 @@
 <?php
 include './header.php';
 
+// if the user is an admin display all the users 
 if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
 {
     $user = new User();
@@ -11,6 +12,7 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
 
 ?>
 
+<!--function to change body size-->
 <script type="text/javascript">
     function chnageSize()
     {
@@ -22,7 +24,7 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
     window.addEventListener('resize', chnageSize);
 </script>
 
-
+<!--if the user is an admin display all users page -->
 <section <?php if(!(isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')){echo 'hidden';} else {echo 'id="usersPageBody"';} ?>>
     <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -46,6 +48,8 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
                         <tbody>
                             
                             <?php
+                            
+                                // loop to show all users in a table 
                                 for ($i = 0; $i < count($data); $i++)
                                 {
                                     $newUser = new User();
@@ -62,6 +66,7 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
                                             <td class="text-center">'.$newUser->getRole().'</td>
                                             <td class="text-center">';
                                     
+                                    // if the user is not a reader allow him to view each users articales 
                                     if ($newUser->getRole() != 'reader')
                                     {
                                         echo '
@@ -89,6 +94,7 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
     </div>
 </section>
 
+<!--if the user is not an admin echo page cannot be accessed by him -->
 <section <?php if((isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')){echo 'hidden';} else {echo 'id="usersPageBody"';}  ?>>
     <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -99,7 +105,7 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
                 <div class="card shadow" style="border-radius: 15px;">
                     
                     <p class="text-center">You cannot use this page unless you are an Admin</p>
-
+                    
                 </div>
 
             </div>

@@ -60,6 +60,8 @@ else
 </script>
 
 
+<!--if the user is an admin or author can view all his articales -->
+
 <section <?php
 if ($canView)
 {
@@ -152,6 +154,7 @@ else
         </div>
     </div>
 </section>
+
 
 <section <?php
 if (!$canView)
