@@ -165,6 +165,7 @@ if (!$canView)
 
 
                 <!--Section: Comments-->
+                
                 <section class="border-bottom mb-3">
                     <p class="text-center"><strong>Comments: 3</strong></p>
 
@@ -214,37 +215,45 @@ if (!$canView)
                 </section>
                 <!--Section: Comments-->
 
-                <!--Section: Reply-->
-                <section>
-                    <p class="text-center"><strong>Leave a Comments</strong></p>
+                
+                <!--Section: Reply if the user is logged in they can comment-->
+                
+                    <section <?php if(!$canComment){echo 'hidden';} ?>>
+                        <p class="text-center"><strong>Leave a Comments</strong></p>
 
-                    <form>
-                        <!-- Name input -->
-                        <div class="form-outline mb-4">
-                            <input type="text" id="form4Example1" class="form-control" />
-                            <label class="form-label" for="form4Example1">Title</label>
-                        </div>
+                        <form method="post">
+                            <!-- Name input -->
+                            <div class="form-outline mb-4">
+                                <input type="text" id="form4Example1" class="form-control" />
+                                <label class="form-label" for="form4Example1">Title</label>
+                            </div>
 
-                        <!-- Message input -->
-                        <div class="form-outline mb-4">
-                            <textarea class="form-control" id="form4Example3" rows="4"></textarea>
-                            <label class="form-label" for="form4Example3">Comment</label>
-                        </div>
+                            <!-- Message input -->
+                            <div class="form-outline mb-4">
+                                <textarea class="form-control" id="form4Example3" rows="4"></textarea>
+                                <label class="form-label" for="form4Example3">Comment</label>
+                            </div>
 
-                        <!-- Submit button -->
-                        <button type="submit" class="btn btn-primary btn-block mb-4">
-                            Publish
-                        </button>
-                    </form>
-                </section>
-                <!--Section: Reply-->
+                            <!-- Submit button -->
+                            <button type="submit" name="commentPost" class="btn btn-primary btn-block mb-4">
+                                Publish
+                            </button>
+                        </form>
+                    </section>
+                
+                    <section <?php if($canComment){echo 'hidden';} ?>>
+                        <p class="text-center"><strong>Please login to leave a comment</strong></p>
+                        <p class="text-center"></p>
+                    </section>
+                
+                    <!--Section: Reply-->
             </div>
             <!--Grid column-->
 
             <!--Grid column-->
             <div class="col-md-4 mb-4">
                 <!--Section: Sidebar-->
-                <section class="sticky-top" style="top: 80px;">
+                <section class="sticky-top" style="top: 80px; z-index: -3">
                     <!--Section: Ad-->
                     <section class="text-center border-bottom pb-4 mb-4">
                         <div class="bg-image hover-overlay ripple mb-4">
