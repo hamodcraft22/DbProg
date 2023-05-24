@@ -34,6 +34,7 @@ if (isset($_POST['profileForm']))
     
     if ($user->updateUser())
     {
+       
         echo 'update done';
     }
     else

@@ -87,6 +87,7 @@ if (isset($_POST['registerForm'])) {
 }
 ?>
 
+<!-- function to change size of the body -->
 <script type="text/javascript">
     function chnageSize()
     {

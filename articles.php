@@ -17,7 +17,7 @@ if (isset($_SESSION['roleType']) && ($_SESSION['roleType'] == 'admin' || $_SESSI
     window.addEventListener('resize', chnageSize);
 </script>
 
-
+<!--if the user is an admin or author can view all his articales -->
 <section <?php if (!(isset($_SESSION['roleType']) && ($_SESSION['roleType'] == 'admin' || $_SESSION['roleType'] == 'author'))) {
     echo 'hidden';
 } else {
@@ -45,6 +45,7 @@ if (isset($_SESSION['roleType']) && ($_SESSION['roleType'] == 'admin' || $_SESSI
         </div>
     </div>
 </section>
+
 
 <section <?php if (isset($_SESSION['roleType']) && ($_SESSION['roleType'] == 'admin' || $_SESSION['roleType'] == 'author')) {
     echo 'hidden';

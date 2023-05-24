@@ -41,7 +41,7 @@ if (isset($_POST['searchForm'])) {
 <html>
     <head>
         <!--title of the website-->
-        <title>TITLE - FIX</title> 
+        <title>The MAZS</title> 
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
