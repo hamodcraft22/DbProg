@@ -70,7 +70,7 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
                                     if ($newUser->getRole() != 'reader')
                                     {
                                         echo '
-                                                <a type="button" class="btn btn-primary"><i class="far fa-eye"></i></a>';
+                                                <a type="button" class="btn btn-primary" href="articles.php?userID='.$newUser->getUserID().'"><i class="fa-solid fa-clipboard"></i></a>';
                                     }
                                     
                                     echo '

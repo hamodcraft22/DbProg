@@ -26,12 +26,12 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                 else
                 {
                     // here is where the stuff should happen
+                    $documnets = new artiDocument();
+                    $documnets->setArticleID($articleID);
+                    $data = $documnets->getAllDocument();
                     
-                    $media = new Media();
-                    $media->setArticleID($articleID);
-                    $data = $media->getAllMedia();
-                    
-                    $canView = true;                   
+                    $canView = true;
+
                 }
             }
             else
@@ -63,7 +63,7 @@ else
     function chnageSize()
     {
         var height = ((window.innerHeight) - (document.getElementById('mainNavBar').offsetHeight));
-        document.getElementById('articlesMediaPageBody').setAttribute("style", "height:" + height);
+        document.getElementById('articlesDocsPageBody').setAttribute("style", "height:" + height);
     }
 
 
@@ -74,7 +74,7 @@ else
 <section <?php
 if ($canView)
 {
-    echo 'id="articlesMediaPageBody"';
+    echo 'id="articlesDocsPageBody"';
 }
 else
 {
@@ -85,22 +85,13 @@ else
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-xl-9">
 
-                <h1 class="text-black mb-4">Article "<?php if ($canView)
-    {
-        echo $retrivedArtcl->getHeader();
-    } ?>" Media</h1>
+                <h1 class="text-black mb-4">Article "<?php if($canView){echo $retrivedArtcl->getHeader();} ?>" Documents</h1>
 
 
 
                 <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                    <a type="button" class="btn btn-primary btn-sm" href="addEditMedia.php?artiID=<?php if ($canView)
-    {
-        echo $articleID;
-    } ?>">Add new Media</a>
-                    <a type="button" class="btn btn-secondary btn-sm" href="addEditArticle.php?artiID=<?php if ($canView)
-    {
-        echo $articleID;
-    } ?>">Back to Article</a>
+                    <a type="button" class="btn btn-primary btn-sm" href="addEditDoc.php?artiID=<?php if($canView){echo $articleID;} ?>">Add new Documents</a>
+                    <a type="button" class="btn btn-secondary btn-sm" href="addEditArticle.php?artiID=<?php if($canView){echo $articleID;} ?>">Back to Article</a>
                 </div>
 
                 <div class="card shadow" style="border-radius: 15px;">
@@ -109,8 +100,7 @@ else
                             <thead class="thead-dark">
                                 <tr>
                                     <th class="text-center" scope="col">ID</th>
-                                    <th scope="col">Media Name</th>
-                                    <th class="text-center" scope="col">Preview</th>
+                                    <th scope="col">Document Name</th>
                                     <th class="text-center" scope="col">Type</th>
                                     <th class="text-center" scope="col">Actions</th>
                                 </tr>
@@ -120,31 +110,24 @@ else
                                 <?php
                                 for ($i = 0; $i < count($data); $i++)
                                 {
-                                    $newMedia = new Media();
-                                    $newMedia->setMediaID($data[$i]->mediaID);
-                                    $newMedia->initMwithID();
+                                    $newDoc = new artiDocument();
+                                    $newDoc->setDocumentID($data[$i]->documentID);
+                                    $newDoc->initDwithID();
 
                                     echo
                                     '
                                         <tr>
-                                            <th class="text-center" scope="row">' . $newMedia->getMediaID() . '</th>
-                                            <td>' . $newMedia->getMediaName() . '</td>';
-                                            
-                                            if ($newMedia->getMediaType() != 'ogm' && $newMedia->getMediaType() != 'wmv' && $newMedia->getMediaType() != 'mpg' && $newMedia->getMediaType() != 'webm' && $newMedia->getMediaType() != 'ogv' && $newMedia->getMediaType() != 'mov' && $newMedia->getMediaType() != 'asx' && $newMedia->getMediaType() != 'mpeg' && $newMedia->getMediaType() != 'mp4' && $newMedia->getMediaType() != 'm4v' && $newMedia->getMediaType() != 'avi')
-                                            {
-                                                echo '<td class="text-center"><a href="'.$newMedia->getMediaPath().'"><img style="height:50px" src="' . $newMedia->getMediaPath() . '"></a></td>';
-                                            }
-                                            else
-                                            {
-                                                echo '<td class="text-center"><a href="'.$newMedia->getMediaPath().'"><video autoplay muted loop style="height:50px"><source src="' . $newMedia->getMediaPath() . '"></video></a></td>';
-                                            }
-                                    
-                                    echo
-                                            '<td class="text-center">' . $newMedia->getMediaType() . '</td>
+                                            <th class="text-center" scope="row">' . $newDoc->getDocumentID() . '</th>
+                                            <td>' . $newDoc->getDocumentName() . '</td>
+                                            <td class="text-center">' . $newDoc->getDocumentType() . '</td>
                                             <td class="text-center">';
 
+                                        echo '
+                                                <a type="button" class="btn btn-primary" href="' . $newDoc->getDocumentPath() . '"><i class="fa-solid fa-file"></i></a>';
+                                    
+
                                     echo '
-                                                <a type="button" class="btn btn-success" href="addEditMedia.php?artiID='.$articleID.'&mediaID='.$newMedia->getMediaID().'"><i class="fas fa-edit"></i></a>
+                                                <a type="button" class="btn btn-success" href="addEditDoc.php?artiID='.$articleID.'&docID='.$newDoc->getDocumentID().'"><i class="fas fa-edit"></i></a>
                                                 <a type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></a>
                                             </td>
                                         </tr>
@@ -158,16 +141,16 @@ else
                         </table>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 </section>
 
-
 <section <?php
 if (!$canView)
 {
-    echo 'id="articlesMediaPageBody"';
+    echo 'id="articlesDocsPageBody"';
 }
 else
 {

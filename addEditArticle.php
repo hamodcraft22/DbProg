@@ -1,94 +1,136 @@
 <?php
 include './header.php';
 
+$canView = true;
+$viewError = '';
+
 $isEdit = false;
-$article = new Article();
 
-if (isset($_GET['artiID']))
+if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
 {
-    $articleID = $_GET['artiID'];
-    // first validate the id and add the booleans for the check later
-    echo 'its an edit';
-    $isEdit = true;
-    $article->setArticleID($articleID);
-    $article->initAwithID();
-    
-    //save method is diifrent here 
-    if (isset($_POST['save']))
+    if (isset($_GET['artiID']))
     {
-        echo 'its a save from an edit';
-    }
-    else if (isset($_POST['publish']))
-    {
-        echo 'its a publish from edit';
-    }
-    else if (isset ($_POST['media']))
-    {
-        echo 'ok going to the media page';
-        
-        echo "<script>window.location.href='viewArticleMedia.php?artiID=$articleID';</script>";
-            exit;
-    }
-    
-}
-else if (isset($_POST['save']))
-{
-    $errors = '';
-    
-    $header = $_POST['headerInput'];
-    $title = $_POST['titleInput'];
-    $body = $_POST['bodyInput'];
-    $catID = $_POST['categoryInput'];
-    
-    
-    // add image errors and validation (upload errors missing from mid dont forget)
-    
-    $name = "assests/thumbnails//" . $_FILES['thumbnailInput']['name']; //unix path uses forward slash
-    move_uploaded_file($_FILES['thumbnailInput']['tmp_name'], $name);
-    
-    $thumbnail = $name;
-    
-    if ($errors == '')
-    {
-        $article->setHeader($header);
-        $article->setTitle($title);
-        $article->setBody($body);
-        $article->setCategoryID($catID);
-        $article->setThumbnail($thumbnail);
-        $article->setUserID($_SESSION['userID']);
-        $article->setStatusID(1);
-        
-        $resultID = $article->saveArti();
-        
-        if ($resultID != false)
+        // check that the article is not publised b3d
+        $retrivedArtcl = new Article();
+        $retrivedArtcl->setArticleID($_GET['artiID']);
+        $retrivedArtcl->initAwithID();
+        $articleID = $retrivedArtcl->getArticleID();
+
+        if ($retrivedArtcl->getArticleID() != null)
         {
-            echo $resultID;
-            echo 'ok done';
+            if ($_SESSION['userID'] == $retrivedArtcl->getUserID() || ($_SESSION['roleType'] == 'admin'))
+            {
+                if ($retrivedArtcl->getStatus() != 'saved')
+                {
+                    $viewError .= 'the article has been publised, you cannot edit it. <br/>';
+                    $canView = false;
+                }
+                else
+                {
+                    $canView = true;
+                    $isEdit = true;
 
-            
-            echo "<script>window.location.href='addEditArticle.php?artiID=$resultID';</script>";
-            exit;
+                    //save method is diifrent here 
+                    if (isset($_POST['save']))
+                    {
+                        // add check to see if foto is here
+                        echo 'its a save from an edit';
+                    }
+                    else if (isset($_POST['publish']))
+                    {
+                        echo 'its a publish from edit';
+                    }
+                    else if (isset($_POST['media']))
+                    {
+                        echo "<script>window.location.href='viewArticleMedia.php?artiID=$articleID';</script>";
+                        exit;
+                    }
+                    else if (isset($_POST['document']))
+                    {
+                        echo "<script>window.location.href='viewArticleDocs.php?artiID=$articleID';</script>";
+                        exit;
+                    }
+                }
+            }
+            else
+            {
+                $viewError .= 'you cannot edit others articles .<br/>';
+                $canView = false;
+            }
         }
         else
         {
-            echo 'add error';
+            $viewError .= 'the article ID was not found. <br/>';
+            $canView = false;
         }
     }
-    else
+    else if (isset($_POST['save']))
     {
-        echo 'Fee error';
-    }
-    
-}
+        $errors = '';
 
-else if (isset($_POST['publish']))
-{
-    // this just chnages the status to published and puts the date
+        $header = $_POST['headerInput'];
+        $title = $_POST['titleInput'];
+        $body = $_POST['bodyInput'];
+        $catID = $_POST['categoryInput'];
+
+        // add image errors and validation (upload errors missing from mid dont forget)
+
+        $name = "assests/thumbnails//" . $_FILES['thumbnailInput']['name']; //unix path uses forward slash
+        move_uploaded_file($_FILES['thumbnailInput']['tmp_name'], $name);
+
+        $thumbnail = $name;
+
+        if ($errors == '')
+        {
+            $article = new Article();
+
+            $article->setHeader($header);
+            $article->setTitle($title);
+            $article->setBody($body);
+            $article->setCategoryID($catID);
+            $article->setThumbnail($thumbnail);
+            $article->setUserID($_SESSION['userID']);
+            $article->setStatusID(1);
+
+            $resultID = $article->saveArti();
+
+            if ($resultID != false)
+            {
+                echo $resultID;
+                echo 'ok done';
+
+                echo "<script>window.location.href='addEditArticle.php?artiID=$resultID';</script>";
+                exit;
+            }
+            else
+            {
+                echo 'add error';
+            }
+        }
+        else
+        {
+            echo 'Fee error';
+        }
+    }
+    else if (isset($_POST['publish']))
+    {
+        // this just chnages the status to published and puts the date
+    }
+    else if (isset($_POST['media']))
+    {
+        // error to user telling him it needs to be saved first
+        echo 'you need to save before you can go';
+    }
+    else if (isset($_POST['document']))
+    {
+        // error to user telling him it needs to be saved first
+        echo 'you need to save before you can go';
+    }
 }
-else if (isset($_POST['media']))
+else
 {
-    // error to user telling him it needs to be saved first
-    echo 'you need to save before you can go';
+    $viewError .= 'You have to be logged in as an author to use this page.<br/>';
+    $canView = false;
 }
 ?>
 
@@ -101,11 +143,55 @@ else if (isset($_POST['media']))
 
 
     window.addEventListener('resize', chnageSize);
+
+    function DetailsValidation() {
+        let header = document.getElementById("headerInput");
+        let category = document.getElementById("categoryInput");
+        if (header.value == "") {
+            header.style.borderColor = "red";
+            header.placeholder = "Required";
+        } else {
+            header.style.borderColor = "green";
+            header.placeholder = "Main Header";
+        }
+        if (category.value == "") {
+            category.style.borderColor = "red";
+        } else {
+            category.style.borderColor = "green";
+        }
+    }
+    function BodyValidation() {
+        let title = document.getElementById("titleInput");
+        let body = document.getElementById("bodyInput");
+        if (title.value == "") {
+            title.style.borderColor = "red";
+            title.placeholder = "Required";
+        } else {
+            title.style.borderColor = "green";
+            title.placeholder = "SUB Header";
+        }
+        if (body.value == "") {
+            body.style.borderColor = "red";
+            body.placeholder = "Required";
+        } else {
+            body.style.borderColor = "green";
+        }
+
+    }
 </script>
 
 
 
-<section id="articleFormBody">
+<section <?php
+if ($canView)
+{
+    echo 'id="articleFormBody"';
+}
+else
+{
+    echo 'hidden';
+}
+?>>
     <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-lg-12 col-xl-11">
@@ -119,42 +205,68 @@ else if (isset($_POST['media']))
                                 <div class="card-header py-3">
                                     <h5 class="mb-0">Article details</h5>
                                 </div>
+
+
                                 <div class="card-body">
 
                                     <!-- Text input -->
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="headerInput">Header</label>
-                                        <input type="text" id="headerInput" name="headerInput" class="form-control" placeholder="Main Header" required <?php if($isEdit){echo 'value = "'.$article->getHeader().'"';}else if (isset ($_POST['headerInput'])){echo 'value = "'.$_POST['headerInput'].'"';} ?>/>
+                                        <input type="text" id="headerInput" name="headerInput" class="form-control" placeholder="Main Header" required onblur="DetailsValidation()" <?php
+if ($canView && $isEdit)
+{
+    echo 'value = "' . $retrivedArtcl->getHeader() . '"';
+}
+else if (isset($_POST['headerInput']))
+{
+    echo 'value = "' . $_POST['headerInput'] . '"';
+}
+?>/>
                                     </div>
 
 
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="form7Example3">Category</label>
-                                        <select name="categoryInput" id="categoryInput" class="form-control" required >
+                                        <select name="categoryInput" id="categoryInput" class="form-control" required onblur="DetailsValidation()">
                                             <option disabled selected=""></option>
-                                            <?php
-                                                $arcObj = new Article();
-                                                $categories = $arcObj->getAllCategories();
-                                                
-                                                for ($i = 0; $i<count($categories); $i++)
-                                                {
-                                                    if($isEdit && ($article->getCategoryID() == $categories[$i]->categoryID))
-                                                    {
-                                                        echo '<option selected value="'.$categories[$i]->categoryID.'">'.$categories[$i]->catgoryName.'</option>';
-                                                    }
-                                                    else
-                                                    {
-                                                        echo '<option value="'.$categories[$i]->categoryID.'">'.$categories[$i]->catgoryName.'</option>';
-                                                    }
-                                                }
-                                            ?>
-                                            
+<?php
+if ($canView)
+{
+    $arcObj = new Article();
+    $categories = $arcObj->getAllCategories();
+
+    for ($i = 0; $i < count($categories); $i++)
+    {
+        if ($isEdit && ($retrivedArtcl->getCategoryID() == $categories[$i]->categoryID))
+        {
+            echo '<option selected value="' . $categories[$i]->categoryID . '">' . $categories[$i]->catgoryName . '</option>';
+        }
+        else
+        {
+            echo '<option value="' . $categories[$i]->categoryID . '">' . $categories[$i]->catgoryName . '</option>';
+        }
+    }
+}
+?>
+
                                         </select>
                                     </div>
 
+<?php
+if (isset($_GET['artiID']))
+{
+    echo '<div class="form-outline mb-4"><img style="max-height:100px"  src=\'' . $retrivedArtcl->getThumbnail() . '\'></div>';
+}
+?>
+
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="thumbnailInput">Thumbnail</label>
-                                        <input type="file" accept="image/*"  id="thumbnailInput" name="thumbnailInput"  required/>
+                                        <input class="form-control" type="file" accept="image/*"  id="thumbnailInput" name="thumbnailInput" <?php
+                                        if (!(isset($_GET['artiID'])))
+                                        {
+                                            echo 'required';
+                                        }
+                                        ?>/>
                                     </div>
 
                                     <button type="submit" name="save" id="save" class="btn btn-primary btn-lg btn-block">
@@ -180,17 +292,39 @@ else if (isset($_POST['media']))
                                     <!-- Text input -->
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="titleInput">Title</label>
-                                        <input type="text" id="titleInput" name="titleInput" class="form-control" placeholder="Sub Header" required <?php if($isEdit){echo 'value = "'.$article->getTitle().'"';} ?>/> 
+                                        <input type="text" id="titleInput" name="titleInput" class="form-control" placeholder="Sub Header" required onblur="BodyValidation()" <?php
+                                        if ($isEdit && $canView)
+                                        {
+                                            echo 'value = "' . $retrivedArtcl->getTitle() . '"';
+                                        }
+                                        ?>/> 
                                     </div>
 
                                     <!-- Message input -->
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="bodyInput">Body</label>
-                                        <textarea class="form-control" id="bodyInput" name="bodyInput" rows="5" required> <?php if($isEdit){echo $article->getBody();} ?> </textarea>
+                                        <textarea class="form-control" id="bodyInput" name="bodyInput" onblur="BodyValidation()" <?php
+                                        if (isset($_GET['artiID']))
+                                        {
+                                            echo 'rows="10"';
+                                        }
+                                        else
+                                        {
+                                            echo 'rows="5"';
+                                        }
+                                        ?> required> <?php
+                                            if ($isEdit && $canView)
+                                            {
+                                                echo $retrivedArtcl->getBody();
+                                            }
+                                            ?> </textarea>
                                     </div>
 
                                     <button type="submit" name="media" id="media" class="btn btn-info btn-block" formnovalidate>
                                         View / Edit Article Media
+                                    </button>
+                                    <button type="submit" name="document" id="document" class="btn btn-info btn-block" formnovalidate>
+                                        View / Edit Article Documents
                                     </button>
 
 
@@ -203,6 +337,35 @@ else if (isset($_POST['media']))
                     </div>
                 </form>
 
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<section <?php
+if (!$canView)
+{
+    echo 'id="articleFormBody"';
+}
+else
+{
+    echo 'hidden';
+}
+?>>
+    <div class="container h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-10">
+
+                <h1 class="text-black mb-4">Error</h1>
+
+
+
+                <div class="card shadow" style="border-radius: 15px;">
+
+                    <p class="text-center"><?php echo $viewError; ?></p>
+                    <!-- add login check here and login button -->
+                </div>
 
             </div>
         </div>

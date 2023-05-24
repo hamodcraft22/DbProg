@@ -1,5 +1,4 @@
 <?php
-
 include 'importClass.php';
 
 // getting username and password from the log in form 
@@ -22,6 +21,7 @@ if (isset($_POST['loginForm'])) {
     }
 }
 
+
 // An error message incase log out was unsucceful. 
 if (!$user-> logout()){
     
@@ -33,6 +33,7 @@ if (!$user-> logout()){
 }
 
 if (isset($_POST['searchForm'])) {
+
     echo 'serach form was submitted';
 }
 ?>
@@ -40,8 +41,9 @@ if (isset($_POST['searchForm'])) {
 <!-- start of html code -->
 <html>
     <head>
-        <!--title of the website-->
-        <title>The MAZS</title> 
+
+        <title>The MAZS's</title>
+
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -57,7 +59,7 @@ if (isset($_POST['searchForm'])) {
 
         <!-- scripts and functions - fancy ocd stuff -->
         <script type="text/javascript">
-            
+
             function showHideSearch()
             {
                 if (document.getElementById("ttlDesc").checked || document.getElementById("authName").checked)
@@ -103,6 +105,87 @@ if (isset($_POST['searchForm'])) {
                         document.getElementById("beginDateInput").setAttribute("required", "");
                         document.getElementById("endDateInput").setAttribute("required", "");
                     }
+                }
+            }
+
+            function SearchValidation() {
+                if (document.getElementById("ttlDesc").checked || document.getElementById("authName").checked) 
+                {
+                    let text = document.getElementById("searchTextInput");
+                    
+                    if (document.getElementById("ttlDesc").checked) 
+                    {
+                        if (text.value == "") 
+                        {
+                            text.style.borderColor = "red";
+                            text.placeholder = "Required";
+                        } else {
+                            text.style.borderColor = "green";
+                            text.placeholder = "TEXT";
+                        }
+                    } else {
+                        let text = document.getElementById("searchTextInput");
+                        if (text.value == "") {
+                            text.style.borderColor = "red";
+                            text.placeholder = "Required";
+                        } else {
+                            text.style.borderColor = "green";
+                            text.placeholder = "TEXT";
+                        }
+                    }
+                } else if (document.getElementById("datePosted").checked) {
+                    let text = document.getElementById("dateSearchInput");
+                    if (text.value == "") {
+                        text.style.borderColor = "red";
+                        text.placeholder = "Required";
+                    } else {
+                        text.style.borderColor = "green";
+                        text.placeholder = "TEXT";
+                    }
+                    if (document.getElementById("dateRange").checked) {
+                        let text = document.getElementById("beginDateInput");
+                        let text2 = document.getElementById("endDateInput");
+                        if (text.value == "") {
+                            text.style.borderColor = "red";
+                            text.placeholder = "Required";
+                        } else {
+                            text.style.borderColor = "green";
+                            text.placeholder = "TEXT";
+                        }
+                        if (text2.value == "") {
+                            text2.style.borderColor = "red";
+                            text2.placeholder = "Required";
+                        } else {
+                            text2.style.borderColor = "green";
+                            text2.placeholder = "TEXT";
+                        }
+                    }
+                }
+            }
+
+            function LoginValidation() {
+                let userName = document.getElementById("usernameInput");
+                let password = document.getElementById("passwordInput");
+                if (userName.value == "" && password.value == "") {
+                    userName.style.borderColor = "red";
+                    userName.placeholder = "Required";
+                    password.style.borderColor = "red";
+                    password.placeholder = "Required";
+                } else if (userName.value == "" && password.value.length > 0) {
+                    userName.style.borderColor = "red";
+                    userName.placeholder = "Required";
+                    password.style.borderColor = "green";
+                    password.placeholder = "TEXT";
+                } else if (password.value == "" && userName.value.length > 0) {
+                    password.style.borderColor = "red";
+                    password.placeholder = "Required";
+                    userName.style.borderColor = "green";
+                    userName.placeholder = "TEXT";
+                } else {
+                    userName.style.borderColor = "green";
+                    password.style.borderColor = "green";
+                    userName.placeholder = "TEXT";
+                    password.placeholder = "TEXT";
                 }
             }
         </script>
@@ -153,13 +236,14 @@ if (isset($_POST['searchForm'])) {
                                 <li><a class="dropdown-item" href="#">Gas Monsters</a></li>
                             </ul>
                         </li>
-                        
+
                         <?php
                         // function to check if the role of the user is admin then he has the admin menue                         
                             if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
                             {
                                 echo 
                                 '
+
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
                                         <ul class="dropdown-menu">
@@ -168,8 +252,9 @@ if (isset($_POST['searchForm'])) {
                                         </ul>
                                     </li>
                                 ';
-                            }
+                        }
                         ?>
+
                         
                         
                         <?php
@@ -181,13 +266,13 @@ if (isset($_POST['searchForm'])) {
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Author</a>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="articles.php">My Articles</a></li>
+                                            <li><a class="dropdown-item" href="articles.php?userID=' . $userID . '">My Articles</a></li>
                                         </ul>
                                     </li>
                                 ';
-                            }
+                        }
                         ?>
-                        
+
                     </ul>
 
 
@@ -211,28 +296,28 @@ if (isset($_POST['searchForm'])) {
                                                     <!-- text search -->
                                                     <div class="form-group mt-1" id="textSearchDiv">
                                                         <label for="searchText">Search Phrases</label><br>
-                                                        <input type="text" class="form-control" id="searchTextInput" placeholder="Text" >
+                                                        <input type="text" class="form-control" id="searchTextInput" placeholder="Text" onblur="SearchValidation()">
                                                     </div>
 
                                                     <!-- spescific date search -->
                                                     <div class="form-group mt-1" id="dateSearchDiv">
                                                         <label for="dateSearch">Date</label><br>
-                                                        <input type="date" class="form-control" id="dateSearchInput">
+                                                        <input type="date" class="form-control" id="dateSearchInput" onblur="SearchValidation()">
                                                     </div>
 
                                                     <!-- date range search -->
                                                     <div class="form-group mt-1" id="dateRangeDiv">
                                                         <label for="beginDate">Begin Date</label><br>
-                                                        <input type="date" class="form-control" id="beginDateInput" placeholder="Text" >
+                                                        <input type="date" class="form-control" id="beginDateInput" placeholder="Text" onblur="SearchValidation()">
                                                         <label for="endDate">End Date</label><br>
-                                                        <input type="date" class="form-control" id="endDateInput" placeholder="Text" >
+                                                        <input type="date" class="form-control" id="endDateInput" placeholder="Text" onblur="SearchValidation()">
                                                     </div>
 
                                                     <div class="form-group mt-1 ">
                                                         <p>Search By</p>
 
                                                         <input type="radio" id="ttlDesc" name="serachBy" value="Title / Description" checked onclick="showHideSearch()">
-                                                        <label for="css">Title / Description</label><br>
+                                                        <label for="css">Title / Heading</label><br>
 
                                                         <input type="radio" id="authName" name="serachBy" value="Author Name" onclick="showHideSearch()">
                                                         <label for="html">Author Name</label><br>
@@ -270,20 +355,20 @@ if (isset($_POST['searchForm'])) {
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink" style="min-width: 250px;">
 
 
-                                    
-                                    
+
+
                                     <?php
-                                        if (!isset($_SESSION['userID']) || $_SESSION['userID'] == null)
-                                        {
-                                            echo '<li>
+                                    if (!isset($_SESSION['userID']) || $_SESSION['userID'] == null)
+                                    {
+                                        echo '<li>
                                                     <div class="row px-3">
                                                         <div class="col-md-12">
                                                             <form class="form" role="form" method="post" accept-charset="UTF-8" id="login-nav">
                                                                 <div class="form-group mt-1">
-                                                                    <input type="text" class="form-control" id="usernameInput" name="usernameInput" placeholder="Username" required="">
+                                                                    <input type="text" class="form-control" id="usernameInput" name="usernameInput" placeholder="Username" required="" onblur="LoginValidation()">
                                                                 </div>
                                                                 <div class="form-group mt-1">
-                                                                    <input type="password" class="form-control" id="passwordInput" name="passwordInput" placeholder="Password" required="">
+                                                                    <input type="password" class="form-control" id="passwordInput" name="passwordInput" placeholder="Password" required="" onblur="LoginValidation()">
                                                                 </div>
                                                                 <div class="form-group mt-1">
                                                                     <button type="submit" class="btn btn-primary btn-block">Sign in</button>
@@ -295,15 +380,15 @@ if (isset($_POST['searchForm'])) {
                                                 </li>
                                                 <li class="dropdown-divider"></li>
                                                 <li><a class="dropdown-item" href="register.php"><i class="fa-regular fa-user"></i> Sign up</a></li>';
-                                        }
+                                    }
                                     ?>
 
-                                    
-                                    <?php  
+
+                                    <?php
                                     if (isset($_SESSION['userID']) && $_SESSION['userID'] != null)
                                     {
-                                        echo 
-                                        '   <li><p class="dropdown-item">Welcome Back '.$_SESSION['username'].'!</p></li>
+                                        echo
+                                        '   <li><p class="dropdown-item">Welcome Back ' . $_SESSION['username'] . '!</p></li>
                                             <!--// add profile picture part here-->
                                             <li class="dropdown-divider"></li>
                                             <li><a class="dropdown-item" href="profile.php"><i class="fa-regular fa-user"></i> Profile</a></li>
@@ -311,7 +396,7 @@ if (isset($_POST['searchForm'])) {
                                         ';
                                     }
                                     ?>
-                                    
+
                                 </ul>
                             </li>
                         </ul>
