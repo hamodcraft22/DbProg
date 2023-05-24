@@ -38,7 +38,31 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                 else if (isset($_POST['mediaSave']))
                 {
                     // here is where the actual save of the media and the image happens
-                    echo 'zift was here';
+                    
+                    $name = $_POST['nameInput'];
+                    
+                    // add image errors and validation (upload errors missing from mid dont forget
+                    $path = "assests/thumbnails//" . $_FILES['thumbnailInput']['name']; //unix path uses forward slash
+                    move_uploaded_file($_FILES['thumbnailInput']['tmp_name'], $path);
+                    
+                    $type = end((explode(".", $name)));
+                    
+                    
+                    $newMedia = new Media();
+                    
+                    $newMedia->setMediaName($name);
+                    $newMedia->setMediaPath($path);
+                    $newMedia->setMediaType($type);
+                    $newMedia->setArticleID($articleID);
+                    
+                    $mediaID = $newMedia->saveMedia();
+                    
+                    if ($mediaID != false)
+                    {
+                        echo "<script>window.location.href='addEditMedia.php?artiID=$articleID"."mediaID=$mediaID';</script>";
+                        exit;
+                    }
+                    
                 }
             }
             else
