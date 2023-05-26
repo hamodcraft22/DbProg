@@ -56,6 +56,24 @@ if (isset($_POST['profileForm']))
     window.addEventListener('resize', chnageSize);
 </script>
 
+<section <?php if(!(isset($_GET['id']) && isset($_SESSION['roleType']) && $_SESSION['roleType'] != 'admin')){echo 'hidden';} else {echo 'id="profilePageBody"';}  ?>>
+    <div class="container h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-9">
+
+                <h1 class="text-black mb-4">Profile</h1>
+
+                <div class="card shadow" style="border-radius: 15px;">
+                    
+                    <p class="text-center">You cannot edit other's information</p>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- implemented from  mdbootstrap.com -->
 <!-- https://mdbootstrap.com/docs/standard/extended/registration/ -->
 
@@ -117,22 +135,6 @@ if (isset($_POST['profileForm']))
     </div>
 </section>
 
-<section <?php if(!(isset($_GET['id']) && isset($_SESSION['roleType']) && $_SESSION['roleType'] != 'admin')){echo 'hidden';} else {echo 'id="profilePageBody"';}  ?>>
-    <div class="container h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-xl-9">
 
-                <h1 class="text-black mb-4">Profile</h1>
-
-                <div class="card shadow" style="border-radius: 15px;">
-                    
-                    <p class="text-center">You cannot edit other's information</p>
-
-                </div>
-
-            </div>
-        </div>
-    </div>
-</section>
 
 <script type="text/javascript">chnageSize();</script>

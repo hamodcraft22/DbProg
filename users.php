@@ -24,6 +24,27 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
     window.addEventListener('resize', chnageSize);
 </script>
 
+
+<!--if the user is not an admin echo page cannot be accessed by him -->
+<section <?php if((isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')){echo 'hidden';} else {echo 'id="usersPageBody"';}  ?>>
+    <div class="container h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-10">
+
+                <h1 class="text-black mb-4">All Users</h1>
+
+                <div class="card shadow" style="border-radius: 15px;">
+                    
+                    <p class="text-center">You cannot use this page unless you are an Admin</p>
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
 <!--if the user is an admin display all users page -->
 <section <?php if(!(isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')){echo 'hidden';} else {echo 'id="usersPageBody"';} ?>>
     <div class="container h-100">
@@ -94,24 +115,7 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
     </div>
 </section>
 
-<!--if the user is not an admin echo page cannot be accessed by him -->
-<section <?php if((isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')){echo 'hidden';} else {echo 'id="usersPageBody"';}  ?>>
-    <div class="container h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-xl-10">
 
-                <h1 class="text-black mb-4">All Users</h1>
-
-                <div class="card shadow" style="border-radius: 15px;">
-                    
-                    <p class="text-center">You cannot use this page unless you are an Admin</p>
-                    
-                </div>
-
-            </div>
-        </div>
-    </div>
-</section>
 
 
 <script type="text/javascript">chnageSize();</script>

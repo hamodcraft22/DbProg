@@ -60,8 +60,36 @@ else
 </script>
 
 
-<!--if the user is an admin or author can view all his articales -->
+<section <?php
+if (!$canView)
+{
+    echo 'id="articlesPageBody"';
+}
+else
+{
+    echo 'hidden';
+}
+?>>
+    <div class="container h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-10">
 
+                <h1 class="text-black mb-4">Error</h1>
+
+
+
+                <div class="card shadow" style="border-radius: 15px;">
+
+                    <p class="text-center"><?php echo $viewError; ?></p>
+                    <!-- add login check here and login button -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--if the user is an admin or author can view all his articales -->
 <section <?php
 if ($canView)
 {
@@ -135,8 +163,13 @@ else
                                                 <a type="button" class="btn btn-success" href="addEditArticle.php?artiID=' . $newArtcl->getArticleID() . '"><i class="fas fa-edit"></i></a>';
                                 }
 
+                                if ($newArtcl->getStatus() != 'published' || $_SESSION['roleType'] == 'admin')
+                                {
+                                    echo '<a type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></a>';
+                                }
+                                
                                 echo '
-                                                <a type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></a>
+                                                
                                             </td>
                                         </tr>
                                     ';
@@ -156,33 +189,6 @@ else
 </section>
 
 
-<section <?php
-if (!$canView)
-{
-    echo 'id="articlesPageBody"';
-}
-else
-{
-    echo 'hidden';
-}
-?>>
-    <div class="container h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-xl-10">
 
-                <h1 class="text-black mb-4">Error</h1>
-
-
-
-                <div class="card shadow" style="border-radius: 15px;">
-
-                    <p class="text-center"><?php echo $viewError; ?></p>
-                    <!-- add login check here and login button -->
-                </div>
-
-            </div>
-        </div>
-    </div>
-</section>
 
 <script type="text/javascript">chnageSize();</script>

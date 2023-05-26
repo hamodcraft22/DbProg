@@ -30,7 +30,7 @@ if (isset($_GET['artiID']))
             $canView = true;
 
             $retrivedArtcl->increaseViews();
-            
+
             $media = new Media();
             $media->setArticleID($articleID);
             $medias = $media->getAllMedia();
@@ -38,43 +38,43 @@ if (isset($_GET['artiID']))
             $documnt = new artiDocument();
             $documnt->setArticleID($articleID);
             $docs = $documnt->getAllDocument();
-            
+
             $comment = new Comment();
             $comment->setArticleID($articleID);
             $commetns = $comment->getAllComms();
-            
+
             if (isset($_POST['likeButton']))
             {
                 echo 'you have liked this article!';
                 $retrivedArtcl->increaseRate();
             }
-            else if (isset ($_POST['dislikeButton']))
+            else if (isset($_POST['dislikeButton']))
             {
                 echo 'you have disliked this article!';
                 $retrivedArtcl->decreaseRate();
             }
-            
-            if(isset($_SESSION['userID']))
+
+            if (isset($_SESSION['userID']))
             {
                 //if any user is logged in, they can add a comment
                 $canComment = true;
-                
-                if(isset($_POST['commentPost']))
+
+                if (isset($_POST['commentPost']))
                 {
                     // do validation here for comment
                     $commentTitle = $_POST['ctitleInput'];
                     $commentBody = $_POST['cBodyInput'];
-                    
+
                     $newUserComment = new Comment();
                     $newUserComment->setCommentTitle($commentTitle);
                     $newUserComment->setCommentBody($commentBody);
                     $newUserComment->setUserID($_SESSION['userID']);
                     $newUserComment->setArticleID($articleID);
-                    
+
                     if ($newUserComment->saveCom())
                     {
                         echo 'comment happend';
-                        
+
                         echo "<script>window.location.href='viewArticle.php?artiID=$articleID';</script>";
                         exit;
                     }
@@ -82,7 +82,6 @@ if (isset($_GET['artiID']))
                     {
                         echo 'error hpnd';
                     }
-                    
                 }
             }
         }
@@ -112,6 +111,35 @@ else
 </script>
 
 
+<section <?php
+                if (!$canView)
+                {
+                    echo 'id="articlePageBody"';
+                }
+                else
+                {
+                    echo 'hidden';
+                }
+                    ?>>
+    <div class="container h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-10">
+
+                <h1 class="text-black mb-4">Error</h1>
+
+
+
+                <div class="card shadow" style="border-radius: 15px;">
+
+                    <p class="text-center"><?php echo $viewError; ?></p>
+                    <!-- add login check here and login button -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- implemnted from https://mdbootstrap.com/snippets/standard/mdbootstrap/2515550 -->
 
 <!--Main layout-->
@@ -124,7 +152,7 @@ if (!$canView)
     <div class="container">
         <!--Grid row-->
         <div class="row">
-            
+
             <!--Grid column-->
             <div class="col-md-4 mb-4">
                 <!--Section: Sidebar-->
@@ -146,31 +174,31 @@ if (!$canView)
                     <!--Section: Video-->
                     <section class="text-center">
                         <h5 class="mb-4">Download Documents</h5>
-                        
-                        <?php
-                            for ($i = 0; $i < count($docs); $i++)
-                            {
 
-                                $newDoc = new artiDocument();
-                                $newDoc->setDocumentID($docs[$i]->documentID);
-                                $newDoc->initDwithID();
-                                
-                                echo 
-                                '
+                        <?php
+                        for ($i = 0; $i < count($docs); $i++)
+                        {
+
+                            $newDoc = new artiDocument();
+                            $newDoc->setDocumentID($docs[$i]->documentID);
+                            $newDoc->initDwithID();
+
+                            echo
+                            '
                                     <div class="m-1">
-                                        <a role="button" class="btn btn-primary" href="'.$newDoc->getDocumentPath().'" target="_blank">Download File "'.$newDoc->getDocumentName().'"<i class="fas fa-download ms-2"></i></a>
+                                        <a role="button" class="btn btn-primary" href="' . $newDoc->getDocumentPath() . '" target="_blank">Download File "' . $newDoc->getDocumentName() . '"<i class="fas fa-download ms-2"></i></a>
                                     </div>
                                 ';
-                            }
+                        }
                         ?>
-                        
+
                     </section>
                     <!--Section: Video-->
                 </section>
                 <!--Section: Sidebar-->
             </div>
             <!--Grid column-->
-            
+
             <!--Grid column-->
             <div class="col-md-8 mb-4">
                 <!--Section: Post data-mdb-->
@@ -250,108 +278,112 @@ if (!$canView)
 
 
                 <!--Section: Comments-->
-                
+
                 <section class="border-bottom mb-3">
                     <p class="text-center"><strong>Comments: <?php echo count($commetns) ?></strong></p>
-                    
+
                     <?php
-                        for ($i = 0; $i<count($commetns); $i++)
+                    for ($i = 0; $i < count($commetns); $i++)
+                    {
+                        $newComment = new Comment();
+                        $newComment->setCommentID($commetns[$i]->commentID);
+                        $newComment->initCwithID();
+
+                        if ($newComment->getStatusID() != 4)
                         {
-                            $newComment = new Comment();
-                            $newComment->setCommentID($commetns[$i]->commentID);
-                            $newComment->initCwithID();
-                            
-                            
-                            //add delete button here
-                            echo 
+                            $newUser = new User();
+                            $newUser->setUserID($newComment->getUserID());
+                            $newUser->initWithID();
+                            $userCommentRole = $newUser->getRole();
+                            echo
                             '
                                 <div class="row mb-4">
                                     <div>
-                                        <p class="mb-2"><strong>'.$newComment->getCommentTitle().'</strong> By '.$newComment->getUserFullName().'</p>
-                                        <p class="text-muted mb-2">'.$newComment->getCommentDate().'</p>
-                                        <p>'.$newComment->getCommentBody().'</p>
-                                    </div>
-                                </div>
+                                        <p class="mb-2"><strong>' . $newComment->getCommentTitle() . '</strong> By ' . $newComment->getUserFullName() . '</p>
+                                        <p class="text-muted mb-2">' . $newComment->getCommentDate() . '</p>
+                                        <p>' . $newComment->getCommentBody() . '</p>
                             ';
+
+                            if ($_SESSION['roleType'] == 'admin' && ($userCommentRole != 'admin' || $_SESSION['userID'] == $newUser->getUserID()))
+                            {
+                                echo '<a type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></a>';
+                            }
+
+                            echo '</div>
+                                </div>';
                         }
+                        else
+                        {
+                            echo
+                            '
+                                <div class="row mb-4">
+                                    <div>
+                                        <p class="mb-2"><strong>This comment was deleted by Admin</p>
+                                    </div>
+                                </div>';
+                        }
+                    }
                     ?>
-                    
-                    
 
 
-                    
+
+
+
                 </section>
                 <!--Section: Comments-->
 
-                
+
                 <!--Section: Reply if the user is logged in they can comment-->
-                
-                    <section <?php if(!$canComment){echo 'hidden';} ?>>
-                        <p class="text-center"><strong>Leave a Comments</strong></p>
 
-                        <form method="post">
-                            <!-- Name input -->
-                            <div class="form-outline mb-4">
-                                <label class="form-label" for="ctitleInput">Title</label>
-                                <input type="text" id="ctitleInput" name="ctitleInput" required class="form-control" />
-                            </div>
+                <section <?php
+                    if (!$canComment)
+                    {
+                        echo 'hidden';
+                    }
+                    ?>>
+                    <p class="text-center"><strong>Leave a Comments</strong></p>
 
-                            <!-- Message input -->
-                            <div class="form-outline mb-4">
-                                <label class="form-label" for="cBodyInput">Comment</label>
-                                <textarea class="form-control" id="cBodyInput" required name="cBodyInput" rows="4"></textarea>
-                            </div>
+                    <form method="post">
+                        <!-- Name input -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="ctitleInput">Title</label>
+                            <input type="text" id="ctitleInput" name="ctitleInput" required class="form-control" />
+                        </div>
 
-                            <!-- Submit button -->
-                            <button type="submit" name="commentPost" class="btn btn-primary btn-block mb-4">
-                                Publish
-                            </button>
-                        </form>
-                    </section>
-                
-                    <section <?php if($canComment){echo 'hidden';} ?>>
-                        <p class="text-center"><strong>Please login to leave a comment</strong></p>
-                        <p class="text-center"></p>
-                    </section>
-                
-                    <!--Section: Reply-->
+                        <!-- Message input -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="cBodyInput">Comment</label>
+                            <textarea class="form-control" id="cBodyInput" required name="cBodyInput" rows="4"></textarea>
+                        </div>
+
+                        <!-- Submit button -->
+                        <button type="submit" name="commentPost" class="btn btn-primary btn-block mb-4">
+                            Publish
+                        </button>
+                    </form>
+                </section>
+
+                <section <?php
+                if ($canComment)
+                {
+                    echo 'hidden';
+                }
+                    ?>>
+                    <p class="text-center"><strong>Please login to leave a comment</strong></p>
+                    <p class="text-center"></p>
+                </section>
+
+                <!--Section: Reply-->
             </div>
             <!--Grid column-->
 
-            
+
         </div>
         <!--Grid row-->
     </div>
 </main>
 <!--Main layout-->
 
-<section <?php
-if (!$canView)
-{
-    echo 'id="articlePageBody"';
-}
-else
-{
-    echo 'hidden';
-}
-?>>
-    <div class="container h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-xl-10">
 
-                <h1 class="text-black mb-4">Error</h1>
-
-
-
-                <div class="card shadow" style="border-radius: 15px;">
-
-                    <p class="text-center"><?php echo $viewError; ?></p>
-                    <!-- add login check here and login button -->
-                </div>
-
-            </div>
-        </div>
-    </div>
-</section>
 
 <script type="text/javascript">chnageSize();</script>
