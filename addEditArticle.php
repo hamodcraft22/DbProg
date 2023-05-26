@@ -1,6 +1,8 @@
 <?php
 include './header.php';
 
+$mediaArray = array('ogm','wmv','mpg','webm','ogv','mov','asx','mpeg','mp4','m4v','avi','opus','flac','weba','wav','ogg','m4a','oga','mid','mp3','aiff','wma','au');
+
 $canView = true;
 $viewError = '';
 
@@ -111,20 +113,24 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                             $mediaCheck->setMediaID($medias[$m]->mediaID);
                             $mediaCheck->initMwithID();
                             
-                            if ($newMedia->getMediaType() != 'ogm' && $newMedia->getMediaType() != 'wmv' && $newMedia->getMediaType() != 'mpg' && $newMedia->getMediaType() != 'webm' && $newMedia->getMediaType() != 'ogv' && $newMedia->getMediaType() != 'mov' && $newMedia->getMediaType() != 'asx' && $newMedia->getMediaType() != 'mpeg' && $newMedia->getMediaType() != 'mp4' && $newMedia->getMediaType() != 'm4v' && $newMedia->getMediaType() != 'avi')
+                            if(in_array($mediaCheck->getMediaType(), $mediaArray))
                             {
-                                $countOfImages = $countOfImages +1;
+                                $countOfVidAud = $countOfVidAud+1;
+                            }
+                            else 
+                            {
+                                $countOfImages = $countOfImages+1;
                             }
                         }
                         
-                        if (count($medias) < 2)
+                        if ($countOfImages < 1)
                         {
                             $errors .= 'you need at least one image for the article .<br/>';
                         }
 
-                        if (count($docs) < 1)
+                        if ($countOfVidAud < 1)
                         {
-                            $errors .= 'you need at least one document for the article .<br/>';
+                            $errors .= 'you need at least one Video/Audio for the article .<br/>';
                         }
 
 

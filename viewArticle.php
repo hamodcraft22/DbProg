@@ -5,6 +5,9 @@ $canView = false;
 $canComment = false;
 $viewError = '';
 
+$videoArray = array('ogm','wmv','mpg','webm','ogv','mov','asx','mpeg','mp4','m4v','avi');
+$audioArray = array('opus','flac','weba','wav','ogg','m4a','oga','mid','mp3','aiff','wma','au');
+
 if (isset($_GET['artiID']))
 {
     $retrivedArtcl = new Article();
@@ -216,12 +219,21 @@ if (!$canView)
                                 $newMedia->setMediaID($medias[$i]->mediaID);
                                 $newMedia->initMwithID();
 
-                                if ($newMedia->getMediaType() != 'ogm' && $newMedia->getMediaType() != 'wmv' && $newMedia->getMediaType() != 'mpg' && $newMedia->getMediaType() != 'webm' && $newMedia->getMediaType() != 'ogv' && $newMedia->getMediaType() != 'mov' && $newMedia->getMediaType() != 'asx' && $newMedia->getMediaType() != 'mpeg' && $newMedia->getMediaType() != 'mp4' && $newMedia->getMediaType() != 'm4v' && $newMedia->getMediaType() != 'avi')
+                                if (in_array($newMedia->getMediaType(), $videoArray))
                                 {
                                     echo
                                     '
                                             <div class="carousel-item active">
-                                                <img class="d-block w-100 img-fluid shadow-2-strong rounded-5 mb-4" src="' . $newMedia->getMediaPath() . '" alt="' . $newMedia->getMediaName() . '">
+                                                <video autoplay muted loop style="width: 100%" class="d-block w-100 img-fluid shadow-2-strong rounded-5 mb-4"><source src="' . $newMedia->getMediaPath() . '"></video>
+                                            </div>
+                                        ';
+                                }
+                                else if (in_array($newMedia->getMediaType(), $audioArray))
+                                {
+                                    echo
+                                    '
+                                            <div class="carousel-item active">
+                                                <audio><source src="' . $newMedia->getMediaPath() . '"></audio>
                                             </div>
                                         ';
                                 }
@@ -230,7 +242,7 @@ if (!$canView)
                                     echo
                                     '
                                             <div class="carousel-item active">
-                                                <video autoplay muted loop style="width: 100%" class="d-block w-100 img-fluid shadow-2-strong rounded-5 mb-4"><source src="' . $newMedia->getMediaPath() . '"></video>
+                                                <img class="d-block w-100 img-fluid shadow-2-strong rounded-5 mb-4" src="' . $newMedia->getMediaPath() . '" alt="' . $newMedia->getMediaName() . '">
                                             </div>
                                         ';
                                 }

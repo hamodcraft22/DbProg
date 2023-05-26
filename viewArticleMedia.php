@@ -4,6 +4,9 @@ include './header.php';
 $canView = true;
 $viewError = '';
 
+$videoArray = array('ogm','wmv','mpg','webm','ogv','mov','asx','mpeg','mp4','m4v','avi');
+$audioArray = array('opus','flac','weba','wav','ogg','m4a','oga','mid','mp3','aiff','wma','au');
+
 //get request to get article id;
 if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
 {
@@ -160,13 +163,17 @@ else
                                             <th class="text-center" scope="row">' . $newMedia->getMediaID() . '</th>
                                             <td>' . $newMedia->getMediaName() . '</td>';
                                             
-                                            if ($newMedia->getMediaType() != 'ogm' && $newMedia->getMediaType() != 'wmv' && $newMedia->getMediaType() != 'mpg' && $newMedia->getMediaType() != 'webm' && $newMedia->getMediaType() != 'ogv' && $newMedia->getMediaType() != 'mov' && $newMedia->getMediaType() != 'asx' && $newMedia->getMediaType() != 'mpeg' && $newMedia->getMediaType() != 'mp4' && $newMedia->getMediaType() != 'm4v' && $newMedia->getMediaType() != 'avi')
+                                            if(in_array($newMedia->getMediaType(), $videoArray))
                                             {
-                                                echo '<td class="text-center"><a href="'.$newMedia->getMediaPath().'"><img style="height:50px" src="' . $newMedia->getMediaPath() . '"></a></td>';
+                                                echo '<td class="text-center"><a href="'.$newMedia->getMediaPath().'"><video autoplay muted loop style="height:50px"><source src="' . $newMedia->getMediaPath() . '"></video></a></td>';
+                                            }
+                                            else if (in_array($newMedia->getMediaType(), $audioArray))
+                                            {
+                                                echo '<td class="text-center"><a href="'.$newMedia->getMediaPath().'"><audio><source src="' . $newMedia->getMediaPath() . '"></audio></a></td>';
                                             }
                                             else
                                             {
-                                                echo '<td class="text-center"><a href="'.$newMedia->getMediaPath().'"><video autoplay muted loop style="height:50px"><source src="' . $newMedia->getMediaPath() . '"></video></a></td>';
+                                                echo '<td class="text-center"><a href="'.$newMedia->getMediaPath().'"><img style="height:50px" src="' . $newMedia->getMediaPath() . '"></a></td>';
                                             }
                                     
                                     echo
