@@ -211,7 +211,7 @@ else
                             <!-- Text input -->
                             <div class="form-outline mb-4" <?php if ($isEdit){echo 'hidden';} ?> >
                                 <label class="form-label" for="fileInput">File</label>
-                                <input type="file" id="fileInput" name="fileInput" accept="image/*,video/*" class="form-control" <?php if (!$isEdit){echo 'required';} ?>/> 
+                                <input type="file" id="fileInput" name="fileInput" accept="audio/*" class="form-control" <?php if (!$isEdit){echo 'required';} ?>/> 
                             </div>
 
 

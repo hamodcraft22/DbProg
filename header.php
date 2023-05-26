@@ -32,8 +32,6 @@ if (isset($_POST['searchForm']))
         $textInput = $_POST['searchTextInput'];
         $textSearchType = $_POST['searchType'];
 
-        
-        
         if ($textSearchType == 'all')
         {
             $textInput = $search->handleAll($textInput);
@@ -60,7 +58,7 @@ if (isset($_POST['searchForm']))
         }
 
 
-        
+
         if ($_POST['serachBy'] == 'ttlDesc')
         {
             $_SESSION['serachOut'] = $search->byTitleDesc($textInput);
@@ -168,14 +166,14 @@ if (isset($_POST['searchForm']))
                 }
             }
 
-            $(document).ready(function(){
-                $('#form input').blur(function(){
-                    if(!$(this).val()){
+            $(document).ready(function () {
+                $('#form input').blur(function () {
+                    if (!$(this).val()) {
                         $(this).attr("placeholder", "required");
-                        $(this).css("border-color","red");
-                    } else{
+                        $(this).css("border-color", "red");
+                    } else {
                         $(this).attr("placeholder", "text");
-                        $(this).css("border-color","green");
+                        $(this).css("border-color", "green");
                     }
                 });
             });
@@ -228,12 +226,12 @@ if (isset($_POST['searchForm']))
                             </ul>
                         </li>
 
-                        <?php
-                        // function to check if the role of the user is admin then he has the admin menue                         
-                        if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
-                        {
-                            echo
-                            '
+<?php
+// function to check if the role of the user is admin then he has the admin menue                         
+if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
+{
+    echo
+    '
 
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
@@ -243,18 +241,18 @@ if (isset($_POST['searchForm']))
                                         </ul>
                                     </li>
                                 ';
-                        }
-                        ?>
+}
+?>
 
 
 
-                        <?php
-                        // function to check if the role of the user is an author then he has the author menue
-                        if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'author')
-                        {
-                            $userID = $_SESSION['userID'];
-                            echo
-                            '
+<?php
+// function to check if the role of the user is an author then he has the author menue
+if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'author')
+{
+    $userID = $_SESSION['userID'];
+    echo
+    '
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Author</a>
                                         <ul class="dropdown-menu">
@@ -262,8 +260,8 @@ if (isset($_POST['searchForm']))
                                         </ul>
                                     </li>
                                 ';
-                        }
-                        ?>
+}
+?>
 
                     </ul>
 
@@ -365,10 +363,10 @@ if (isset($_POST['searchForm']))
 
 
 
-                                    <?php
-                                    if (!isset($_SESSION['userID']) || $_SESSION['userID'] == null)
-                                    {
-                                        echo '<li>
+<?php
+if (!isset($_SESSION['userID']) || $_SESSION['userID'] == null)
+{
+    echo '<li>
                                                     <div class="row px-3">
                                                         <div class="col-md-12">
                                                             <form class="form" id="form" role="form" method="post" accept-charset="UTF-8" id="login-nav">
@@ -388,8 +386,8 @@ if (isset($_POST['searchForm']))
                                                 </li>
                                                 <li class="dropdown-divider"></li>
                                                 <li><a class="dropdown-item" href="register.php"><i class="fa-regular fa-user"></i> Sign up</a></li>';
-                                    }
-                                    ?>
+}
+?>
 
 
 <?php
@@ -402,8 +400,8 @@ if (isset($_SESSION['userID']) && $_SESSION['userID'] != null)
                                             <li><a class="dropdown-item" href="profile.php"><i class="fa-regular fa-user"></i> Profile</a></li>
                                             <li><a class="dropdown-item" href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a></li>
                                         ';
-                                    }
-                                    ?>
+}
+?>
                                     <li><a class="dropdown-item"><i class="fa-solid"></i><div id="google_translate_element"></div></a></li>
 
                                 </ul>
@@ -423,7 +421,7 @@ if (isset($_SESSION['userID']) && $_SESSION['userID'] != null)
                 new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
             }
         </script>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 
 

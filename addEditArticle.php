@@ -36,11 +36,11 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                     {
                         // add check to see if foto is here
                         echo 'its a save from an edit';
-                        
+
                         $article = new Article();
                         $article->setArticleID($articleID);
                         $article->initAwithID();
-                        
+
                         $errors = '';
 
                         $header = $_POST['headerInput'];
@@ -50,26 +50,26 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
 
                         // add image errors and validation (upload errors missing from mid dont forget)
 
-                        if (isset($_FILES['thumbnailInput']['name']) && $_FILES['thumbnailInput']['name']!= null)
+                        if (isset($_FILES['thumbnailInput']['name']) && $_FILES['thumbnailInput']['name'] != null)
                         {
                             echo 'image chnaged';
                             $imageChnage = true;
-                            $name = "assests/thumbnails//" . $_FILES['thumbnailInput']['name']; 
+                            $name = "assests/thumbnails//" . $_FILES['thumbnailInput']['name'];
                             move_uploaded_file($_FILES['thumbnailInput']['tmp_name'], $name);
                             $thumbnail = $name;
                         }
 
-                        
+
 
                         if ($errors == '')
                         {
-                            
+
 
                             $article->setHeader($header);
                             $article->setTitle($title);
                             $article->setBody($body);
                             $article->setCategoryID($catID);
-                            if($imageChnage)
+                            if ($imageChnage)
                             {
                                 $article->setThumbnail($thumbnail);
                             }
@@ -88,44 +88,57 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                     else if (isset($_POST['publish']))
                     {
                         $errors = '';
-                        
-                        
-                        
+
                         $article = new Article();
                         $article->setArticleID($articleID);
                         $article->initAwithID();
-                        
+
                         $media = new Media();
                         $media->setArticleID($articleID);
                         $medias = $media->getAllMedia();
-                        
+
                         $documnt = new artiDocument();
                         $documnt->setArticleID($articleID);
                         $docs = $documnt->getAllDocument();
-                        
-                        if (!(count($medias) >= 1))
+
+                        $countOfImages = 0;
+                        $countOfVidAud = 0;
+
+                        for ($m = 0; $m<count($medias); $m++)
                         {
-                            $errors .= 'you need at least one media for the article .<br/>';
+                            
+                            $mediaCheck = new Media();
+                            $mediaCheck->setMediaID($medias[$m]->mediaID);
+                            $mediaCheck->initMwithID();
+                            
+                            if ($newMedia->getMediaType() != 'ogm' && $newMedia->getMediaType() != 'wmv' && $newMedia->getMediaType() != 'mpg' && $newMedia->getMediaType() != 'webm' && $newMedia->getMediaType() != 'ogv' && $newMedia->getMediaType() != 'mov' && $newMedia->getMediaType() != 'asx' && $newMedia->getMediaType() != 'mpeg' && $newMedia->getMediaType() != 'mp4' && $newMedia->getMediaType() != 'm4v' && $newMedia->getMediaType() != 'avi')
+                            {
+                                $countOfImages = $countOfImages +1;
+                            }
                         }
                         
-                        if (!(count($docs) >= 1))
+                        if (count($medias) < 2)
+                        {
+                            $errors .= 'you need at least one image for the article .<br/>';
+                        }
+
+                        if (count($docs) < 1)
                         {
                             $errors .= 'you need at least one document for the article .<br/>';
                         }
-                        
-                        
+
+
                         if ($errors == '')
                         {
-                            
+
                             $article->setStatusID(2);
                             $article->updateArti();
                             $article->setPubDate();
                             echo 'its a publish from edit all done';
-                            
+
                             $userID = $_SESSION['userID'];
                             echo "<script>window.location.href='articles.php?userID=$userID';</script>";
                             exit;
-                            
                         }
                         else
                         {
@@ -237,32 +250,32 @@ else
 
     window.addEventListener('resize', chnageSize);
 
-    $(document).ready(function(){
-        $('#articleForm input').blur(function(){
-            if(!$(this).val()){
+    $(document).ready(function () {
+        $('#articleForm input').blur(function () {
+            if (!$(this).val()) {
                 $(this).attr("placeholder", "required");
-                $(this).css("border-color","red");
-            } else{
+                $(this).css("border-color", "red");
+            } else {
                 $(this).attr("placeholder", "text");
-                $(this).css("border-color","green");
+                $(this).css("border-color", "green");
             }
         });
-        $('#bodyInput').blur(function(){
-            if(!$(this).val()){
+        $('#bodyInput').blur(function () {
+            if (!$(this).val()) {
                 $(this).attr("placeholder", "required");
-                $(this).css("border-color","red");
-            } else{
+                $(this).css("border-color", "red");
+            } else {
                 $(this).attr("placeholder", "text");
-                $(this).css("border-color","green");
+                $(this).css("border-color", "green");
             }
         });
-        $('#categoryInput').blur(function(){
-            if(!$(this).val()){
+        $('#categoryInput').blur(function () {
+            if (!$(this).val()) {
                 $(this).attr("placeholder", "required");
-                $(this).css("border-color","red");
-            } else{
+                $(this).css("border-color", "red");
+            } else {
                 $(this).attr("placeholder", "text");
-                $(this).css("border-color","green");
+                $(this).css("border-color", "green");
             }
         });
     });
@@ -329,15 +342,15 @@ else
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="headerInput">Header</label>
                                         <input type="text" id="headerInput" name="headerInput" class="form-control" placeholder="Main Header" required" <?php
-                                        if ($canView && $isEdit)
-                                        {
-                                            echo 'value = "' . $retrivedArtcl->getHeader() . '"';
-                                        }
-                                        else if (isset($_POST['headerInput']))
-                                        {
-                                            echo 'value = "' . $_POST['headerInput'] . '"';
-                                        }
-                                        ?>/>
+if ($canView && $isEdit)
+{
+    echo 'value = "' . $retrivedArtcl->getHeader() . '"';
+}
+else if (isset($_POST['headerInput']))
+{
+    echo 'value = "' . $_POST['headerInput'] . '"';
+}
+?>/>
                                     </div>
 
 
@@ -345,44 +358,44 @@ else
                                         <label class="form-label" for="form7Example3">Category</label>
                                         <select name="categoryInput" id="categoryInput" class="form-control" required>
                                             <option disabled selected=""></option>
-                                            <?php
-                                            if ($canView)
-                                            {
-                                                $arcObj = new Article();
-                                                $categories = $arcObj->getAllCategories();
+<?php
+if ($canView)
+{
+    $arcObj = new Article();
+    $categories = $arcObj->getAllCategories();
 
-                                                for ($i = 0; $i < count($categories); $i++)
-                                                {
-                                                    if ($isEdit && ($retrivedArtcl->getCategoryID() == $categories[$i]->categoryID))
-                                                    {
-                                                        echo '<option selected value="' . $categories[$i]->categoryID . '">' . $categories[$i]->catgoryName . '</option>';
-                                                    }
-                                                    else
-                                                    {
-                                                        echo '<option value="' . $categories[$i]->categoryID . '">' . $categories[$i]->catgoryName . '</option>';
-                                                    }
-                                                }
-                                            }
-                                            ?>
+    for ($i = 0; $i < count($categories); $i++)
+    {
+        if ($isEdit && ($retrivedArtcl->getCategoryID() == $categories[$i]->categoryID))
+        {
+            echo '<option selected value="' . $categories[$i]->categoryID . '">' . $categories[$i]->catgoryName . '</option>';
+        }
+        else
+        {
+            echo '<option value="' . $categories[$i]->categoryID . '">' . $categories[$i]->catgoryName . '</option>';
+        }
+    }
+}
+?>
 
                                         </select>
                                     </div>
 
-                                    <?php
-                                    if (isset($_GET['artiID']))
-                                    {
-                                        echo '<div class="form-outline mb-4"><img style="max-height:100px"  src=\'' . $retrivedArtcl->getThumbnail() . '\'></div>';
-                                    }
-                                    ?>
+                                            <?php
+                                            if (isset($_GET['artiID']))
+                                            {
+                                                echo '<div class="form-outline mb-4"><img style="max-height:100px"  src=\'' . $retrivedArtcl->getThumbnail() . '\'></div>';
+                                            }
+                                            ?>
 
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="thumbnailInput">Thumbnail</label>
                                         <input class="form-control" type="file" accept="image/*"  id="thumbnailInput" name="thumbnailInput" <?php
-                                        if (!(isset($_GET['artiID'])))
-                                        {
-                                            echo 'required';
-                                        }
-                                        ?>/>
+                                    if (!(isset($_GET['artiID'])))
+                                    {
+                                        echo 'required';
+                                    }
+                                    ?>/>
                                     </div>
 
                                     <button type="submit" name="save" id="save" class="btn btn-primary btn-lg btn-block">
@@ -409,31 +422,31 @@ else
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="titleInput">Title</label>
                                         <input type="text" id="titleInput" name="titleInput" class="form-control" placeholder="Sub Header" required <?php
-                                        if ($isEdit && $canView)
-                                        {
-                                            echo 'value = "' . $retrivedArtcl->getTitle() . '"';
-                                        }
-                                        ?>/> 
+                                    if ($isEdit && $canView)
+                                    {
+                                        echo 'value = "' . $retrivedArtcl->getTitle() . '"';
+                                    }
+                                    ?>/> 
                                     </div>
 
                                     <!-- Message input -->
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="bodyInput">Body</label>
                                         <textarea class="form-control" id="bodyInput" name="bodyInput" <?php
-                                        if (isset($_GET['artiID']))
+                                    if (isset($_GET['artiID']))
+                                    {
+                                        echo 'rows="10"';
+                                    }
+                                    else
+                                    {
+                                        echo 'rows="5"';
+                                    }
+                                    ?> required><?php
+                                        if ($isEdit && $canView)
                                         {
-                                            echo 'rows="10"';
+                                            echo $retrivedArtcl->getBody();
                                         }
-                                        else
-                                        {
-                                            echo 'rows="5"';
-                                        }
-                                        ?> required><?php
-                                                      if ($isEdit && $canView)
-                                                      {
-                                                          echo $retrivedArtcl->getBody();
-                                                      }
-                                                      ?></textarea>
+                                        ?></textarea>
                                     </div>
 
                                     <button type="submit" name="media" id="media" class="btn btn-info btn-block" formnovalidate>
