@@ -2,15 +2,16 @@
 include 'importClass.php';
 
 // getting username and password from the log in form 
-if (isset($_POST['loginForm'])) {
+if (isset($_POST['loginForm']))
+{
     $username = $_POST['usernameInput'];
     $password = $_POST['passwordInput'];
-    
+
 // setting the username and password to a user obj  
     $user = new User();
     $user->setUserName($username);
     $user->setPassword($password);
-    
+
 // if users login isnt successful display error message 
     if (!$user->login())
     {
@@ -22,9 +23,77 @@ if (isset($_POST['loginForm'])) {
 }
 
 
-if (isset($_POST['searchForm'])) {
+if (isset($_POST['searchForm']))
+{
+    $search = new Search();
 
-    echo 'serach form was submitted';
+    if (isset($_POST['serachBy']) && (($_POST['serachBy'] == 'ttlDesc') || ($_POST['serachBy'] == 'authName')))
+    {
+        $textInput = $_POST['searchTextInput'];
+        $textSearchType = $_POST['searchType'];
+
+        
+        
+        if ($textSearchType == 'all')
+        {
+            $textInput = $search->handleAll($textInput);
+        }
+
+        if ($textSearchType == 'none')
+        {
+            $textInput = $search->handleNone($textInput);
+        }
+
+        if ($textSearchType == 'first')
+        {
+            $textInput = $search->handleFirst($textInput);
+        }
+
+        if ($textSearchType == 'part')
+        {
+            $textInput = $search->handlePart($textInput);
+        }
+
+        if ($textSearchType == 'exact')
+        {
+            $textInput = $search->handleExact($textInput);
+        }
+
+
+        
+        if ($_POST['serachBy'] == 'ttlDesc')
+        {
+            $_SESSION['serachOut'] = $search->byTitleDesc($textInput);
+        }
+
+        if ($_POST['serachBy'] == 'authName')
+        {
+            $_SESSION['serachOut'] = $search->byAuthor($textInput);
+        }
+
+        echo "<script>window.location.href='articlesResults.php';</script>";
+        exit;
+    }
+
+    if (isset($_POST['serachBy']) && $_POST['serachBy'] == 'datePosted')
+    {
+        $dateInput = $_POST['dateSearchInput'];
+
+        $_SESSION['serachOut'] = $search->byDate($dateInput);
+
+        echo "<script>window.location.href='articlesResults.php';</script>";
+        exit;
+    }
+    else if (isset($_POST['serachBy']) && $_POST['serachBy'] == 'dateRange')
+    {
+        $dateSatrtInput = $_POST['beginDateInput'];
+        $dateEndInput = $_POST['endDateInput'];
+
+        $_SESSION['serachOut'] = $search->byDateRange($dateSatrtInput, $dateEndInput);
+
+        echo "<script>window.location.href='articlesResults.php';</script>";
+        exit;
+    }
 }
 ?>
 
@@ -36,12 +105,12 @@ if (isset($_POST['searchForm'])) {
 
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
+
 
         <!--link to stylesheet and boostrap link-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         <link href="style.css" rel="stylesheet" type="text/css">
-        
+
         <!--link to font file-->
         <script src="https://kit.fontawesome.com/d5bcc006a2.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
@@ -100,13 +169,13 @@ if (isset($_POST['searchForm'])) {
             }
 
             function SearchValidation() {
-                if (document.getElementById("ttlDesc").checked || document.getElementById("authName").checked) 
+                if (document.getElementById("ttlDesc").checked || document.getElementById("authName").checked)
                 {
                     let text = document.getElementById("searchTextInput");
-                    
-                    if (document.getElementById("ttlDesc").checked) 
+
+                    if (document.getElementById("ttlDesc").checked)
                     {
-                        if (text.value == "") 
+                        if (text.value == "")
                         {
                             text.style.borderColor = "red";
                             text.placeholder = "Required";
@@ -230,10 +299,10 @@ if (isset($_POST['searchForm'])) {
 
                         <?php
                         // function to check if the role of the user is admin then he has the admin menue                         
-                            if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
-                            {
-                                echo 
-                                '
+                        if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
+                        {
+                            echo
+                            '
 
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
@@ -246,16 +315,15 @@ if (isset($_POST['searchForm'])) {
                         }
                         ?>
 
-                        
-                        
+
+
                         <?php
-                            
-                            // function to check if the role of the user is an author then he has the author menue
-                            if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'author')
-                            {
-                                $userID = $_SESSION['userID'];
-                                echo 
-                                '
+                        // function to check if the role of the user is an author then he has the author menue
+                        if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'author')
+                        {
+                            $userID = $_SESSION['userID'];
+                            echo
+                            '
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Author</a>
                                         <ul class="dropdown-menu">
@@ -288,37 +356,50 @@ if (isset($_POST['searchForm'])) {
 
                                                     <!-- text search -->
                                                     <div class="form-group mt-1" id="textSearchDiv">
-                                                        <label for="searchText">Search Phrases</label><br>
-                                                        <input type="text" class="form-control" id="searchTextInput" placeholder="Text" onblur="SearchValidation()">
+                                                        <label for="searchTextInput">Search Phrases</label><br>
+                                                        <input type="text" class="form-control" id="searchTextInput" name="searchTextInput" placeholder="Text" onblur="SearchValidation()">
+
+                                                        <div>
+                                                            <br>
+                                                            <b>Find Results with: </b><br>
+                                                            <input type="radio" name="searchType" value="any" checked> Any of these words<br>
+                                                            <input type="radio" name="searchType" value="all"> All of these words<br>
+                                                            <input type="radio" name="searchType" value="none"> None of these words<br>
+                                                            <input type="radio" name="searchType" value="first"> Containing first but not second<br>
+                                                            <input type="radio" name="searchType" value="part"> Part of this word<br>
+                                                            <input type="radio" name="searchType" value="exact"> Exact Term<br>
+                                                        </div>
                                                     </div>
+
+
 
                                                     <!-- spescific date search -->
                                                     <div class="form-group mt-1" id="dateSearchDiv">
-                                                        <label for="dateSearch">Date</label><br>
-                                                        <input type="date" class="form-control" id="dateSearchInput" onblur="SearchValidation()">
+                                                        <label for="dateSearchInput">Date</label><br>
+                                                        <input type="date" class="form-control" id="dateSearchInput" name="dateSearchInput" onblur="SearchValidation()">
                                                     </div>
 
                                                     <!-- date range search -->
                                                     <div class="form-group mt-1" id="dateRangeDiv">
-                                                        <label for="beginDate">Begin Date</label><br>
-                                                        <input type="date" class="form-control" id="beginDateInput" placeholder="Text" onblur="SearchValidation()">
-                                                        <label for="endDate">End Date</label><br>
-                                                        <input type="date" class="form-control" id="endDateInput" placeholder="Text" onblur="SearchValidation()">
+                                                        <label for="beginDateInput">Begin Date</label><br>
+                                                        <input type="date" class="form-control" id="beginDateInput" name="beginDateInput" placeholder="Text" onblur="SearchValidation()">
+                                                        <label for="endDateInput">End Date</label><br>
+                                                        <input type="date" class="form-control" id="endDateInput" name="endDateInput" placeholder="Text" onblur="SearchValidation()">
                                                     </div>
 
                                                     <div class="form-group mt-1 ">
-                                                        <p>Search By</p>
+                                                        </br><b>Search By</b></br>
 
-                                                        <input type="radio" id="ttlDesc" name="serachBy" value="Title / Description" checked onclick="showHideSearch()">
-                                                        <label for="css">Title / Heading</label><br>
+                                                        <input type="radio" id="ttlDesc" name="serachBy" value="ttlDesc" checked onclick="showHideSearch()">
+                                                        <label for="ttlDesc">Title / Heading</label><br>
 
-                                                        <input type="radio" id="authName" name="serachBy" value="Author Name" onclick="showHideSearch()">
-                                                        <label for="html">Author Name</label><br>
+                                                        <input type="radio" id="authName" name="serachBy" value="authName" onclick="showHideSearch()">
+                                                        <label for="authName">Author Name</label><br>
 
-                                                        <input type="radio" id="datePosted" name="serachBy" value="Date of Post" onclick="showHideSearch()">
-                                                        <label for="javascript">Date of Post</label>
+                                                        <input type="radio" id="datePosted" name="serachBy" value="datePosted" onclick="showHideSearch()">
+                                                        <label for="datePosted">Date of Post</label>
 
-                                                        <input type="checkbox" id="dateRange" name="serachBy" value="Date Range" onclick="showHideSearch()">
+                                                        <input type="checkbox" id="dateRange" name="serachBy" value="dateRange" onclick="showHideSearch()">
                                                         <label for="dateRange" id="dateRangeLbl">Date Range</label>
                                                     </div>
 
@@ -377,18 +458,18 @@ if (isset($_POST['searchForm'])) {
                                     ?>
 
 
-                                    <?php
-                                    if (isset($_SESSION['userID']) && $_SESSION['userID'] != null)
-                                    {
-                                        echo
-                                        '   <li><p class="dropdown-item">Welcome Back ' . $_SESSION['username'] . '!</p></li>
+<?php
+if (isset($_SESSION['userID']) && $_SESSION['userID'] != null)
+{
+    echo
+    '   <li><p class="dropdown-item">Welcome Back ' . $_SESSION['username'] . '!</p></li>
                                             <!--// add profile picture part here-->
                                             <li class="dropdown-divider"></li>
                                             <li><a class="dropdown-item" href="profile.php"><i class="fa-regular fa-user"></i> Profile</a></li>
                                             <li><a class="dropdown-item" href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a></li>
                                         ';
-                                    }
-                                    ?>
+}
+?>
 
                                 </ul>
                             </li>

@@ -4,8 +4,13 @@ include './header.php';
 $canView = true;
 $viewError = '';
 
-$data = null;
+$data = $_SESSION['serachOut'];
 
+if (count($data)<1)
+{
+    $canView = false;
+    $viewError = 'No results were found';
+}
 
 ?>
 
@@ -66,14 +71,13 @@ else
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-xl-9">
 
-                <h1 class="text-black mb-4">Search Results(sorted by views)</h1>
+                <h1 class="text-black mb-4">Search Results (sorted by Date)</h1>
 
 
                 <div class="card shadow" style="border-radius: 15px;">
                     <table class="table table-striped">
                         <thead class="thead-dark">
                             <tr>
-                                <th class="text-center" scope="col">ID</th>
                                 <th class="text-center" scope="col">Thumbnail</th>
                                 <th class="text-center" scope="col">Title</th>
                                 <th class="text-center" scope="col">Category</th>
@@ -92,7 +96,6 @@ else
                                 echo
                                 '
                                         <tr>
-                                            <th class="text-center" scope="row">' . $newArtcl->getArticleID() . '</th>
                                             <td class="text-center"><img style="height:50px" src="' . $newArtcl->getThumbnail() . '"></img></td>
                                             <td class="text-center">' . $newArtcl->getTitle() . '</td>
                                             <td class="text-center">' . $newArtcl->getCategory() . '</td>
