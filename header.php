@@ -36,6 +36,7 @@ if (isset($_POST['searchForm'])) {
 
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
 
         <!--link to stylesheet and boostrap link-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
@@ -200,30 +201,30 @@ if (isset($_POST['searchForm'])) {
 
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#">International</a>
+                            <a class="nav-link" href="categoryView.php?catID=1">International</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Local</a>
+                            <a class="nav-link" href="categoryView.php?catID=2">Local</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Sports & Arts</a>
+                            <a class="nav-link" href="categoryView.php?catID=3">Sports & Arts</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Weather</a>
+                            <a class="nav-link" href="categoryView.php?catID=4">Weather</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Advertisement</a>
+                            <a class="nav-link" href="categoryView.php?catID=5">Advertisement</a>
                         </li>
 
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Cars</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Electric</a></li>
-                                <li><a class="dropdown-item" href="#">Gas Monsters</a></li>
+                                <li><a class="dropdown-item" href="categoryView.php?catID=6">Electric</a></li>
+                                <li><a class="dropdown-item" href="categoryView.php?catID=7">Gas Monsters</a></li>
                             </ul>
                         </li>
 
