@@ -151,6 +151,35 @@ else
     });
 </script>
 
+<section <?php
+    if (!$canView)
+    {
+        echo 'id="articleDocFormBody"';
+    }
+    else
+    {
+        echo 'hidden';
+    }
+    ?>>
+    <div class="container h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-10">
+
+                <h1 class="text-black mb-4">Error</h1>
+
+
+
+                <div class="card shadow" style="border-radius: 15px;">
+
+                    <p class="text-center"><?php echo $viewError; ?></p>
+                    <!-- add login check here and login button -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
 
 <section <?php
 if ($canView)
@@ -202,33 +231,6 @@ else
 
 
 
-<section <?php
-    if (!$canView)
-    {
-        echo 'id="articleDocFormBody"';
-    }
-    else
-    {
-        echo 'hidden';
-    }
-    ?>>
-    <div class="container h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-xl-10">
 
-                <h1 class="text-black mb-4">Error</h1>
-
-
-
-                <div class="card shadow" style="border-radius: 15px;">
-
-                    <p class="text-center"><?php echo $viewError; ?></p>
-                    <!-- add login check here and login button -->
-                </div>
-
-            </div>
-        </div>
-    </div>
-</section>
 
 <script type="text/javascript">chnageSize();</script>
