@@ -1,7 +1,6 @@
 <?php
 include './header.php';
 
-
 $canView = true;
 $viewError = '';
 
@@ -34,14 +33,14 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                         $retrivedMedia->setMediaID($_GET['mediaID']);
                         $retrivedMedia->initMwithID();
                         $mediID = $retrivedMedia->getMediaID();
-                        
+
                         if ($mediID != null)
                         {
                             if ($retrivedMedia->getArticleID() == $articleID)
                             {
                                 $canView = true;
                                 $isEdit = true;
-                                
+
                                 // extra validartion comes in from here for editiing media 
                                 //save method is diifrent here 
                                 if (isset($_POST['mediaSave']))
@@ -49,7 +48,7 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                                     $name = $_POST['nameInput'];
                                     $retrivedMedia->setMediaName($name);
                                     $retrivedMedia->updateMedia();
-                                    
+
                                     //add error here
                                     echo 'update slayed';
                                 }
@@ -65,7 +64,6 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                             $viewError .= 'Media was not found .<br/>';
                             $canView = false;
                         }
-
                     }
                     else if (isset($_POST['mediaSave']))
                     {
@@ -140,15 +138,15 @@ else
 
 
     window.addEventListener('resize', chnageSize);
-    
-    $(document).ready(function(){
-        $('#mediaForm input').blur(function(){
-            if(!$(this).val()){
+
+    $(document).ready(function () {
+        $('#mediaForm input').blur(function () {
+            if (!$(this).val()) {
                 $(this).attr("placeholder", "required");
-                $(this).css("border-color","red");
-            } else{
+                $(this).css("border-color", "red");
+            } else {
                 $(this).attr("placeholder", "text");
-                $(this).css("border-color","green");
+                $(this).css("border-color", "green");
             }
         });
     });
@@ -201,30 +199,48 @@ else
                 <form id="mediaForm" method="post" enctype="multipart/form-data">
                     <div class="card mb-4 shadow">
                         <div class="card-header py-3">
-                            <h5 class="mb-0">Article "<?php if ($canView){echo $retrivedArtcl->getHeader();} ?>" Media</h5>
+                            <h5 class="mb-0">Article "<?php if ($canView)
+{
+    echo $retrivedArtcl->getHeader();
+} ?>" Media</h5>
                         </div>
                         <div class="card-body ">
 
                             <!-- Text input -->
                             <div class="form-outline" mb-4">
                                 <label class="form-label" for="nameInput">Name</label>
-                                <input type="text" id="nameInput" name="nameInput" class="form-control" placeholder="Media Name" required <?php if ($canView && $isEdit){echo 'value = "' . $retrivedMedia->getMediaName() . '"';}else if (isset($_POST['nameInput']))
-{
-    echo 'value = "' . $_POST['nameInput'] . '"';
-} ?>/> 
+                                <input type="text" id="nameInput" name="nameInput" class="form-control" placeholder="Media Name" required <?php
+                                if ($canView && $isEdit)
+                                {
+                                    echo 'value = "' . $retrivedMedia->getMediaName() . '"';
+                                }
+                                else if (isset($_POST['nameInput']))
+                                {
+                                    echo 'value = "' . $_POST['nameInput'] . '"';
+                                }
+                                ?>/> 
                             </div>
 
                             <!-- Text input -->
-                            <div class="form-outline mb-4" <?php if ($isEdit){echo 'hidden';} ?> >
+                            <div class="form-outline mb-4" <?php if ($isEdit)
+                                {
+                                    echo 'hidden';
+                                } ?> >
                                 <label class="form-label" for="fileInput">File</label>
-                                <input type="file" id="fileInput" name="fileInput" accept="audio/*,video/*,image/*" class="form-control" <?php if (!$isEdit){echo 'required';} ?>/> 
+                                <input type="file" id="fileInput" name="fileInput" accept="audio/*,video/*,image/*" class="form-control" <?php if (!$isEdit)
+                                {
+                                    echo 'required';
+                                } ?>/> 
                             </div>
 
 
                             <button type="submit" name="mediaSave" id="mediaSave" value="mediaSave" class="btn btn-success btn-block">
                                 Save
                             </button>
-                            <a href="viewArticleMedia.php?artiID=<?php if ($canView){echo $retrivedArtcl->getArticleID();} ?>" name="document" id="document" class="btn btn-secondary btn-block">Back to Media</a>
+                            <a href="viewArticleMedia.php?artiID=<?php if ($canView)
+                                {
+                                    echo $retrivedArtcl->getArticleID();
+                                } ?>" name="document" id="document" class="btn btn-secondary btn-block">Back to Media</a>
 
 
 
