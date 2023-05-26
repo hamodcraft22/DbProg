@@ -49,6 +49,7 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                                     $retrivedDoc->setDocumentName($name);
                                     $retrivedDoc->updateDocument();
                                     
+                                    //add error here
                                     echo 'update slayed';
                                 }
                             }
@@ -98,6 +99,7 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                         else
                         {
                             $isEdit = false;
+                            //add error here
                             echo 'FEE SAVE ERRORRR TRY AGAIN';
                         }
                     }
@@ -204,7 +206,10 @@ else
                             <!-- Text input -->
                             <div class="form-outline mb-4">
                                 <label class="form-label" for="nameInput">Title</label>
-                                <input type="text" id="nameInput" name="nameInput" class="form-control" placeholder="Document Name" required <?php if ($canView && $isEdit){echo 'value = "' . $retrivedDoc->getDocumentName() . '"';} ?>/> 
+                                <input type="text" id="nameInput" name="nameInput" class="form-control" placeholder="Document Name" required <?php if ($canView && $isEdit){echo 'value = "' . $retrivedDoc->getDocumentName() . '"';}else if (isset($_POST['nameInput']))
+{
+    echo 'value = "' . $_POST['nameInput'] . '"';
+} ?>/> 
                             </div>
 
                             <!-- file input -->

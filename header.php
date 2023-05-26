@@ -15,7 +15,7 @@ if (isset($_POST['loginForm']))
 // if users login isnt successful display error message 
     if (!$user->login())
     {
-        echo '<div class="alert alert-danger alert-dismissible fade show " role="alert">
+        echo '<div class="alert alert-danger alert-dismissible fade show botAlert" role="alert">
                 Wrong Username or Password, Please try again.
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>';

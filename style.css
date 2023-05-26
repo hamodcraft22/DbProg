@@ -72,3 +72,9 @@ body
     max-height: 10vw;
     object-fit: cover;
 }
+
+.botAlert {
+    position:fixed;
+    width: 100%;
+    z-index: 10;
+}

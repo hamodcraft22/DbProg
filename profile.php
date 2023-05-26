@@ -34,11 +34,12 @@ if (isset($_POST['profileForm']))
     
     if ($user->updateUser())
     {
-       
+       //add error here
         echo 'update done';
     }
     else
     {
+        //add error here
         echo 'error in saving, try again';
     }
 }

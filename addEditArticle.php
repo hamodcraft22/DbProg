@@ -36,8 +36,6 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                     //save method is diifrent here 
                     if (isset($_POST['save']))
                     {
-                        // add check to see if foto is here
-                        echo 'its a save from an edit';
 
                         $article = new Article();
                         $article->setArticleID($articleID);
@@ -50,19 +48,42 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                         $body = $_POST['bodyInput'];
                         $catID = $_POST['categoryInput'];
 
-                        // add image errors and validation (upload errors missing from mid dont forget)
 
                         if (isset($_FILES['thumbnailInput']['name']) && $_FILES['thumbnailInput']['name'] != null)
                         {
-                            echo 'image chnaged';
                             $imageChnage = true;
                             $name = "assests/thumbnails//" . $_FILES['thumbnailInput']['name'];
                             move_uploaded_file($_FILES['thumbnailInput']['tmp_name'], $name);
+                            
+                            if ($_FILES['thumbnailInput']['error'] > 0) 
+        {
+                $errors .= $_FILES['thumbnailInput']['error'];}
+                
                             $thumbnail = $name;
+                            
+                            
                         }
-
-
-
+                        
+                        if ($header == '')
+                        {
+                            $errors .= 'Article Header Mising.<br/>';
+                        }
+                        
+                        if ($title == '')
+                        {
+                            $errors .= 'Article Title Mising.<br/>';
+                        }
+                        
+                        if ($body == '')
+                        {
+                            $errors .= 'Article Body Mising.<br/>';
+                        }
+                        
+                        if ($catID == '')
+                        {
+                            $errors .= 'Category Mising.<br/>';
+                        } 
+                        
                         if ($errors == '')
                         {
 
@@ -84,7 +105,8 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                         }
                         else
                         {
-                            echo 'Fee error';
+                            //add error here
+                            echo 'Fee error echo the bootstrap error thing';
                         }
                     }
                     else if (isset($_POST['publish']))
@@ -140,7 +162,6 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                             $article->setStatusID(2);
                             $article->updateArti();
                             $article->setPubDate();
-                            echo 'its a publish from edit all done';
 
                             $userID = $_SESSION['userID'];
                             echo "<script>window.location.href='articles.php?userID=$userID';</script>";
@@ -148,7 +169,8 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                         }
                         else
                         {
-                            echo $errors;
+                            //add error here
+                            echo 'fee errors'.$errors;
                         }
                     }
                     else if (isset($_POST['media']))
@@ -183,13 +205,42 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
         $title = $_POST['titleInput'];
         $body = $_POST['bodyInput'];
         $catID = $_POST['categoryInput'];
-
+        
         // add image errors and validation (upload errors missing from mid dont forget)
 
         $name = "assests/thumbnails//" . $_FILES['thumbnailInput']['name']; //unix path uses forward slash
         move_uploaded_file($_FILES['thumbnailInput']['tmp_name'], $name);
 
+        if ($_FILES['thumbnailInput']['error'] > 0) 
+        {
+                $errors .= $_FILES['thumbnailInput']['error'];}
+        
         $thumbnail = $name;
+        
+        if ($header == '')
+                        {
+                            $errors .= 'Article Header Mising.<br/>';
+                        }
+                        
+                        if ($title == '')
+                        {
+                            $errors .= 'Article Title Mising.<br/>';
+                        }
+                        
+                        if ($body == '')
+                        {
+                            $errors .= 'Article Body Mising.<br/>';
+                        }
+                        
+                        if ($catID == '')
+                        {
+                            $errors .= 'Category Mising.<br/>';
+                        }
+                        
+                        if ($_FILES['thumbnailInput']['tmp_name'] == '')
+                        {
+                            $errors .= 'Article Image Mising.<br/>';
+                        }
 
         if ($errors == '')
         {
@@ -208,6 +259,7 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
             if ($resultID != false)
             {
                 echo $resultID;
+                //add error here
                 echo 'ok done';
 
                 echo "<script>window.location.href='addEditArticle.php?artiID=$resultID';</script>";
@@ -215,26 +267,31 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
             }
             else
             {
+                //add error here
                 echo 'add error';
             }
         }
         else
         {
+            //add error here
             echo 'Fee error';
         }
     }
     else if (isset($_POST['publish']))
     {
+        //add error here
         // this just chnages the status to published and puts the date
         echo 'you need to save before you can go';
     }
     else if (isset($_POST['media']))
     {
+        //add error here
         // error to user telling him it needs to be saved first
         echo 'you need to save before you can go';
     }
     else if (isset($_POST['document']))
     {
+        //add error here
         // error to user telling him it needs to be saved first
         echo 'you need to save before you can go';
     }
@@ -432,6 +489,10 @@ if ($canView)
                                     {
                                         echo 'value = "' . $retrivedArtcl->getTitle() . '"';
                                     }
+                                    else if (isset($_POST['titleInput']))
+{
+    echo 'value = "' . $_POST['titleInput'] . '"';
+}
                                     ?>/> 
                                     </div>
 
@@ -451,6 +512,10 @@ if ($canView)
                                         if ($isEdit && $canView)
                                         {
                                             echo $retrivedArtcl->getBody();
+                                        }
+                                        else if (isset ($_POST['bodyInput']))
+                                        {
+                                            echo $_POST['bodyInput'];
                                         }
                                         ?></textarea>
                                     </div>

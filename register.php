@@ -20,7 +20,35 @@ if (isset($_POST['registerForm'])) {
         $isAuthor = true;
     }
 
-    // maybe add some validation here 
+    if ($fullname == '')
+    {
+        $errors .= 'Fullname Mising.<br/>';
+    }
+    
+    if ($username == '')
+    {
+        $errors .= 'Username Mising.<br/>';
+    }
+    
+    if ($email == '')
+    {
+        $errors .= 'Email Mising.<br/>';
+    }
+    
+    if ($phone == '')
+    {
+        $errors .= 'Phone Number Mising.<br/>';
+    }
+    
+    if ($password == '')
+    {
+        $errors .= 'Passowrd Mising.<br/>';
+    }
+    
+    if ($passwordRpt == '')
+    {
+        $errors .= 'Password Reapet Mising.<br/>';
+    }
 
     $user->setUserName($username);
 
@@ -71,16 +99,13 @@ if (isset($_POST['registerForm'])) {
         }
         else
         {
+            //add error here
             echo 'issue no reg';
-                
-            
-            
-            
-            
         }
     }
     else
     {
+        //add error here
         // missing the bootsstrap alert (copy from header)
         echo 'errors :';
         echo $errors;

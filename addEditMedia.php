@@ -50,6 +50,7 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                                     $retrivedMedia->setMediaName($name);
                                     $retrivedMedia->updateMedia();
                                     
+                                    //add error here
                                     echo 'update slayed';
                                 }
                             }
@@ -99,6 +100,7 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                         else
                         {
                             $isEdit = false;
+                            //add error here
                             echo 'FEE SAVE ERRORRR TRY AGAIN';
                         }
                     }
@@ -206,7 +208,10 @@ else
                             <!-- Text input -->
                             <div class="form-outline" mb-4">
                                 <label class="form-label" for="nameInput">Name</label>
-                                <input type="text" id="nameInput" name="nameInput" class="form-control" placeholder="Media Name" required <?php if ($canView && $isEdit){echo 'value = "' . $retrivedMedia->getMediaName() . '"';} ?>/> 
+                                <input type="text" id="nameInput" name="nameInput" class="form-control" placeholder="Media Name" required <?php if ($canView && $isEdit){echo 'value = "' . $retrivedMedia->getMediaName() . '"';}else if (isset($_POST['nameInput']))
+{
+    echo 'value = "' . $_POST['nameInput'] . '"';
+} ?>/> 
                             </div>
 
                             <!-- Text input -->

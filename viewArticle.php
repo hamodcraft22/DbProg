@@ -48,11 +48,13 @@ if (isset($_GET['artiID']))
 
             if (isset($_POST['likeButton']))
             {
+                //add error here
                 echo 'you have liked this article!';
                 $retrivedArtcl->increaseRate();
             }
             else if (isset($_POST['dislikeButton']))
             {
+                //add error here
                 echo 'you have disliked this article!';
                 $retrivedArtcl->decreaseRate();
             }
@@ -76,13 +78,12 @@ if (isset($_GET['artiID']))
 
                     if ($newUserComment->saveCom())
                     {
-                        echo 'comment happend';
-
                         echo "<script>window.location.href='viewArticle.php?artiID=$articleID';</script>";
                         exit;
                     }
                     else
                     {
+                        //add error here
                         echo 'error hpnd';
                     }
                 }
