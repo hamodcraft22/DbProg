@@ -71,7 +71,7 @@ else
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-xl-9">
 
-                <h1 class="text-black mb-4">Search Results (sorted by Date)</h1>
+                <h1 class="text-black mb-4">Search Results (<?php if(isset($_GET['mv'])){echo 'Top 5 views';}else{echo 'sorted by Date';} ?>)</h1>
 
 
                 <div class="card shadow" style="border-radius: 15px;">

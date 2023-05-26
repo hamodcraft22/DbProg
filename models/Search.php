@@ -59,6 +59,20 @@ class Search
             return false;
         }
     }
+    
+    public function byMostRead()
+    {
+        try {
+            $db = Database::getInstance();
+            $q = "select * from dbProj_article order by views DESC limit 5";
+            echo $q;
+            $data = $db->multiFetch($q);
+            return $data;
+        } catch (Exception $e) {
+            echo 'Exception: ' . $e;
+            return false;
+        }
+    }
 
     function handleAll($text)
     {

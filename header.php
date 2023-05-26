@@ -23,7 +23,7 @@ if (isset($_POST['loginForm']))
 }
 
 
-if (isset($_POST['searchForm']))
+if (isset($_POST['normalSearch']))
 {
     $search = new Search();
 
@@ -92,6 +92,17 @@ if (isset($_POST['searchForm']))
         echo "<script>window.location.href='articlesResults.php';</script>";
         exit;
     }
+}
+
+
+if (isset($_POST['mostRead']))
+{
+    $search = new Search();
+    
+    $_SESSION['serachOut'] = $search->byMostRead();
+
+    echo "<script>window.location.href='articlesResults.php?mv';</script>";
+    exit;
 }
 ?>
 
@@ -274,7 +285,7 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'author')
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
                                 </a>
 
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
@@ -336,8 +347,9 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'author')
                                                     </div>
 
                                                     <div class="form-group mt-1">
-                                                        <input type="hidden" name="searchForm" value="true">
-                                                        <button type="submit" class="btn btn-primary btn-block">Search</button>
+                                                        <button type="submit" name="normalSearch" class="btn btn-primary btn-block">Search</button>
+                                                        
+                                                        <button type="submit" name="mostRead" class="btn btn-success btn-block" formnovalidate>Most Read</button>
                                                     </div>
 
 
@@ -356,7 +368,7 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'author')
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-                                    Account
+                                    <i class="fa-regular fa-circle-user fa-lg"></i>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink" style="min-width: 250px;">
 
