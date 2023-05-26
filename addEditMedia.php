@@ -137,6 +137,18 @@ else
 
 
     window.addEventListener('resize', chnageSize);
+    
+    $(document).ready(function(){
+        $('#mediaForm input').blur(function(){
+            if(!$(this).val()){
+                $(this).attr("placeholder", "required");
+                $(this).css("border-color","red");
+            } else{
+                $(this).attr("placeholder", "text");
+                $(this).css("border-color","green");
+            }
+        });
+    });
 </script>
 
 
@@ -183,7 +195,7 @@ else
     <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-xl-9">
-                <form method="post" enctype="multipart/form-data">
+                <form id="mediaForm" method="post" enctype="multipart/form-data">
                     <div class="card mb-4 shadow">
                         <div class="card-header py-3">
                             <h5 class="mb-0">Article "<?php if ($canView){echo $retrivedArtcl->getHeader();} ?>" Media</h5>
@@ -191,7 +203,7 @@ else
                         <div class="card-body ">
 
                             <!-- Text input -->
-                            <div class="form-outline mb-4">
+                            <div class="form-outline" mb-4">
                                 <label class="form-label" for="nameInput">Name</label>
                                 <input type="text" id="nameInput" name="nameInput" class="form-control" placeholder="Media Name" required <?php if ($canView && $isEdit){echo 'value = "' . $retrivedMedia->getMediaName() . '"';} ?>/> 
                             </div>

@@ -137,6 +137,18 @@ else
 
 
     window.addEventListener('resize', chnageSize);
+    
+    $(document).ready(function(){
+        $('#docForm input').blur(function(){
+            if(!$(this).val()){
+                $(this).attr("placeholder", "required");
+                $(this).css("border-color","red");
+            } else{
+                $(this).attr("placeholder", "text");
+                $(this).css("border-color","green");
+            }
+        });
+    });
 </script>
 
 <section <?php
@@ -182,7 +194,7 @@ else
     <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-xl-9">
-                <form method="post" enctype="multipart/form-data">
+                <form id="docForm" method="post" enctype="multipart/form-data">
                     <div class="card mb-4 shadow">
                         <div class="card-header py-3">
                             <h5 class="mb-0">Article "<?php if ($canView){echo $retrivedArtcl->getHeader();} ?>" Document</h5>

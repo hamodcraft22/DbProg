@@ -7,6 +7,7 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
     $user = new User();
     $data = $user->getAllUsers(null);    
     // add a form to filter by type
+    
 }
 
 
@@ -22,6 +23,18 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
 
 
     window.addEventListener('resize', chnageSize);
+   
+    $(document).ready(function(){
+            $("#delete").on("click",function (){
+               
+                var del = confirm("Are you sure to delete this user ");
+                if(del == true){
+                    
+                    var htmlString="<?php echo $htmlString; ?>";
+                    alert(htmlString);
+                }
+        });
+    });
 </script>
 
 
@@ -96,7 +109,7 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
                                     
                                     echo '
                                                 <a type="button" class="btn btn-success" href="profile.php?id='.$newUser->getUserID().'"><i class="fas fa-edit"></i></a>
-                                                <a type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></a>
+                                                <a type="button" class="btn btn-danger" id="delete" ><i class="far fa-trash-alt"></i></a>
                                             </td>
                                         </tr>
                                     ';

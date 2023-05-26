@@ -54,6 +54,18 @@ if (isset($_POST['profileForm']))
 
 
     window.addEventListener('resize', chnageSize);
+    
+    $(document).ready(function(){
+        $('#userForm input').blur(function(){
+            if(!$(this).val()){
+                $(this).attr("placeholder", "required");
+                $(this).css("border-color","red");
+            } else{
+                $(this).attr("placeholder", "text");
+                $(this).css("border-color","green");
+            }
+        });
+    });
 </script>
 
 <section <?php if(!(isset($_GET['id']) && isset($_SESSION['roleType']) && $_SESSION['roleType'] != 'admin')){echo 'hidden';} else {echo 'id="profilePageBody"';}  ?>>
@@ -86,7 +98,7 @@ if (isset($_POST['profileForm']))
 
                 <div class="card shadow" style="border-radius: 15px;">
                     <div class="card-body">
-                        <form method="post">
+                        <form id="userForm"method="post">
                         <div class="row align-items-center pt-4 pb-3">
                             <div class="col-md-3 ps-5">
                                 <h6 class="mb-0">Full name</h6>

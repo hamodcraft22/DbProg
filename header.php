@@ -115,7 +115,7 @@ if (isset($_POST['searchForm']))
         <script src="https://kit.fontawesome.com/d5bcc006a2.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
         <!-- scripts and functions - fancy ocd stuff -->
         <script type="text/javascript">
@@ -168,86 +168,17 @@ if (isset($_POST['searchForm']))
                 }
             }
 
-            function SearchValidation() {
-                if (document.getElementById("ttlDesc").checked || document.getElementById("authName").checked)
-                {
-                    let text = document.getElementById("searchTextInput");
-
-                    if (document.getElementById("ttlDesc").checked)
-                    {
-                        if (text.value == "")
-                        {
-                            text.style.borderColor = "red";
-                            text.placeholder = "Required";
-                        } else {
-                            text.style.borderColor = "green";
-                            text.placeholder = "TEXT";
-                        }
-                    } else {
-                        let text = document.getElementById("searchTextInput");
-                        if (text.value == "") {
-                            text.style.borderColor = "red";
-                            text.placeholder = "Required";
-                        } else {
-                            text.style.borderColor = "green";
-                            text.placeholder = "TEXT";
-                        }
+            $(document).ready(function(){
+                $('#form input').blur(function(){
+                    if(!$(this).val()){
+                        $(this).attr("placeholder", "required");
+                        $(this).css("border-color","red");
+                    } else{
+                        $(this).attr("placeholder", "text");
+                        $(this).css("border-color","green");
                     }
-                } else if (document.getElementById("datePosted").checked) {
-                    let text = document.getElementById("dateSearchInput");
-                    if (text.value == "") {
-                        text.style.borderColor = "red";
-                        text.placeholder = "Required";
-                    } else {
-                        text.style.borderColor = "green";
-                        text.placeholder = "TEXT";
-                    }
-                    if (document.getElementById("dateRange").checked) {
-                        let text = document.getElementById("beginDateInput");
-                        let text2 = document.getElementById("endDateInput");
-                        if (text.value == "") {
-                            text.style.borderColor = "red";
-                            text.placeholder = "Required";
-                        } else {
-                            text.style.borderColor = "green";
-                            text.placeholder = "TEXT";
-                        }
-                        if (text2.value == "") {
-                            text2.style.borderColor = "red";
-                            text2.placeholder = "Required";
-                        } else {
-                            text2.style.borderColor = "green";
-                            text2.placeholder = "TEXT";
-                        }
-                    }
-                }
-            }
-
-            function LoginValidation() {
-                let userName = document.getElementById("usernameInput");
-                let password = document.getElementById("passwordInput");
-                if (userName.value == "" && password.value == "") {
-                    userName.style.borderColor = "red";
-                    userName.placeholder = "Required";
-                    password.style.borderColor = "red";
-                    password.placeholder = "Required";
-                } else if (userName.value == "" && password.value.length > 0) {
-                    userName.style.borderColor = "red";
-                    userName.placeholder = "Required";
-                    password.style.borderColor = "green";
-                    password.placeholder = "TEXT";
-                } else if (password.value == "" && userName.value.length > 0) {
-                    password.style.borderColor = "red";
-                    password.placeholder = "Required";
-                    userName.style.borderColor = "green";
-                    userName.placeholder = "TEXT";
-                } else {
-                    userName.style.borderColor = "green";
-                    password.style.borderColor = "green";
-                    userName.placeholder = "TEXT";
-                    password.placeholder = "TEXT";
-                }
-            }
+                });
+            });
         </script>
     </head>
 
@@ -352,13 +283,12 @@ if (isset($_POST['searchForm']))
                                     <li>
                                         <div class="row px-3" style="min-width: 500px;">
                                             <div class="col-mx-2">
-                                                <form class="form" role="form" method="post" accept-charset="UTF-8" id="search-nav">
+                                                <form class="form" id="form" role="form" method="post" accept-charset="UTF-8" id="search-nav">
 
                                                     <!-- text search -->
                                                     <div class="form-group mt-1" id="textSearchDiv">
                                                         <label for="searchTextInput">Search Phrases</label><br>
-                                                        <input type="text" class="form-control" id="searchTextInput" name="searchTextInput" placeholder="Text" onblur="SearchValidation()">
-
+                                                        <input type="text" class="form-control" id="searchTextInput" name="searchTextInput" placeholder="Text">
                                                         <div>
                                                             <br>
                                                             <b>Find Results with: </b><br>
@@ -376,15 +306,19 @@ if (isset($_POST['searchForm']))
                                                     <!-- spescific date search -->
                                                     <div class="form-group mt-1" id="dateSearchDiv">
                                                         <label for="dateSearchInput">Date</label><br>
-                                                        <input type="date" class="form-control" id="dateSearchInput" name="dateSearchInput" onblur="SearchValidation()">
+                                                        <input type="date" class="form-control" id="dateSearchInput" name="dateSearchInput">
                                                     </div>
 
                                                     <!-- date range search -->
                                                     <div class="form-group mt-1" id="dateRangeDiv">
+                                                        <label for="beginDate">Begin Date</label><br>
+                                                        <input type="date" class="form-control" id="beginDateInput" placeholder="Text">
+                                                        <label for="endDate">End Date</label><br>
+                                                        <input type="date" class="form-control" id="endDateInput" placeholder="Text">
                                                         <label for="beginDateInput">Begin Date</label><br>
-                                                        <input type="date" class="form-control" id="beginDateInput" name="beginDateInput" placeholder="Text" onblur="SearchValidation()">
+                                                        <input type="date" class="form-control" id="beginDateInput" name="beginDateInput" placeholder="Text">
                                                         <label for="endDateInput">End Date</label><br>
-                                                        <input type="date" class="form-control" id="endDateInput" name="endDateInput" placeholder="Text" onblur="SearchValidation()">
+                                                        <input type="date" class="form-control" id="endDateInput" name="endDateInput" placeholder="Text">
                                                     </div>
 
                                                     <div class="form-group mt-1 ">
@@ -437,12 +371,12 @@ if (isset($_POST['searchForm']))
                                         echo '<li>
                                                     <div class="row px-3">
                                                         <div class="col-md-12">
-                                                            <form class="form" role="form" method="post" accept-charset="UTF-8" id="login-nav">
+                                                            <form class="form" id="form" role="form" method="post" accept-charset="UTF-8" id="login-nav">
                                                                 <div class="form-group mt-1">
-                                                                    <input type="text" class="form-control" id="usernameInput" name="usernameInput" placeholder="Username" required="" onblur="LoginValidation()">
+                                                                    <input type="text" class="form-control" id="usernameInput" name="usernameInput" placeholder="Username" required="">
                                                                 </div>
                                                                 <div class="form-group mt-1">
-                                                                    <input type="password" class="form-control" id="passwordInput" name="passwordInput" placeholder="Password" required="" onblur="LoginValidation()">
+                                                                    <input type="password" class="form-control" id="passwordInput" name="passwordInput" placeholder="Password" required="">
                                                                 </div>
                                                                 <div class="form-group mt-1">
                                                                     <button type="submit" class="btn btn-primary btn-block">Sign in</button>
@@ -468,8 +402,9 @@ if (isset($_SESSION['userID']) && $_SESSION['userID'] != null)
                                             <li><a class="dropdown-item" href="profile.php"><i class="fa-regular fa-user"></i> Profile</a></li>
                                             <li><a class="dropdown-item" href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a></li>
                                         ';
-}
-?>
+                                    }
+                                    ?>
+                                    <li><a class="dropdown-item"><i class="fa-solid"></i><div id="google_translate_element"></div></a></li>
 
                                 </ul>
                             </li>
@@ -484,7 +419,11 @@ if (isset($_SESSION['userID']) && $_SESSION['userID'] != null)
 
         <script>
             showHideSearch();
+            function googleTranslateElementInit() {
+                new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+            }
         </script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 
 
