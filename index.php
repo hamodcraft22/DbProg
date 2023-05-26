@@ -114,7 +114,7 @@ if (count($articles) > 0)
                                     <h5 class="card-title">' . $newArtcl->getTitle() . '</h5>
                                     <p class="card-text">' . $newArtcl->getHeader() . '</p>
                                     <p class="card-text"><small class="text-body-secondary">Published date: ' . $newArtcl->getDate() . '</small></p>
-                                    <a id="articalButton" class="btn btn-success" role="button" href="viewArticle.php?artiID=' . $newArtcl->getArticleID() . '">Read More</a>
+                                    <a id="articalButton" class="btn btn-outline-dark" role="button" href="viewArticle.php?artiID=' . $newArtcl->getArticleID() . '">Read More</a>
                                 </div>
                             </div>
                         </div>

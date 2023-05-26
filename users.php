@@ -5,12 +5,20 @@ include './header.php';
 if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
 {
     $user = new User();
-    $data = $user->getAllUsers(null);    
+    $data = $user->getAllUsers(null);
     // add a form to filter by type
-    
 }
 
-
+if (isset($_POST['deleteUser']))
+{
+    $deleteUser = new User();
+    $deleteUser->setUserID($_POST['deleteUser']);
+    $deleteUser->initWithID();
+    $deleteUser->deRegister();
+    
+    echo "<script>window.location.href='users.php';</script>";
+    exit;
+}
 ?>
 
 <!--function to change body size-->
@@ -23,23 +31,35 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
 
 
     window.addEventListener('resize', chnageSize);
-   
-    $(document).ready(function(){
-            $("#delete").on("click",function (){
-               
-                var del = confirm("Are you sure to delete this user ");
-                if(del == true){
-                    
-                    var htmlString="<?php echo $htmlString; ?>";
-                    alert(htmlString);
-                }
+
+    function checkForm()
+    {
+        return confirm('Are you sure you want to delete this user?');
+    }
+    
+    $(document).ready(function () {
+        $("#delete").on("click", function () {
+
+            var del = confirm("Are you sure to delete this user ");
+            if (del == true) {
+
+                var htmlString = "<?php echo $htmlString; ?>";
+                alert(htmlString);
+            }
         });
     });
 </script>
 
 
 <!--if the user is not an admin echo page cannot be accessed by him -->
-<section <?php if((isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')){echo 'hidden';} else {echo 'id="usersPageBody"';}  ?>>
+<section <?php if ((isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin'))
+{
+    echo 'hidden';
+}
+else
+{
+    echo 'id="usersPageBody"';
+} ?>>
     <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-xl-10">
@@ -47,9 +67,9 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
                 <h1 class="text-black mb-4">All Users</h1>
 
                 <div class="card shadow" style="border-radius: 15px;">
-                    
+
                     <p class="text-center">You cannot use this page unless you are an Admin</p>
-                    
+
                 </div>
 
             </div>
@@ -59,7 +79,14 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
 
 
 <!--if the user is an admin display all users page -->
-<section <?php if(!(isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')){echo 'hidden';} else {echo 'id="usersPageBody"';} ?>>
+<section <?php if (!(isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin'))
+{
+    echo 'hidden';
+}
+else
+{
+    echo 'id="usersPageBody"';
+} ?>>
     <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-xl-10">
@@ -79,44 +106,46 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
                                 <th class="text-center" scope="col">Actions</th>
                             </tr>
                         </thead>
+                        
                         <tbody>
-                            
+                        
                             <?php
-                            
-                                // loop to show all users in a table 
-                                for ($i = 0; $i < count($data); $i++)
-                                {
-                                    $newUser = new User();
-                                    $newUser->setUserID($data[$i]->userID);
-                                    $newUser->initWithID();
-                                    
-                                    echo 
-                                    '
+                            // loop to show all users in a table 
+                            for ($i = 0; $i < count($data); $i++)
+                            {
+                                $newUser = new User();
+                                $newUser->setUserID($data[$i]->userID);
+                                $newUser->initWithID();
+
+                                echo
+                                '       
                                         <tr>
-                                            <th class="text-center" scope="row">'.$newUser->getUserID().'</th>
-                                            <td>'.$newUser->getFullname().'</td>
-                                            <td class="text-center">'.$newUser->getUsername().'</td>
-                                            <td class="text-center"><a href="mailto:'.$newUser->getEmail().'">Send</a></td>
-                                            <td class="text-center">'.$newUser->getRole().'</td>
-                                            <td class="text-center">';
-                                    
-                                    // if the user is not a reader allow him to view each users articales 
-                                    if ($newUser->getRole() != 'reader')
-                                    {
-                                        echo '
-                                                <a type="button" class="btn btn-primary" href="articles.php?userID='.$newUser->getUserID().'"><i class="fa-solid fa-clipboard"></i></a>';
-                                    }
-                                    
+                                            <th class="text-center" scope="row">' . $newUser->getUserID() . '</th>
+                                            <td>' . $newUser->getFullname() . '</td>
+                                            <td class="text-center">' . $newUser->getUsername() . '</td>
+                                            <td class="text-center"><a href="mailto:' . $newUser->getEmail() . '">Send</a></td>
+                                            <td class="text-center">' . $newUser->getRole() . '</td>
+                                            <td class="text-center">
+                                            <form method="post" onsubmit="return checkForm();">';
+                                            
+                                // if the user is not a reader allow him to view each users articales 
+                                if ($newUser->getRole() != 'reader')
+                                {
                                     echo '
-                                                <a type="button" class="btn btn-success" href="profile.php?id='.$newUser->getUserID().'"><i class="fas fa-edit"></i></a>
-                                                <a type="button" class="btn btn-danger" id="delete" ><i class="far fa-trash-alt"></i></a>
+                                                <a type="button" class="btn btn-primary" href="articles.php?userID=' . $newUser->getUserID() . '"><i class="fa-solid fa-clipboard"></i></a>';
+                                }
+
+                                echo '
+                                                <a type="button" class="btn btn-success" href="profile.php?id=' . $newUser->getUserID() . '"><i class="fas fa-edit"></i></a>
+                                                <button type="submit" class="btn btn-danger" name="deleteUser" value="'.$newUser->getUserID().'" ><i class="far fa-trash-alt"></i></button>
+                                                </form>
                                             </td>
                                         </tr>
                                     ';
-                                }
+                            }
                             ?>
-                            
-                            
+                        
+
 
                         </tbody>
                     </table>

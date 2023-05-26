@@ -5,8 +5,8 @@ $canView = false;
 $canComment = false;
 $viewError = '';
 
-$videoArray = array('ogm','wmv','mpg','webm','ogv','mov','asx','mpeg','mp4','m4v','avi');
-$audioArray = array('opus','flac','weba','wav','ogg','m4a','oga','mid','mp3','aiff','wma','au');
+$videoArray = array('ogm', 'wmv', 'mpg', 'webm', 'ogv', 'mov', 'asx', 'mpeg', 'mp4', 'm4v', 'avi');
+$audioArray = array('opus', 'flac', 'weba', 'wav', 'ogg', 'm4a', 'oga', 'mid', 'mp3', 'aiff', 'wma', 'au');
 
 if (isset($_GET['artiID']))
 {
@@ -101,6 +101,17 @@ else
     $canView = false;
     $viewError = 'No Article was selected';
 }
+
+if (isset($_POST['deleteCom']))
+{
+    $deleteComment = new Comment();
+    $deleteComment->setCommentID($_POST['deleteCom']);
+    $deleteComment->initCwithID();
+    $deleteComment->deleteCom();
+
+    echo "<script>window.location.href='viewArticle.php?artiID=$articleID';</script>";
+    exit;
+}
 ?>
 
 <script type="text/javascript">
@@ -110,21 +121,26 @@ else
         document.getElementById('articlePageBody').setAttribute("style", "height:" + height);
     }
 
+    function checkForm()
+    {
+        return confirm('Are you sure you want to delete this comment?');
+
+    }
 
     window.addEventListener('resize', chnageSize);
 </script>
 
 
 <section <?php
-                if (!$canView)
-                {
-                    echo 'id="articlePageBody"';
-                }
-                else
-                {
-                    echo 'hidden';
-                }
-                    ?>>
+if (!$canView)
+{
+    echo 'id="articlePageBody"';
+}
+else
+{
+    echo 'hidden';
+}
+?>>
     <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-xl-10">
@@ -319,7 +335,7 @@ if (!$canView)
 
                             if ($_SESSION['roleType'] == 'admin' && ($userCommentRole != 'admin' || $_SESSION['userID'] == $newUser->getUserID()))
                             {
-                                echo '<a type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></a>';
+                                echo '<form method="post" onsubmit="return checkForm();"><button type="submit" name="deleteCom" value="'.$newComment->getCommentID().'" class="btn btn-danger"><i class="far fa-trash-alt"></i></button></form>';
                             }
 
                             echo '</div>
@@ -349,11 +365,11 @@ if (!$canView)
                 <!--Section: Reply if the user is logged in they can comment-->
 
                 <section <?php
-                    if (!$canComment)
-                    {
-                        echo 'hidden';
-                    }
-                    ?>>
+                if (!$canComment)
+                {
+                    echo 'hidden';
+                }
+                ?>>
                     <p class="text-center"><strong>Leave a Comments</strong></p>
 
                     <form method="post">
@@ -381,7 +397,7 @@ if (!$canView)
                 {
                     echo 'hidden';
                 }
-                    ?>>
+                ?>>
                     <p class="text-center"><strong>Please login to leave a comment</strong></p>
                     <p class="text-center"></p>
                 </section>

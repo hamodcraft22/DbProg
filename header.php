@@ -320,10 +320,6 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'author')
 
                                                     <!-- date range search -->
                                                     <div class="form-group mt-1" id="dateRangeDiv">
-                                                        <label for="beginDate">Begin Date</label><br>
-                                                        <input type="date" class="form-control" id="beginDateInput" placeholder="Text">
-                                                        <label for="endDate">End Date</label><br>
-                                                        <input type="date" class="form-control" id="endDateInput" placeholder="Text">
                                                         <label for="beginDateInput">Begin Date</label><br>
                                                         <input type="date" class="form-control" id="beginDateInput" name="beginDateInput" placeholder="Text">
                                                         <label for="endDateInput">End Date</label><br>

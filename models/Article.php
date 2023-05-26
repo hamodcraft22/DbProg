@@ -371,5 +371,31 @@ class Article
             return false;
         }
     }
+    
+    public function setHome()
+    {
+        try {
+            $db = Database::getInstance();
+            $q = 'CALL dbProj_setHome(' . $this->getArticleID() . ')';
+            $data = $db->querySql($q);
+            return true;
+        } catch (Exception $e) {
+            echo 'Exception: ' . $e;
+            return false;
+        }
+    }
+    
+    public function setDeleted()
+    {
+        try {
+            $db = Database::getInstance();
+            $q = 'CALL dbProj_setDelete(' . $this->getArticleID() . ')';
+            $data = $db->querySql($q);
+            return true;
+        } catch (Exception $e) {
+            echo 'Exception: ' . $e;
+            return false;
+        }
+    }
 
 }
