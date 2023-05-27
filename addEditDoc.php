@@ -33,24 +33,25 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                         $retrivedDoc->setDocumentID($_GET['docID']);
                         $retrivedDoc->initDwithID();
                         $docID = $retrivedDoc->getDocumentID();
-                        
+
                         if ($docID != null)
                         {
                             if ($retrivedDoc->getDocumentID() == $docID)
                             {
                                 $canView = true;
                                 $isEdit = true;
-                                
-                                // extra validartion comes in from here for editiing documents 
+
                                 //save method is diifrent here 
                                 if (isset($_POST['docSave']))
                                 {
                                     $name = $_POST['nameInput'];
                                     $retrivedDoc->setDocumentName($name);
                                     $retrivedDoc->updateDocument();
-                                    
-                                    //add error here
-                                    echo 'update slayed';
+
+                                    echo '<div class="alert alert-success alert-dismissible fade show botAlert" role="alert">
+                Document name updated.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
                                 }
                             }
                             else
@@ -64,7 +65,6 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                             $viewError .= 'Document was not found .<br/>';
                             $canView = false;
                         }
-
                     }
                     else if (isset($_POST['docSave']))
                     {
@@ -72,35 +72,58 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
 
                         $name = $_POST['nameInput'];
 
-                        // add image errors and validation (upload errors missing from mid dont forget
-                        $path = "docs//" . $_FILES['fileInput']['name']; //unix path uses forward slash
-                        move_uploaded_file($_FILES['fileInput']['tmp_name'], $path);
-
-                        $type = end((explode(".", $path)));
-
-                        $newDoc = new artiDocument();
-
-                        $newDoc->setDocumentName($name);
-                        $newDoc->setDocumentPath($path);
-                        $newDoc->setDocumentType($type);
-                        $newDoc->setArticleID($articleID);
-
-                        $docID = $newDoc->saveDocument();
-
-                        if ($docID != false)
+                        if ($_FILES['fileInput']['size'] > 2087152)
                         {
-                            // go to edit mode - removes image link allowes only name chnage
-
-                            $isEdit = true;
-
-                            echo "<script>window.location.href='addEditDoc.php?artiID=$articleID" . "&docID=$docID';</script>";
-                            exit;
+                            $errors .= 'file larger then allowed size, 2MB max.<br/>';
                         }
                         else
                         {
-                            $isEdit = false;
-                            //add error here
-                            echo 'FEE SAVE ERRORRR TRY AGAIN';
+                            $path = "docs//" . $_FILES['fileInput']['name']; //unix path uses forward slash
+                            move_uploaded_file($_FILES['fileInput']['tmp_name'], $path);
+                            $type = end((explode(".", $path)));
+                        }
+
+                        if ($_FILES['fileInput']['error'] > 0)
+                        {
+                            $errors .= $_FILES['fileInput']['error'];
+                        }
+
+
+                        if ($errors != '')
+                        {
+                            echo '<div class="alert alert-danger alert-dismissible fade show botAlert" role="alert">
+                '.$errors.'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
+                        }
+                        else
+                        {
+                            $newDoc = new artiDocument();
+
+                            $newDoc->setDocumentName($name);
+                            $newDoc->setDocumentPath($path);
+                            $newDoc->setDocumentType($type);
+                            $newDoc->setArticleID($articleID);
+
+                            $docID = $newDoc->saveDocument();
+
+                            if ($docID != false)
+                            {
+                                // go to edit mode - removes image link allowes only name chnage
+
+                                $isEdit = true;
+
+                                echo "<script>window.location.href='addEditDoc.php?artiID=$articleID" . "&docID=$docID';</script>";
+                                exit;
+                            }
+                            else
+                            {
+                                $isEdit = false;
+                                echo '<div class="alert alert-danger alert-dismissible fade show botAlert" role="alert">
+                '.$errors.'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
+                            }
                         }
                     }
                 }
@@ -139,30 +162,30 @@ else
 
 
     window.addEventListener('resize', chnageSize);
-    
-    $(document).ready(function(){
-        $('#docForm input').blur(function(){
-            if(!$(this).val()){
+
+    $(document).ready(function () {
+        $('#docForm input').blur(function () {
+            if (!$(this).val()) {
                 $(this).attr("placeholder", "required");
-                $(this).css("border-color","red");
-            } else{
+                $(this).css("border-color", "red");
+            } else {
                 $(this).attr("placeholder", "text");
-                $(this).css("border-color","green");
+                $(this).css("border-color", "green");
             }
         });
     });
 </script>
 
 <section <?php
-    if (!$canView)
-    {
-        echo 'id="articleDocFormBody"';
-    }
-    else
-    {
-        echo 'hidden';
-    }
-    ?>>
+if (!$canView)
+{
+    echo 'id="articleDocFormBody"';
+}
+else
+{
+    echo 'hidden';
+}
+?>>
     <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-xl-10">
@@ -199,30 +222,56 @@ else
                 <form id="docForm" method="post" enctype="multipart/form-data">
                     <div class="card mb-4 shadow">
                         <div class="card-header py-3">
-                            <h5 class="mb-0">Article "<?php if ($canView){echo $retrivedArtcl->getHeader();} ?>" Document</h5>
+                            <h5 class="mb-0">Article "<?php
+                                if ($canView)
+                                {
+                                    echo $retrivedArtcl->getHeader();
+                                }
+                                ?>" Document</h5>
                         </div>
                         <div class="card-body ">
 
                             <!-- Text input -->
                             <div class="form-outline mb-4">
                                 <label class="form-label" for="nameInput">Title</label>
-                                <input type="text" id="nameInput" name="nameInput" class="form-control" placeholder="Document Name" required <?php if ($canView && $isEdit){echo 'value = "' . $retrivedDoc->getDocumentName() . '"';}else if (isset($_POST['nameInput']))
-{
-    echo 'value = "' . $_POST['nameInput'] . '"';
-} ?>/> 
+                                <input type="text" id="nameInput" name="nameInput" class="form-control" placeholder="Document Name" required <?php
+                                if ($canView && $isEdit)
+                                {
+                                    echo 'value = "' . $retrivedDoc->getDocumentName() . '"';
+                                }
+                                else if (isset($_POST['nameInput']))
+                                {
+                                    echo 'value = "' . $_POST['nameInput'] . '"';
+                                }
+                                ?>/> 
                             </div>
 
                             <!-- file input -->
-                            <div class="form-outline mb-4" <?php if ($isEdit){echo 'hidden';} ?>>
+                            <div class="form-outline mb-4" <?php
+                                 if ($isEdit)
+                                 {
+                                     echo 'hidden';
+                                 }
+                                 ?>>
                                 <label class="form-label" for="fileInput">File</label>
-                                <input type="file" id="fileInput" name="fileInput" class="form-control" <?php if (!$isEdit){echo 'required';} ?>/> 
+                                <input type="file" id="fileInput" name="fileInput" class="form-control" <?php
+                                if (!$isEdit)
+                                {
+                                    echo 'required';
+                                }
+                                 ?>/> 
                             </div>
 
 
                             <button type="submit" name="docSave" id="docSave" class="btn btn-success btn-block">
                                 Save
                             </button>
-                            <a href="viewArticleDocs.php?artiID=<?php if ($canView){echo $retrivedArtcl->getArticleID();} ?>" name="document" id="document" class="btn btn-secondary btn-block">Back to Documents</a>
+                            <a href="viewArticleDocs.php?artiID=<?php
+                                if ($canView)
+                                {
+                                    echo $retrivedArtcl->getArticleID();
+                                }
+                                 ?>" name="document" id="document" class="btn btn-secondary btn-block">Back to Documents</a>
 
 
 

@@ -7,7 +7,7 @@ class Search
     {
         try {
             $db = Database::getInstance();
-            $q = 'select * from dbProj_article where statusID=2 and match(`header`,`title`) against("' . $text . '" in boolean mode)  ORDER by `date` DESC';
+            $q = 'select * from dbProj_article where statusID in (2,3) and match(`header`,`title`) against("' . $text . '" in boolean mode)  ORDER by `date` DESC';
             $data = $db->multiFetch($q);
             return $data;
         } catch (Exception $e) {
@@ -37,7 +37,7 @@ class Search
     {
         try {
             $db = Database::getInstance();
-            $q = 'select * from dbProj_article where statusID=2 and date =\'' . $date . '\';';
+            $q = 'select * from dbProj_article where statusID in (2,3) and date =\'' . $date . '\';';
             $data = $db->multiFetch($q);
             return $data;
         } catch (Exception $e) {
@@ -50,7 +50,7 @@ class Search
     {
         try {
             $db = Database::getInstance();
-            $q = "select * from dbProj_article where statusID=2 and date >= '$dateStart' and date <= '$dateEnd'";
+            $q = "select * from dbProj_article where statusID in (2,3) and date >= '$dateStart' and date <= '$dateEnd'";
             echo $q;
             $data = $db->multiFetch($q);
             return $data;

@@ -41,7 +41,7 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                                 $canView = true;
                                 $isEdit = true;
 
-                                // extra validartion comes in from here for editiing media 
+                                // edit only allows chnaing name
                                 //save method is diifrent here 
                                 if (isset($_POST['mediaSave']))
                                 {
@@ -49,8 +49,10 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                                     $retrivedMedia->setMediaName($name);
                                     $retrivedMedia->updateMedia();
 
-                                    //add error here
-                                    echo 'update slayed';
+                                    echo '<div class="alert alert-success alert-dismissible fade show botAlert" role="alert">
+                Media name updated.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
                                 }
                             }
                             else
@@ -68,38 +70,62 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                     else if (isset($_POST['mediaSave']))
                     {
                         // here is where the actual save of the media and the image happens
+                        $errors = '';
 
                         $name = $_POST['nameInput'];
 
-                        // add image errors and validation (upload errors missing from mid dont forget
-                        $path = "media//" . $_FILES['fileInput']['name']; //unix path uses forward slash
-                        move_uploaded_file($_FILES['fileInput']['tmp_name'], $path);
-
-                        $type = end((explode(".", $path)));
-
-                        $newMedia = new Media();
-
-                        $newMedia->setMediaName($name);
-                        $newMedia->setMediaPath($path);
-                        $newMedia->setMediaType($type);
-                        $newMedia->setArticleID($articleID);
-
-                        $mediaID = $newMedia->saveMedia();
-
-                        if ($mediaID != false)
+                        if ($_FILES['fileInput']['size'] > 2087152)
                         {
-                            // go to edit mode - removes image link allowes only name chnage
-
-                            $isEdit = true;
-
-                            echo "<script>window.location.href='addEditMedia.php?artiID=$articleID" . "&mediaID=$mediaID';</script>";
-                            exit;
+                            $errors .= 'file larger then allowed size, 2MB max.<br/>';
                         }
                         else
                         {
-                            $isEdit = false;
-                            //add error here
-                            echo 'FEE SAVE ERRORRR TRY AGAIN';
+                            $path = "media//" . $_FILES['fileInput']['name']; //unix path uses forward slash
+                            move_uploaded_file($_FILES['fileInput']['tmp_name'], $path);
+                            $type = end((explode(".", $path)));
+                        }
+
+                        if ($_FILES['fileInput']['error'] > 0)
+                        {
+                            $errors .= $_FILES['fileInput']['error'];
+                        }
+
+
+                        if ($errors != '')
+                        {
+                            echo '<div class="alert alert-danger alert-dismissible fade show botAlert" role="alert">
+                '.$errors.'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
+                        }
+                        else
+                        {
+                            $newMedia = new Media();
+
+                            $newMedia->setMediaName($name);
+                            $newMedia->setMediaPath($path);
+                            $newMedia->setMediaType($type);
+                            $newMedia->setArticleID($articleID);
+
+                            $mediaID = $newMedia->saveMedia();
+
+                            if ($mediaID != false)
+                            {
+                                // go to edit mode - removes image link allowes only name chnage
+
+                                $isEdit = true;
+
+                                echo "<script>window.location.href='addEditMedia.php?artiID=$articleID" . "&mediaID=$mediaID';</script>";
+                                exit;
+                            }
+                            else
+                            {
+                                $isEdit = false;
+                                echo '<div class="alert alert-danger alert-dismissible fade show botAlert" role="alert">
+                '.$errors.'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
+                            }
                         }
                     }
                 }
@@ -150,6 +176,16 @@ else
             }
         });
     });
+
+    var uploadField = document.getElementById("file");
+
+    uploadField.onchange = function () {
+        if (this.files[0].size > 2097152) {
+            alert("File is too big!");
+            this.value = "";
+        }
+        ;
+    };
 </script>
 
 
@@ -199,10 +235,12 @@ else
                 <form id="mediaForm" method="post" enctype="multipart/form-data">
                     <div class="card mb-4 shadow">
                         <div class="card-header py-3">
-                            <h5 class="mb-0">Article "<?php if ($canView)
-{
-    echo $retrivedArtcl->getHeader();
-} ?>" Media</h5>
+                            <h5 class="mb-0">Article "<?php
+                                if ($canView)
+                                {
+                                    echo $retrivedArtcl->getHeader();
+                                }
+                                ?>" Media</h5>
                         </div>
                         <div class="card-body ">
 
@@ -222,25 +260,31 @@ else
                             </div>
 
                             <!-- Text input -->
-                            <div class="form-outline mb-4" <?php if ($isEdit)
-                                {
-                                    echo 'hidden';
-                                } ?> >
+                            <div class="form-outline mb-4" <?php
+                            if ($isEdit)
+                            {
+                                echo 'hidden';
+                            }
+                            ?> >
                                 <label class="form-label" for="fileInput">File</label>
-                                <input type="file" id="fileInput" name="fileInput" accept="audio/*,video/*,image/*" class="form-control" <?php if (!$isEdit)
+                                <input type="file" id="fileInput" name="fileInput" accept="audio/*,video/*,image/*" class="form-control" <?php
+                                if (!$isEdit)
                                 {
                                     echo 'required';
-                                } ?>/> 
+                                }
+                                ?>/> 
                             </div>
 
 
                             <button type="submit" name="mediaSave" id="mediaSave" value="mediaSave" class="btn btn-success btn-block">
                                 Save
                             </button>
-                            <a href="viewArticleMedia.php?artiID=<?php if ($canView)
-                                {
-                                    echo $retrivedArtcl->getArticleID();
-                                } ?>" name="document" id="document" class="btn btn-secondary btn-block">Back to Media</a>
+                            <a href="viewArticleMedia.php?artiID=<?php
+                            if ($canView)
+                            {
+                                echo $retrivedArtcl->getArticleID();
+                            }
+                            ?>" name="document" id="document" class="btn btn-secondary btn-block">Back to Media</a>
 
 
 

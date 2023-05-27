@@ -36,18 +36,6 @@ if (isset($_POST['deleteUser']))
     {
         return confirm('Are you sure you want to delete this user?');
     }
-    
-    $(document).ready(function () {
-        $("#delete").on("click", function () {
-
-            var del = confirm("Are you sure to delete this user ");
-            if (del == true) {
-
-                var htmlString = "<?php echo $htmlString; ?>";
-                alert(htmlString);
-            }
-        });
-    });
 </script>
 
 

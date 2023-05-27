@@ -160,6 +160,17 @@ class Comment
         }
     }
     
+    public function adminDeleteCom()
+    {
+        try {
+            $db = Database::getInstance();
+            $q = 'update dbProj_comment set statusID=5 where commentID = '.$this->getCommentID().';';
+            $data = $db->querySql($q);
+        } catch (Exception $e) {
+            echo 'Exception: ' . $e;
+        }
+    }
+    
     function getAllComms()
     {
         try {

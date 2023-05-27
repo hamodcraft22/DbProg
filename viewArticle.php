@@ -24,7 +24,12 @@ if (isset($_GET['artiID']))
         }
         else if ($retrivedArtcl->getStatusID() == 1)
         {
-            $viewError .= 'the article is not avalabile. <br/>';
+            $viewError .= 'the article is not Published. <br/>';
+            $canView = false;
+        }
+        else if ($retrivedArtcl->getStatusID() == 5)
+        {
+            $viewError .= 'the article was removed by an administrator. <br/>';
             $canView = false;
         }
         else
@@ -48,15 +53,19 @@ if (isset($_GET['artiID']))
 
             if (isset($_POST['likeButton']))
             {
-                //add error here
-                echo 'you have liked this article!';
                 $retrivedArtcl->increaseRate();
+                echo '<div class="alert alert-success alert-dismissible fade show botAlert" role="alert">
+                You have liked the article.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
             }
             else if (isset($_POST['dislikeButton']))
             {
-                //add error here
-                echo 'you have disliked this article!';
                 $retrivedArtcl->decreaseRate();
+                echo '<div class="alert alert-success alert-dismissible fade show botAlert" role="alert">
+                You have disliked the article.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
             }
 
             if (isset($_SESSION['userID']))
@@ -83,8 +92,10 @@ if (isset($_GET['artiID']))
                     }
                     else
                     {
-                        //add error here
-                        echo 'error hpnd';
+                        echo '<div class="alert alert-danger alert-dismissible fade show botAlert" role="alert">
+                '.$errors.'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
                     }
                 }
             }
@@ -107,7 +118,14 @@ if (isset($_POST['deleteCom']))
     $deleteComment = new Comment();
     $deleteComment->setCommentID($_POST['deleteCom']);
     $deleteComment->initCwithID();
-    $deleteComment->deleteCom();
+    if ($_SESSION['roleType'] == 'admin')
+    {
+        $deleteComment->adminDeleteCom();
+    }
+    else
+    {
+        $deleteComment->deleteCom();
+    }
 
     echo "<script>window.location.href='viewArticle.php?artiID=$articleID';</script>";
     exit;
@@ -179,7 +197,7 @@ if (!$canView)
                 <section class="sticky-top" style="top: 80px;">
                     <!--Section: Ad-->
                     <section class="text-center border-bottom pb-4 mb-4">
-                        <div class="bg-image hover-overlay ripple mb-4">
+                        <div class="bg-image mb-4">
                             <img src="<?php echo $retrivedArtcl->getThumbnail() ?>" class="img-fluid" />
                         </div>
                         <h5><?php echo $retrivedArtcl->getTitle() ?></h5>
@@ -196,7 +214,9 @@ if (!$canView)
                         <h5 class="mb-4">Download Documents</h5>
 
                         <?php
-                        for ($i = 0; $i < count($docs); $i++)
+                        if (count($docs) > 1)
+                        {
+                            for ($i = 0; $i < count($docs); $i++)
                         {
 
                             $newDoc = new artiDocument();
@@ -207,6 +227,16 @@ if (!$canView)
                             '
                                     <div class="m-1">
                                         <a role="button" class="btn btn-primary" href="' . $newDoc->getDocumentPath() . '" target="_blank">Download File "' . $newDoc->getDocumentName() . '"<i class="fas fa-download ms-2"></i></a>
+                                    </div>
+                                ';
+                        }
+                        }
+                        else
+                        {
+                            echo
+                            '
+                                    <div class="m-1">
+                                        <p>No Documents Avalible</p>
                                     </div>
                                 ';
                         }
@@ -318,7 +348,7 @@ if (!$canView)
                         $newComment->setCommentID($commetns[$i]->commentID);
                         $newComment->initCwithID();
 
-                        if ($newComment->getStatusID() != 4)
+                        if ($newComment->getStatusID() == 2)
                         {
                             $newUser = new User();
                             $newUser->setUserID($newComment->getUserID());
@@ -333,7 +363,7 @@ if (!$canView)
                                         <p>' . $newComment->getCommentBody() . '</p>
                             ';
 
-                            if ($_SESSION['roleType'] == 'admin' && ($userCommentRole != 'admin' || $_SESSION['userID'] == $newUser->getUserID()))
+                            if (($_SESSION['roleType'] == 'admin' && ($userCommentRole != 'admin'))  || ($_SESSION['userID'] == $newUser->getUserID()))
                             {
                                 echo '<form method="post" onsubmit="return checkForm();"><button type="submit" name="deleteCom" value="'.$newComment->getCommentID().'" class="btn btn-danger"><i class="far fa-trash-alt"></i></button></form>';
                             }
@@ -341,13 +371,23 @@ if (!$canView)
                             echo '</div>
                                 </div>';
                         }
-                        else
+                        else if ($newComment->getStatusID() == 4)
                         {
                             echo
                             '
                                 <div class="row mb-4">
                                     <div>
-                                        <p class="mb-2"><strong>This comment was deleted by Admin</p>
+                                        <p class="mb-2"><strong>This comment was deleted</p>
+                                    </div>
+                                </div>';
+                        }
+                        else if ($newComment->getStatusID() == 5)
+                        {
+                            echo
+                            '
+                                <div class="row mb-4">
+                                    <div>
+                                        <p class="mb-2"><strong>This comment was removed by an administrator</p>
                                     </div>
                                 </div>';
                         }

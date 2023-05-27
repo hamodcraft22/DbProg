@@ -271,8 +271,29 @@ class Article
                 $q .= 'where userID =' . $this->getUserID();
             }
 
-            $q .= ' order by views DESC;';
+            $q .= ' order by rates DESC;';
 
+            $data = $db->multiFetch($q);
+            return $data;
+        } catch (Exception $e) {
+            echo 'Exception: ' . $e;
+            return false;
+        }
+    }
+    
+    public function getAllbyDate($dateStart, $dateEnd)
+    {
+        try {
+            $db = Database::getInstance();
+            $q = "select * from dbProj_article where date >= '$dateStart' and date <= '$dateEnd' ";
+            
+            if ($this->getUserID() != null)
+            {
+                $q .= 'where userID =' . $this->getUserID();
+            }
+
+            $q .= ' order by rates DESC;';
+            
             $data = $db->multiFetch($q);
             return $data;
         } catch (Exception $e) {
@@ -285,7 +306,7 @@ class Article
     {
         try {
             $db = Database::getInstance();
-            $q = 'select * from dbProj_article where statusID = 2 ';
+            $q = 'select * from dbProj_article where statusID in (2,3) ';
             
             if(isset($catID))
             {
@@ -397,5 +418,18 @@ class Article
             return false;
         }
     }
-
+    
+    
+    public function setAdminDeleted()
+    {
+        try {
+            $db = Database::getInstance();
+            $q = 'CALL dbProj_setAdminDelete(' . $this->getArticleID() . ')';
+            $data = $db->querySql($q);
+            return true;
+        } catch (Exception $e) {
+            echo 'Exception: ' . $e;
+            return false;
+        }
+    }
 }

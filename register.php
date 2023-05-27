@@ -99,16 +99,18 @@ if (isset($_POST['registerForm'])) {
         }
         else
         {
-            //add error here
-            echo 'issue no reg';
+            echo '<div class="alert alert-danger alert-dismissible fade show botAlert" role="alert">
+                Error in saving, Try again later.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
         }
     }
     else
     {
-        //add error here
-        // missing the bootsstrap alert (copy from header)
-        echo 'errors :';
-        echo $errors;
+        echo '<div class="alert alert-danger alert-dismissible fade show botAlert" role="alert">
+                '.$errors.'
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
     }
 }
 ?>
