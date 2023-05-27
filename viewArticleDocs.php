@@ -57,6 +57,17 @@ else
     $viewError .= 'You have to be logged in as an author.<br/>';
     $canView = false;
 }
+
+if (isset($_POST['deleteDocument']))
+{
+    $deleteDoc = new artiDocument();
+    $deleteDoc->setDocumentID($_POST['deleteDocument']);
+    $deleteDoc->initDwithID();
+    $deleteDoc->deleteDoc();
+    
+    echo "<script>window.location.href='viewArticleDocs.php?artiID='$articleID;</script>";
+    exit;
+}
 ?>
 
 <script type="text/javascript">
@@ -68,6 +79,11 @@ else
 
 
     window.addEventListener('resize', chnageSize);
+    
+    function checkForm()
+    {
+        return confirm('Are you sure you want to delete this Document?');
+    }
 </script>
 
 
@@ -150,7 +166,8 @@ else
                                             <th class="text-center" scope="row">' . $newDoc->getDocumentID() . '</th>
                                             <td>' . $newDoc->getDocumentName() . '</td>
                                             <td class="text-center">' . $newDoc->getDocumentType() . '</td>
-                                            <td class="text-center">';
+                                            <td class="text-center">
+                                            <form method="post" onsubmit="return checkForm();">';
 
                                         echo '
                                                 <a type="button" class="btn btn-primary" href="' . $newDoc->getDocumentPath() . '"><i class="fa-solid fa-file"></i></a>';
@@ -158,7 +175,8 @@ else
 
                                     echo '
                                                 <a type="button" class="btn btn-success" href="addEditDoc.php?artiID='.$articleID.'&docID='.$newDoc->getDocumentID().'"><i class="fas fa-edit"></i></a>
-                                                <a type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></a>
+                                                <button type="submit" class="btn btn-danger" name="deleteDocument" value="'.$newDoc->getDocumentID().'"><i class="far fa-trash-alt"></i></button>
+                                                </form>
                                             </td>
                                         </tr>
                                     ';

@@ -114,12 +114,13 @@ class Media
         }
     }
     
-    public function deleteArti()
+    public function deleteMedia()
     {
         try {
             $db = Database::getInstance();
             $q = 'delete from dbProj_media where mediaID = '.$this->getMediaID().';';
             $data = $db->querySql($q);
+            unlink($this->getDocumentPath());
             return true;
         } catch (Exception $e) {
             echo 'Exception: ' . $e;

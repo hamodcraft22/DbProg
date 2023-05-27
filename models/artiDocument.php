@@ -120,6 +120,7 @@ class artiDocument
             $db = Database::getInstance();
             $q = 'delete from dbProj_document where documentID = '.$this->getDocumentID().';';
             $data = $db->querySql($q);
+            unlink($this->getDocumentPath());
             return true;
         } catch (Exception $e) {
             echo 'Exception: ' . $e;

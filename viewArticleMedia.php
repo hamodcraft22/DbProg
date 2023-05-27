@@ -60,6 +60,17 @@ else
     $viewError .= 'You have to be logged in as an author.<br/>';
     $canView = false;
 }
+
+if (isset($_POST['deleteMedia']))
+{
+    $deleteMedia = new Media();
+    $deleteMedia->setMediaID($_POST['deleteMedia']);
+    $deleteMedia->initMwithID();
+    $deleteMedia->deleteMedia();
+    
+    echo "<script>window.location.href='viewArticleMedia.php?artiID='$articleID;</script>";
+    exit;
+}
 ?>
 
 <script type="text/javascript">
@@ -71,6 +82,11 @@ else
 
 
     window.addEventListener('resize', chnageSize);
+    
+    function checkForm()
+    {
+        return confirm('Are you sure you want to delete this Media?');
+    }
 </script>
 
 
@@ -178,11 +194,13 @@ else
                                     
                                     echo
                                             '<td class="text-center">' . $newMedia->getMediaType() . '</td>
-                                            <td class="text-center">';
+                                            <td class="text-center">
+                                            <form method="post" onsubmit="return checkForm();">';
 
                                     echo '
                                                 <a type="button" class="btn btn-success" href="addEditMedia.php?artiID='.$articleID.'&mediaID='.$newMedia->getMediaID().'"><i class="fas fa-edit"></i></a>
-                                                <a type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></a>
+                                                <button type="submit" class="btn btn-danger" name="deleteMedia" value="'.$newMedia->getMediaID().'"><i class="far fa-trash-alt"></i></button>
+                                                </form>
                                             </td>
                                         </tr>
                                     ';

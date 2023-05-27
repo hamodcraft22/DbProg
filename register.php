@@ -56,9 +56,7 @@ if (isset($_POST['registerForm'])) {
     if (!$user->checkUsername()) 
     {
         //error message if name isnt available 
-        echo  ' <div class="alert alert-danger alert-dismissible fade show " role="alert">'.
-        $errors.'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
-        
+        $errors .= 'username Alredy in use.<br/>';
     }
     
     // checks if the password matches the pssword in the repeat field 
