@@ -143,7 +143,14 @@ if (count($articles) > 0)
 
                 for ($i = 0; $i < $pageination->getTotal_pages(); $i++)
                 {
-                    echo '<li class="page-item"><a class="page-link" href="index.php?pg=' . ($i + 1) . '">' . ($i + 1) . '</a></li>';
+                    if($_GET['pg'] == ($i + 1))
+                    {
+                        echo '<li class="page-item active"><a class="page-link" href="index.php?pg=' . ($i + 1) . '">' . ($i + 1) . '</a></li>';
+                    }
+                    else
+                    {
+                        echo '<li class="page-item"><a class="page-link" href="index.php?pg=' . ($i + 1) . '">' . ($i + 1) . '</a></li>';
+                    }
                 }
 
                 if (isset($_GET['pg']) && (($_GET['pg']) == ($pageination->getTotal_pages())))

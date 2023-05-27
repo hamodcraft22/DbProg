@@ -56,6 +56,11 @@ if (isset($_GET['catID']))
                 exit;
             }
         }
+        else
+        {
+            $canView = false;
+            $viewError .= "No articles are avalible for this category";
+        }
     }
 }
 else

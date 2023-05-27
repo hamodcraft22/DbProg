@@ -68,7 +68,7 @@ if (isset($_POST['deleteMedia']))
     $deleteMedia->initMwithID();
     $deleteMedia->deleteMedia();
     
-    echo "<script>window.location.href='viewArticleMedia.php?artiID='$articleID;</script>";
+    echo "<script>window.location.href='viewArticleMedia.php?artiID=$articleID';</script>";
     exit;
 }
 ?>

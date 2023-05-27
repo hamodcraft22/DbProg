@@ -120,7 +120,7 @@ class Media
             $db = Database::getInstance();
             $q = 'delete from dbProj_media where mediaID = '.$this->getMediaID().';';
             $data = $db->querySql($q);
-            unlink($this->getDocumentPath());
+            unlink($this->getMediaPath());
             return true;
         } catch (Exception $e) {
             echo 'Exception: ' . $e;

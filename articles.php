@@ -84,6 +84,8 @@ if (isset($_POST['deleteArticle']))
     {
         $deleteArticle->setDeleted();
     }
+    
+    
 }
 ?>
 
@@ -229,7 +231,7 @@ for ($i = 0; $i < count($data); $i++)
     $newArtcl->setArticleID($data[$i]->articleID);
     $newArtcl->initAwithID();
 
-    if ($newArtcl->getStatus() == 'deleted' || $newArtcl->getStatus() == 'adminDeleted')
+    if ($newArtcl->getStatus() == 'deleted' || $newArtcl->getStatus() == 'adminDelete')
     {
         echo '<tr class="table-danger">';
     }
@@ -261,7 +263,7 @@ for ($i = 0; $i < count($data); $i++)
                                                 <button type="submit" class="btn btn-warning" name="homeArticle" onclick="setHome();" value="' . $newArtcl->getArticleID() . '"><i class="fa-solid fa-house"></i></button>';
     }
 
-    if (($newArtcl->getStatus() != 'published' && $newArtcl->getStatus() != 'deleted' && $newArtcl->getStatus() != 'adminDeleted' && ($_SESSION['roleType'] == 'admin' || $_SESSION['userID'] == $newArtcl->getUserID())))
+    if (($newArtcl->getStatus() != 'published' && $newArtcl->getStatus() != 'deleted' && $newArtcl->getStatus() != 'adminDelete' && ($_SESSION['roleType'] == 'admin' || $_SESSION['userID'] == $newArtcl->getUserID())))
     {
         echo '      <button type="submit" class="btn btn-danger" name="deleteArticle" onclick="setDelete();" value="' . $newArtcl->getArticleID() . '"><i class="fa-solid fa-trash-alt"></i></button>';
     }

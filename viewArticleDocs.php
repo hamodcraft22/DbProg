@@ -65,7 +65,7 @@ if (isset($_POST['deleteDocument']))
     $deleteDoc->initDwithID();
     $deleteDoc->deleteDoc();
     
-    echo "<script>window.location.href='viewArticleDocs.php?artiID='$articleID;</script>";
+    echo "<script>window.location.href='viewArticleDocs.php?artiID='$articleID';</script>";
     exit;
 }
 ?>
