@@ -22,7 +22,7 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
             {
                 $dateSatrtInput = $_POST['beginDateInput'];
                 $dateEndInput = $_POST['endDateInput'];
-                
+
                 $data = $article->getAllbyDate($dateSatrtInput, $dateEndInput);
             }
         }
@@ -44,10 +44,10 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
             {
                 $dateSatrtInput = $_POST['beginDateInput'];
                 $dateEndInput = $_POST['endDateInput'];
-                
+
                 $data = $article->getAllbyDate($dateSatrtInput, $dateEndInput);
             }
-            
+
             $canView = true;
         }
         else
@@ -84,8 +84,6 @@ if (isset($_POST['deleteArticle']))
     {
         $deleteArticle->setDeleted();
     }
-    
-    
 }
 ?>
 
@@ -122,6 +120,12 @@ if (isset($_POST['deleteArticle']))
             return false;
         }
     }
+
+    const handlePrint = () => {
+        var actContents = document.body.innerHTML;
+        document.body.innerHTML = actContents;
+        window.print();
+    };
 
     window.addEventListener('resize', chnageSize);
 </script>
@@ -195,20 +199,20 @@ else
                 <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                     <a type="button" class="btn btn-primary btn-sm" href="addEditArticle.php">Compose a New Article</a>
 
-<?php
-if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
-{
-    if (!(isset($_GET['userID'])))
-    {
-        $adminID = $_SESSION['userID'];
-        echo '<a type="button" class="btn btn-success btn-sm" href="articles.php?userID=' . $adminID . '">My Articles</a>';
-    }
-    else
-    {
-        echo '<a type="button" class="btn btn-success btn-sm" href="articles.php">All Articles</a>';
-    }
-}
-?>
+                    <?php
+                    if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
+                    {
+                        if (!(isset($_GET['userID'])))
+                        {
+                            $adminID = $_SESSION['userID'];
+                            echo '<a type="button" class="btn btn-success btn-sm" href="articles.php?userID=' . $adminID . '">My Articles</a>';
+                        }
+                        else
+                        {
+                            echo '<a type="button" class="btn btn-success btn-sm" href="articles.php">All Articles</a>';
+                        }
+                    }
+                    ?>
                 </div>
 
                 <div class="card shadow" style="border-radius: 15px;">
@@ -224,24 +228,24 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
                         </thead>
                         <tbody>
 
-<?php
-for ($i = 0; $i < count($data); $i++)
-{
-    $newArtcl = new Article();
-    $newArtcl->setArticleID($data[$i]->articleID);
-    $newArtcl->initAwithID();
+                            <?php
+                            for ($i = 0; $i < count($data); $i++)
+                            {
+                                $newArtcl = new Article();
+                                $newArtcl->setArticleID($data[$i]->articleID);
+                                $newArtcl->initAwithID();
 
-    if ($newArtcl->getStatus() == 'deleted' || $newArtcl->getStatus() == 'adminDelete')
-    {
-        echo '<tr class="table-danger">';
-    }
-    else
-    {
-        echo '<tr>';
-    }
+                                if ($newArtcl->getStatus() == 'deleted' || $newArtcl->getStatus() == 'adminDelete')
+                                {
+                                    echo '<tr class="table-danger">';
+                                }
+                                else
+                                {
+                                    echo '<tr>';
+                                }
 
-    echo
-    '
+                                echo
+                                '
                                         
                                             <th class="text-center" scope="row">' . $newArtcl->getArticleID() . '</th>
                                             <td class="text-center"><img style="height:50px" src="' . $newArtcl->getThumbnail() . '"></img></td>
@@ -251,37 +255,41 @@ for ($i = 0; $i < count($data); $i++)
                                             <td class="text-center">
                                                 <a type="button" href="viewArticle.php?artiID=' . $newArtcl->getArticleID() . '" class="btn btn-primary"><i class="far fa-eye"></i></a>';
 
-    if ($newArtcl->getStatus() == 'saved')
-    {
-        echo '
+                                if ($newArtcl->getStatus() == 'saved')
+                                {
+                                    echo '
                                                 <a type="button" class="btn btn-success" href="addEditArticle.php?artiID=' . $newArtcl->getArticleID() . '"><i class="far fa-edit"></i></a>';
-    }
+                                }
 
-    if ($newArtcl->getStatus() == 'published')
-    {
-        echo '
+                                if ($newArtcl->getStatus() == 'published')
+                                {
+                                    echo '
                                                 <button type="submit" class="btn btn-warning" name="homeArticle" onclick="setHome();" value="' . $newArtcl->getArticleID() . '"><i class="fa-solid fa-house"></i></button>';
-    }
+                                }
 
-    if (($newArtcl->getStatus() != 'published' && $newArtcl->getStatus() != 'deleted' && $newArtcl->getStatus() != 'adminDelete' && ($_SESSION['roleType'] == 'admin' || $_SESSION['userID'] == $newArtcl->getUserID())))
-    {
-        echo '      <button type="submit" class="btn btn-danger" name="deleteArticle" onclick="setDelete();" value="' . $newArtcl->getArticleID() . '"><i class="fa-solid fa-trash-alt"></i></button>';
-    }
+                                if (($newArtcl->getStatus() != 'published' && $newArtcl->getStatus() != 'deleted' && $newArtcl->getStatus() != 'adminDelete' && ($_SESSION['roleType'] == 'admin' || $_SESSION['userID'] == $newArtcl->getUserID())))
+                                {
+                                    echo '      <button type="submit" class="btn btn-danger" name="deleteArticle" onclick="setDelete();" value="' . $newArtcl->getArticleID() . '"><i class="fa-solid fa-trash-alt"></i></button>';
+                                }
 
-    echo '
+                                echo '
                                                 
                                             </td>
                                             </form>
                                         </tr>
                                     ';
-}
-?>
+                            }
+                            ?>
 
 
 
                         </tbody>
                     </table>
 
+                </div>
+                </br>
+                <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                    <input value='Print' type='button' class="btn btn-success" onclick='handlePrint()' />
                 </div>
 
             </div>
