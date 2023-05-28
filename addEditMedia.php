@@ -85,9 +85,44 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                             $type = end((explode(".", $path)));
                         }
 
-                        if ($_FILES['fileInput']['error'] > 0)
+                        if ($_FILES['fileInput']['error'] != 0)
                         {
-                            $errors .= $_FILES['fileInput']['error'];
+                            $fileError .= $_FILES['fileInput']['error'];
+                            
+                            if ($fileError == 1)
+                            {
+                                $errors .= 'The uploaded file exceeds the upload limit, 2 mb max';
+                            }
+                            
+                            if ($fileError == 2)
+                            {
+                                $errors .= 'The uploaded file exceeds the upload limit, 2 mb max';
+                            }
+                            
+                            if ($fileError == 3)
+                            {
+                                $errors .= 'The uploaded file was only partially uploaded';
+                            }
+                            
+                            if ($fileError == 4)
+                            {
+                                $errors .= 'No file was uploaded';
+                            }
+                            
+                            if ($fileError == 6)
+                            {
+                                $errors .= 'Missing a temporary folder';
+                            }
+                            
+                            if ($fileError == 7)
+                            {
+                                $errors .= 'Failed to write file to disk.';
+                            }
+                            
+                            if ($fileError == 8)
+                            {
+                                $errors .= 'A PHP extension stopped the file upload.';
+                            }
                         }
 
 
@@ -179,7 +214,7 @@ else
 
     var uploadField = document.getElementById("file");
 
-    uploadField.onchange = function () {
+    fileInput.onchange = function () {
         if (this.files[0].size > 2097152) {
             alert("File is too big!");
             this.value = "";
