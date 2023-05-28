@@ -265,12 +265,21 @@ if (!$canView)
                                 $newMedia = new Media();
                                 $newMedia->setMediaID($medias[$i]->mediaID);
                                 $newMedia->initMwithID();
-
+                                
+                                if($i == 0)
+                                {
+                                    echo '<div class="carousel-item active">';
+                                }
+                                else
+                                {
+                                    echo '<div class="carousel-item">';
+                                }
+                                
                                 if (in_array($newMedia->getMediaType(), $videoArray))
                                 {
                                     echo
                                     '
-                                            <div class="carousel-item active">
+                                            
                                                 <video autoplay muted loop style="width: 100%" class="d-block w-100 img-fluid shadow-2-strong rounded-5 mb-4"><source src="' . $newMedia->getMediaPath() . '"></video>
                                             </div>
                                         ';
@@ -279,7 +288,6 @@ if (!$canView)
                                 {
                                     echo
                                     '
-                                            <div class="carousel-item active">
                                                 <audio><source src="' . $newMedia->getMediaPath() . '"></audio>
                                             </div>
                                         ';
@@ -288,7 +296,6 @@ if (!$canView)
                                 {
                                     echo
                                     '
-                                            <div class="carousel-item active">
                                                 <img class="d-block w-100 img-fluid shadow-2-strong rounded-5 mb-4" src="' . $newMedia->getMediaPath() . '" alt="' . $newMedia->getMediaName() . '">
                                             </div>
                                         ';

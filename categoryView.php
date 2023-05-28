@@ -23,7 +23,7 @@ if (isset($_GET['catID']))
         {
             $pageination = new Pagination();
             $pageination->totalRecords($articles);
-            $pageination->setLimit(10);
+            $pageination->setLimit(5);
 
             $totalPgs = $pageination->getTotal_pages();
 
