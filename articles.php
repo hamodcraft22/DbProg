@@ -239,6 +239,10 @@ else
                                 {
                                     echo '<tr class="table-danger">';
                                 }
+                                if ($newArtcl->getStatus() == 'homed')
+                                {
+                                    echo '<tr class="table-warning">';
+                                }
                                 else
                                 {
                                     echo '<tr>';
@@ -267,7 +271,7 @@ else
                                                 <button type="submit" class="btn btn-warning" name="homeArticle" onclick="setHome();" value="' . $newArtcl->getArticleID() . '"><i class="fa-solid fa-house"></i></button>';
                                 }
 
-                                if (($newArtcl->getStatus() != 'published' && $newArtcl->getStatus() != 'deleted' && $newArtcl->getStatus() != 'adminDelete' && ($_SESSION['roleType'] == 'admin' || $_SESSION['userID'] == $newArtcl->getUserID())))
+                                if (($newArtcl->getStatus() != 'homed' && $newArtcl->getStatus() != 'deleted' && $newArtcl->getStatus() != 'adminDelete' && ($_SESSION['roleType'] == 'admin' || $_SESSION['userID'] == $newArtcl->getUserID())))
                                 {
                                     echo '      <button type="submit" class="btn btn-danger" name="deleteArticle" onclick="setDelete();" value="' . $newArtcl->getArticleID() . '"><i class="fa-solid fa-trash-alt"></i></button>';
                                 }

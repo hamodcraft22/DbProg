@@ -1,6 +1,8 @@
 <?php
 include './header.php';
 
+$hasHomeArti = false;
+
 $article = new Article();
 $articles = $article->getPubArtis(null, null, null);
 
@@ -37,6 +39,23 @@ if (count($articles) > 0)
         exit;
     }
 }
+
+$homeArti = new Article();
+$hasVideo = true;
+if ($homeArti->getHomeArti())
+{
+    $hasHomeArti = true;
+    
+    $homeMedia = new Media();
+    $homeMedia->setArticleID($homeArti->getArticleID());
+    $homeMedia->getVideo();
+    
+    if ($homeMedia->getMediaID() == null)
+    {
+        $hasVideo = false;
+        $homeMedia->getPhoto();
+    }
+}
 ?>
 
 <!-- scripts and functions - fancy ocd stuff -->
@@ -61,9 +80,24 @@ if (count($articles) > 0)
 </script>
 
 <!-- home Video/Image - chosen news Media (add image part) -->
-<video autoplay="autoplay" loop="loop" muted playsinline defaultMuted id="mainVideo">
-    <source src="assests/mainVideo.mp4" type="video/mp4">
-</video>
+<?php
+    if ($hasVideo)
+    {
+        echo 
+        '
+            <video autoplay="autoplay" loop="loop" muted playsinline defaultMuted id="mainVideo">
+                <source src="'.$homeMedia->getMediaPath().'">
+            </video>
+        ';
+    }
+    else
+    {
+        echo 
+        '
+            <img id="mainVideo" src="'.$homeMedia->getMediaPath().'"">
+        ';
+    }
+?>
 
 <!-- Main Home Div's -->
 <div id="homeDiv">
@@ -71,7 +105,7 @@ if (count($articles) > 0)
         <div id="mainDiv">
             <div id="mainTitle">
                 <h2 class="text-white invert text-center">
-                    this should be the title sdfsdf dsfds fdsfsdf dsfsdfd sfsdfsdf	
+                    <?php echo $homeArti->getTitle() ?>
                 </h2>
             </div>
 
@@ -79,10 +113,10 @@ if (count($articles) > 0)
                 <div id="mainButtons">
 
                     <div>
-                        <p style="text-align: center;">this should be header.&nbsp;</p>
+                        <p style="text-align: center;"><?php echo $homeArti->getHeader() ?>.&nbsp;</p>
                     </div>
                     <div>
-                        <a id="articalButton" class="btn btn-outline-light" role="button" href="/electric/celestiq">
+                        <a id="articalButton" class="btn btn-outline-light" role="button" href="viewArticle.php?artiID=<?php echo $homeArti->getArticleID() ?>">
                             Read Full Article
                         </a>
                     </div>
@@ -143,7 +177,7 @@ if (count($articles) > 0)
 
                 for ($i = 0; $i < $pageination->getTotal_pages(); $i++)
                 {
-                    if($_GET['pg'] == ($i + 1))
+                    if ($_GET['pg'] == ($i + 1))
                     {
                         echo '<li class="page-item active"><a class="page-link" href="index.php?pg=' . ($i + 1) . '">' . ($i + 1) . '</a></li>';
                     }

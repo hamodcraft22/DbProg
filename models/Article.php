@@ -327,6 +327,20 @@ class Article
             return false;
         }
     }
+    
+    function getHomeArti()
+    {
+        try {
+            $db = Database::getInstance();
+            $q = 'select * from dbProj_article where statusID = 3;';
+            $data = $db->singleFetch($q);
+            $this->initArticle($data->articleID, $data->header, $data->title, $data->body, $data->date, $data->thumbnail, $data->rating, $data->rates, $data->views, $data->statusID, $data->categoryID, $data->userID);
+            return true;
+        } catch (Exception $e) {
+            echo 'Exception: ' . $e;
+            return false;
+        }
+    }
 
     function getAllCategories()
     {

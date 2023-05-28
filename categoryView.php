@@ -4,8 +4,6 @@ include './header.php';
 $canView = true;
 $viewError = '';
 
-$article = new Article();
-$articles = $article->getPubArtis(null, null, null);
 
 if (isset($_GET['catID']))
 {
@@ -17,6 +15,10 @@ if (isset($_GET['catID']))
     else
     {
         $catID = $_GET['catID'];
+        
+        $article = new Article();
+        $articles = $article->getPubArtis(null, null, $catID);
+        
         if (count($articles) > 0)
         {
             $pageination = new Pagination();

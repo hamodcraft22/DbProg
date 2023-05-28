@@ -146,4 +146,32 @@ class Media
             return false;
         }
     }
+    
+    function getVideo()
+    {
+        try {
+            $db = Database::getInstance();
+            $q = "select * from dbProj_media where articleID = $this->articleID and mediaType in ('ogm', 'wmv', 'mpg', 'webm', 'ogv', 'mov', 'asx', 'mpeg', 'mp4', 'm4v', 'avi', 'opus', 'flac', 'weba', 'wav', 'ogg', 'm4a', 'oga', 'mid', 'mp3', 'aiff', 'wma', 'au') limit 1;";
+            $data = $db->singleFetch($q);
+            $this->initMedia($data->mediaID, $data->mediaName, $data->mediaPath, $data->mediaType, $data->articleID);
+            return true;
+        } catch (Exception $e) {
+            echo 'Exception: ' . $e;
+            return false;
+        }
+    }
+    
+    function getPhoto()
+    {
+        try {
+            $db = Database::getInstance();
+            $q = "select * from dbProj_media where articleID = $this->articleID and mediaType not in ('ogm', 'wmv', 'mpg', 'webm', 'ogv', 'mov', 'asx', 'mpeg', 'mp4', 'm4v', 'avi', 'opus', 'flac', 'weba', 'wav', 'ogg', 'm4a', 'oga', 'mid', 'mp3', 'aiff', 'wma', 'au') limit 1;";
+            $data = $db->singleFetch($q);
+            $this->initMedia($data->mediaID, $data->mediaName, $data->mediaPath, $data->mediaType, $data->articleID);
+            return true;
+        } catch (Exception $e) {
+            echo 'Exception: ' . $e;
+            return false;
+        }
+    }
 }
