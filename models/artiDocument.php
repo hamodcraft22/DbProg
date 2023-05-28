@@ -138,6 +138,7 @@ class artiDocument
             {
                 $q .= 'where articleID =' . $this->getArticleID();
             }
+            echo $q;
             $data = $db->multiFetch($q);
             return $data;
         } catch (Exception $e) {

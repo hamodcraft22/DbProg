@@ -93,7 +93,7 @@ if (isset($_GET['artiID']))
                     else
                     {
                         echo '<div class="alert alert-danger alert-dismissible fade show botAlert" role="alert">
-                '.$errors.'
+                ' . $errors . '
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>';
                     }
@@ -214,22 +214,22 @@ if (!$canView)
                         <h5 class="mb-4">Download Documents</h5>
 
                         <?php
-                        if (count($docs) > 1)
+                        if (count($docs) >= 1)
                         {
                             for ($i = 0; $i < count($docs); $i++)
-                        {
+                            {
 
-                            $newDoc = new artiDocument();
-                            $newDoc->setDocumentID($docs[$i]->documentID);
-                            $newDoc->initDwithID();
+                                $newDoc = new artiDocument();
+                                $newDoc->setDocumentID($docs[$i]->documentID);
+                                $newDoc->initDwithID();
 
-                            echo
-                            '
+                                echo
+                                '
                                     <div class="m-1">
                                         <a role="button" class="btn btn-primary" href="' . $newDoc->getDocumentPath() . '" target="_blank">Download File "' . $newDoc->getDocumentName() . '"<i class="fas fa-download ms-2"></i></a>
                                     </div>
                                 ';
-                        }
+                            }
                         }
                         else
                         {
@@ -265,8 +265,8 @@ if (!$canView)
                                 $newMedia = new Media();
                                 $newMedia->setMediaID($medias[$i]->mediaID);
                                 $newMedia->initMwithID();
-                                
-                                if($i == 0)
+
+                                if ($i == 0)
                                 {
                                     echo '<div class="carousel-item active">';
                                 }
@@ -274,7 +274,7 @@ if (!$canView)
                                 {
                                     echo '<div class="carousel-item">';
                                 }
-                                
+
                                 if (in_array($newMedia->getMediaType(), $videoArray))
                                 {
                                     echo
@@ -370,9 +370,9 @@ if (!$canView)
                                         <p>' . $newComment->getCommentBody() . '</p>
                             ';
 
-                            if (($_SESSION['roleType'] == 'admin' && ($userCommentRole != 'admin'))  || ($_SESSION['userID'] == $newUser->getUserID()))
+                            if (($_SESSION['roleType'] == 'admin' && ($userCommentRole != 'admin')) || ($_SESSION['userID'] == $newUser->getUserID()))
                             {
-                                echo '<form method="post" onsubmit="return checkForm();"><button type="submit" name="deleteCom" value="'.$newComment->getCommentID().'" class="btn btn-danger"><i class="far fa-trash-alt"></i></button></form>';
+                                echo '<form method="post" onsubmit="return checkForm();"><button type="submit" name="deleteCom" value="' . $newComment->getCommentID() . '" class="btn btn-danger"><i class="far fa-trash-alt"></i></button></form>';
                             }
 
                             echo '</div>
