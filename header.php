@@ -22,16 +22,18 @@ if (isset($_POST['loginForm']))
     }
 }
 
-
+// if normal search 
 if (isset($_POST['normalSearch']))
 {
     $search = new Search();
 
+    // if search by title is selcted 
     if (isset($_POST['serachBy']) && (($_POST['serachBy'] == 'ttlDesc') || ($_POST['serachBy'] == 'authName')))
     {
         $textInput = $_POST['searchTextInput'];
         $textSearchType = $_POST['searchType'];
 
+        // search all text
         if ($textSearchType == 'all')
         {
             $textInput = $search->handleAll($textInput);
@@ -42,28 +44,32 @@ if (isset($_POST['normalSearch']))
             $textInput = $search->handleNone($textInput);
         }
 
+        // if first is selected 
         if ($textSearchType == 'first')
         {
             $textInput = $search->handleFirst($textInput);
         }
 
+        // if part is searched 
         if ($textSearchType == 'part')
         {
             $textInput = $search->handlePart($textInput);
         }
 
+        // exact search to string 
         if ($textSearchType == 'exact')
         {
             $textInput = $search->handleExact($textInput);
         }
 
 
-
+        // if search by title desc 
         if ($_POST['serachBy'] == 'ttlDesc')
         {
             $_SESSION['serachOut'] = $search->byTitleDesc($textInput);
         }
 
+        // search by author name 
         if ($_POST['serachBy'] == 'authName')
         {
             $_SESSION['serachOut'] = $search->byAuthor($textInput);
@@ -73,6 +79,7 @@ if (isset($_POST['normalSearch']))
         exit;
     }
 
+    // if search by date posted 
     if (isset($_POST['serachBy']) && $_POST['serachBy'] == 'datePosted')
     {
         $dateInput = $_POST['dateSearchInput'];
@@ -82,6 +89,7 @@ if (isset($_POST['normalSearch']))
         echo "<script>window.location.href='articlesResults.php';</script>";
         exit;
     }
+    // else by range date 
     else if (isset($_POST['serachBy']) && $_POST['serachBy'] == 'dateRange')
     {
         $dateSatrtInput = $_POST['beginDateInput'];
@@ -94,7 +102,7 @@ if (isset($_POST['normalSearch']))
     }
 }
 
-
+//searching for most read 
 if (isset($_POST['mostRead']))
 {
     $search = new Search();
@@ -423,7 +431,7 @@ if (isset($_SESSION['userID']) && $_SESSION['userID'] != null)
                 </div>
             </div>
         </nav>
-
+<!--// localization purposes -->
         <script>
             showHideSearch();
             function googleTranslateElementInit() {

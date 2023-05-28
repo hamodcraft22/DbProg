@@ -4,31 +4,39 @@ include './header.php';
 $canView = true;
 $viewError = '';
 
-
+// get cateory 
 if (isset($_GET['catID']))
 {
+    // if category not selected 
     if ($_GET['catID'] < 1 || $_GET['catID'] > 7)
     {
+        //echo error msg
         $canView = false;
         $viewError = 'The category is not found, please select another one';
     }
     else
     {
+        // else view categories 
         $catID = $_GET['catID'];
         
         $article = new Article();
         $articles = $article->getPubArtis(null, null, $catID);
         
+        // if there is articales 
         if (count($articles) > 0)
         {
+            // new page once exceeded 5 articals 
             $pageination = new Pagination();
             $pageination->totalRecords($articles);
             $pageination->setLimit(5);
 
+            // total pages 
             $totalPgs = $pageination->getTotal_pages();
 
+            // if pae is selcted 
             if (isset($_GET['pg']))
-            {
+            {   
+              
                 if ($_GET['pg'] < 1)
                 {
                     echo "<script>window.location.href='categoryView.php?catID=$catID&pg=1';</script>";
@@ -46,20 +54,24 @@ if (isset($_GET['catID']))
 
                 $articles = $article->getPubArtis($start, $end, $catID);
 
+                // if no articales 
                 if (count($articles) < 1)
                 {
+                    //echo error msg
                     $canView = false;
                     $viewError .= "No articles are avalible for this category";
                 }
             }
             else
             {
+                // go to page 1 
                 echo "<script>window.location.href='categoryView.php?catID=$catID&pg=1';</script>";
                 exit;
             }
         }
         else
         {
+            //echo error msg
             $canView = false;
             $viewError .= "No articles are avalible for this category";
         }
@@ -67,6 +79,7 @@ if (isset($_GET['catID']))
 }
 else
 {
+    //echo error msg
     $canView = false;
     $viewError .= 'no Catgory id, please try select a category';
 }
@@ -164,6 +177,7 @@ else
                             ?>
 
                             <?php
+//                            if there is articales 
                             if (count($articles) > 0)
                             {
                                 echo '<nav aria-label="Page navigation example">

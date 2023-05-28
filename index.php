@@ -6,14 +6,17 @@ $hasHomeArti = false;
 $article = new Article();
 $articles = $article->getPubArtis(null, null, null);
 
+// if articales exsit 
 if (count($articles) > 0)
 {
+    // new pages 
     $pageination = new Pagination();
     $pageination->totalRecords($articles);
     $pageination->setLimit(5);
 
     $totalPgs = $pageination->getTotal_pages();
 
+    // pae selected 
     if (isset($_GET['pg']))
     {
         if ($_GET['pg'] < 1)
@@ -42,6 +45,7 @@ if (count($articles) > 0)
 
 $homeArti = new Article();
 $hasVideo = true;
+// adding articale to home page 
 if ($homeArti->getHomeArti())
 {
     $hasHomeArti = true;
@@ -50,6 +54,7 @@ if ($homeArti->getHomeArti())
     $homeMedia->setArticleID($homeArti->getArticleID());
     $homeMedia->getVideo();
     
+    // if no video cant add
     if ($homeMedia->getMediaID() == null)
     {
         $hasVideo = false;
@@ -158,6 +163,7 @@ if ($homeArti->getHomeArti())
             ?>
 
             <?php
+            // articales list body 
             if (count($articles) > 0)
             {
                 echo '<nav aria-label="Page navigation example">
@@ -175,6 +181,7 @@ if ($homeArti->getHomeArti())
                 echo '<a class="page-link" href="index.php?pg=1" tabindex="-1">First</a>
                     </li>';
 
+                // loop for pages numbers 
                 for ($i = 0; $i < $pageination->getTotal_pages(); $i++)
                 {
                     if ($_GET['pg'] == ($i + 1))

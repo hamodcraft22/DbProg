@@ -6,6 +6,7 @@ $viewError = '';
 
 $isEdit = false;
 
+// if user is reader
 if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
 {
     if (isset($_GET['artiID']))
@@ -15,27 +16,33 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
         $retrivedArtcl->setArticleID($_GET['artiID']);
         $retrivedArtcl->initAwithID();
         $articleID = $retrivedArtcl->getArticleID();
-
+        
+        //if article exsits 
         if ($retrivedArtcl->getArticleID() != null)
         {
+            //if user is admin or author
             if ($_SESSION['userID'] == $retrivedArtcl->getUserID() || ($_SESSION['roleType'] == 'admin'))
             {
                 if ($retrivedArtcl->getStatus() != 'saved')
                 {
+                    //echo error msg
                     $viewError .= 'the article has been publised, you cannot edit it. <br/>';
                     $canView = false;
                 }
                 else
                 {
+                    //if select document 
                     if (isset($_GET['docID']))
                     {
                         $retrivedDoc = new artiDocument();
                         $retrivedDoc->setDocumentID($_GET['docID']);
                         $retrivedDoc->initDwithID();
                         $docID = $retrivedDoc->getDocumentID();
-
+                        
+                        //if doc exsits
                         if ($docID != null)
                         {
+                            // get doc 
                             if ($retrivedDoc->getDocumentID() == $docID)
                             {
                                 $canView = true;
@@ -48,6 +55,7 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                                     $retrivedDoc->setDocumentName($name);
                                     $retrivedDoc->updateDocument();
 
+                                    //update doc name 
                                     echo '<div class="alert alert-success alert-dismissible fade show botAlert" role="alert">
                 Document name updated.
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -56,12 +64,14 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                             }
                             else
                             {
+                                //echo error msg
                                 $viewError .= 'Document is not a part of the Same Article .<br/>';
                                 $canView = false;
                             }
                         }
                         else
                         {
+                            //echo error msg
                             $viewError .= 'Document was not found .<br/>';
                             $canView = false;
                         }
@@ -72,17 +82,21 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
 
                         $name = $_POST['nameInput'];
 
+                        //if file > 2mb 
                         if ($_FILES['fileInput']['size'] > 2087152)
                         {
+                            //echo error msg
                             $errors .= 'file larger then allowed size, 2MB max.<br/>';
                         }
                         else
                         {
+                            // if not add it 
                             $path = "docs//" . $_FILES['fileInput']['name']; //unix path uses forward slash
                             move_uploaded_file($_FILES['fileInput']['tmp_name'], $path);
                             $type = end((explode(".", $path)));
                         }
-
+                        
+                        // if there is errorrrrrr
                         if ($_FILES['fileInput']['error'] != 0)
                         {
                             
@@ -90,41 +104,48 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                             
                             if ($fileError == 1)
                             {
+                                //echo error msg
                                 $errors .= 'The uploaded file exceeds the upload limit, 2 mb max';
                             }
                             
                             if ($fileError == 2)
                             {
+                                //echo error msg
                                 $errors .= 'The uploaded file exceeds the upload limit, 2 mb max';
                             }
                             
                             if ($fileError == 3)
                             {
+                                //echo error msg
                                 $errors .= 'The uploaded file was only partially uploaded';
                             }
                             
                             if ($fileError == 4)
                             {
+                                //echo error msg
                                 $errors .= 'No file was uploaded';
                             }
                             
                             if ($fileError == 6)
                             {
+                                //echo error msg
                                 $errors .= 'Missing a temporary folder';
                             }
                             
                             if ($fileError == 7)
                             {
+                                //echo error msg
                                 $errors .= 'Failed to write file to disk.';
                             }
                             
                             if ($fileError == 8)
                             {
+                                //echo error msg
                                 $errors .= 'A PHP extension stopped the file upload.';
                             }
                         }
 
-
+                        // if there is error format it this way
                         if ($errors != '')
                         {
                             echo '<div class="alert alert-danger alert-dismissible fade show botAlert" role="alert">
@@ -134,6 +155,7 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                         }
                         else
                         {
+                            // if no error add the doc 
                             $newDoc = new artiDocument();
 
                             $newDoc->setDocumentName($name);
@@ -154,6 +176,7 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                             }
                             else
                             {
+                                //echo error msg
                                 $isEdit = false;
                                 echo '<div class="alert alert-danger alert-dismissible fade show botAlert" role="alert">
                 '.$errors.'
@@ -166,30 +189,35 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
             }
             else
             {
+                //echo error msg
                 $viewError .= 'you cannot edit others articles .<br/>';
                 $canView = false;
             }
         }
         else
         {
+            //echo error msg
             $viewError .= 'the article ID was not found. <br/>';
             $canView = false;
         }
     }
     else
     {
+        //echo error msg
         $viewError .= 'No Article ID was provided .<br/>';
         $canView = false;
     }
 }
 else
 {
+    //echo error msg
     $viewError .= 'You have to be logged in as an author to use this page.<br/>';
     $canView = false;
 }
 ?>
 
 <script type="text/javascript">
+//    function to change body size
     function chnageSize()
     {
         var height = ((window.innerHeight) - (document.getElementById('mainNavBar').offsetHeight));
@@ -298,7 +326,7 @@ else
                                  ?>/> 
                             </div>
 
-
+<!--                            // save button-->
                             <button type="submit" name="docSave" id="docSave" class="btn btn-success btn-block">
                                 Save
                             </button>

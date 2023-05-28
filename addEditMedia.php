@@ -6,42 +6,54 @@ $viewError = '';
 
 $isEdit = false;
 
+// if user or readeer
 if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
 {
+    // if articale is selected 
     if (isset($_GET['artiID']))
     {
+        //get articale 
         // check that the article is not publised b3d
         $retrivedArtcl = new Article();
         $retrivedArtcl->setArticleID($_GET['artiID']);
         $retrivedArtcl->initAwithID();
         $articleID = $retrivedArtcl->getArticleID();
 
+        // if articale exsits 
         if ($retrivedArtcl->getArticleID() != null)
         {
+            // if user is admin or author 
             if ($_SESSION['userID'] == $retrivedArtcl->getUserID() || ($_SESSION['roleType'] == 'admin'))
             {
+                // if articale is saved not published 
                 if ($retrivedArtcl->getStatus() != 'saved')
                 {
+                    //echo error msg
                     $viewError .= 'the article has been publised, you cannot edit it. <br/>';
                     $canView = false;
                 }
                 else
                 {
+                    // articale not published 
+                    // get selected media 
                     if (isset($_GET['mediaID']))
                     {
+                        //add media 
                         $retrivedMedia = new Media();
                         $retrivedMedia->setMediaID($_GET['mediaID']);
                         $retrivedMedia->initMwithID();
                         $mediID = $retrivedMedia->getMediaID();
-
+                        
+                       // if it exsits
                         if ($mediID != null)
                         {
+                            //if it belongs to the articale selected 
                             if ($retrivedMedia->getArticleID() == $articleID)
                             {
                                 $canView = true;
                                 $isEdit = true;
 
-                                // edit only allows chnaing name
+                                //  only allows changing name
                                 //save method is diifrent here 
                                 if (isset($_POST['mediaSave']))
                                 {
@@ -57,16 +69,19 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                             }
                             else
                             {
+                                //echo error msg
                                 $viewError .= 'Media is not a part of the Same Article .<br/>';
                                 $canView = false;
                             }
                         }
                         else
                         {
+                            //echo error msg
                             $viewError .= 'Media was not found .<br/>';
                             $canView = false;
                         }
                     }
+                    // if selected media 
                     else if (isset($_POST['mediaSave']))
                     {
                         // here is where the actual save of the media and the image happens
@@ -74,58 +89,70 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
 
                         $name = $_POST['nameInput'];
 
+                        // file > 2mb 
                         if ($_FILES['fileInput']['size'] > 2087152)
                         {
+                            //echo error msg
                             $errors .= 'file larger then allowed size, 2MB max.<br/>';
                         }
                         else
                         {
+                            // else add media 
                             $path = "media//" . $_FILES['fileInput']['name']; //unix path uses forward slash
                             move_uploaded_file($_FILES['fileInput']['tmp_name'], $path);
                             $type = end((explode(".", $path)));
                         }
-
+                        
+                        // if there is errors
+                        
                         if ($_FILES['fileInput']['error'] != 0)
                         {
                             $fileError .= $_FILES['fileInput']['error'];
                             
                             if ($fileError == 1)
                             {
+                                //echo error msg
                                 $errors .= 'The uploaded file exceeds the upload limit, 2 mb max';
                             }
                             
                             if ($fileError == 2)
                             {
+                                //echo error msg
                                 $errors .= 'The uploaded file exceeds the upload limit, 2 mb max';
                             }
                             
                             if ($fileError == 3)
                             {
+                                //echo error msg
                                 $errors .= 'The uploaded file was only partially uploaded';
                             }
                             
                             if ($fileError == 4)
                             {
+                                //echo error msg
                                 $errors .= 'No file was uploaded';
                             }
                             
                             if ($fileError == 6)
                             {
+                                //echo error msg
                                 $errors .= 'Missing a temporary folder';
                             }
                             
                             if ($fileError == 7)
                             {
+                                //echo error msg
                                 $errors .= 'Failed to write file to disk.';
                             }
                             
                             if ($fileError == 8)
                             {
+                                //echo error msg
                                 $errors .= 'A PHP extension stopped the file upload.';
                             }
                         }
 
-
+                        // if there is error this is the bootstrap formatting 
                         if ($errors != '')
                         {
                             echo '<div class="alert alert-danger alert-dismissible fade show botAlert" role="alert">
@@ -135,6 +162,7 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                         }
                         else
                         {
+                            // no errors, add media 
                             $newMedia = new Media();
 
                             $newMedia->setMediaName($name);
@@ -144,6 +172,7 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
 
                             $mediaID = $newMedia->saveMedia();
 
+                            // media id not belong 
                             if ($mediaID != false)
                             {
                                 // go to edit mode - removes image link allowes only name chnage
@@ -156,6 +185,7 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
                             else
                             {
                                 $isEdit = false;
+                                //echo error msg
                                 echo '<div class="alert alert-danger alert-dismissible fade show botAlert" role="alert">
                 '.$errors.'
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -167,30 +197,35 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
             }
             else
             {
+                //echo error msg
                 $viewError .= 'you cannot edit others articles .<br/>';
                 $canView = false;
             }
         }
         else
         {
+            //echo error msg
             $viewError .= 'the article ID was not found. <br/>';
             $canView = false;
         }
     }
     else
     {
+        //echo error msg
         $viewError .= 'No Article ID was provided .<br/>';
         $canView = false;
     }
 }
 else
 {
+    //echo error msg
     $viewError .= 'You have to be logged in as an author to use this page.<br/>';
     $canView = false;
 }
 ?>
 
 <script type="text/javascript">
+    //function to change body size 
     function chnageSize()
     {
         var height = ((window.innerHeight) - (document.getElementById('mainNavBar').offsetHeight));
@@ -234,6 +269,7 @@ else
     echo 'hidden';
 }
 ?>>
+    <!--error formatting banner--> 
     <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-xl-10">
@@ -264,6 +300,7 @@ else
     echo 'hidden';
 }
 ?>>
+    <!--body formatting card-->
     <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-xl-9">
@@ -310,7 +347,7 @@ else
                                 ?>/> 
                             </div>
 
-
+                            <!--save  button format-->
                             <button type="submit" name="mediaSave" id="mediaSave" value="mediaSave" class="btn btn-success btn-block">
                                 Save
                             </button>

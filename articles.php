@@ -6,10 +6,13 @@ $viewError = '';
 
 $data = null;
 
+// if user or reader 
 if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
 {
+    // get user id
     if (isset($_GET['userID']))
     {
+        // if user is admin 
         if ($_GET['userID'] == $_SESSION['userID'] || $_SESSION['roleType'] == 'admin')
         {
             $canView = true;
@@ -18,8 +21,10 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
             $article->setUserID($_GET['userID']);
             $data = $article->getAllArtis();
 
+             // if filter option selected 
             if (isset($_POST['filterArticle']))
             {
+                // sort articales to dates 
                 $dateSatrtInput = $_POST['beginDateInput'];
                 $dateEndInput = $_POST['endDateInput'];
 
@@ -28,18 +33,23 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
         }
         else
         {
+            //echo error msg
             $viewError .= 'you cannot edit other users articles. <br/>';
             $canView = false;
         }
     }
     else
     {
+        // if user is admin 
         if ($_SESSION['roleType'] == 'admin')
         {
+            
+            //get all articales 
             $article = new Article();
             $article->setUserID(null);
             $data = $article->getAllArtis();
 
+            // if filter is selected 
             if (isset($_POST['filterArticle']))
             {
                 $dateSatrtInput = $_POST['beginDateInput'];
@@ -52,6 +62,7 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
         }
         else
         {
+            //echo error msg
             $viewError .= 'you cannot edit other users articles. <br/>';
             $canView = false;
         }
@@ -59,34 +70,42 @@ if (isset($_SESSION['userID']) && $_SESSION['roleType'] != 'reader')
 }
 else
 {
+    //echo error msg
     $viewError .= 'You have to be logged in as an author to use this page.<br/>';
     $canView = false;
 }
-
+// if home articale is selected 
 if (isset($_POST['homeArticle']))
 {
+    // remove from category and set to home 
     $deleteArticle = new Article();
     $deleteArticle->setArticleID($_POST['homeArticle']);
     $deleteArticle->initAwithID();
     $deleteArticle->setHome();
 }
 
+// if delete button is clicked 
 if (isset($_POST['deleteArticle']))
 {
+    // deleteee
     $deleteArticle = new Article();
     $deleteArticle->setArticleID($_POST['deleteArticle']);
     $deleteArticle->initAwithID();
+    // if admin 
     if ($_SESSION['roleType'] == 'admin')
     {
+        // set admin deleted 
         $deleteArticle->setAdminDeleted();
     }
     else
     {
+        //user deleted 
         $deleteArticle->setDeleted();
     }
 }
 ?>
 
+<!--script for buttons -->
 <script type="text/javascript">
     function chnageSize()
     {
@@ -96,17 +115,17 @@ if (isset($_POST['deleteArticle']))
 
     var isDelete = false;
     var isHome = false;
-
+// delete 
     function setDelete()
     {
         isDelete = true;
     }
-
+// set home button 
     function setHome()
     {
         isHome = true;
     }
-
+// check delete 
     function checkForm()
     {
         if (isDelete)
@@ -120,7 +139,7 @@ if (isset($_POST['deleteArticle']))
             return false;
         }
     }
-
+//print button
     const handlePrint = () => {
         var actContents = document.body.innerHTML;
         document.body.innerHTML = actContents;
@@ -140,6 +159,7 @@ else
 {
     echo 'hidden';
 }
+// error banner formatting 
 ?>>
     <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -200,6 +220,7 @@ else
                     <a type="button" class="btn btn-primary btn-sm" href="addEditArticle.php">Compose a New Article</a>
 
                     <?php
+                    // if admin 
                     if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
                     {
                         if (!(isset($_GET['userID'])))
@@ -209,6 +230,7 @@ else
                         }
                         else
                         {
+                            // get all articles 
                             echo '<a type="button" class="btn btn-success btn-sm" href="articles.php">All Articles</a>';
                         }
                     }
@@ -229,6 +251,7 @@ else
                         <tbody>
 
                             <?php
+                            // loop thro all and get status 
                             for ($i = 0; $i < count($data); $i++)
                             {
                                 $newArtcl = new Article();

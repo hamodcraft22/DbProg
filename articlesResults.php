@@ -6,6 +6,7 @@ $viewError = '';
 
 $data = $_SESSION['serachOut'];
 
+//if there is data 
 if (count($data)<1)
 {
     $canView = false;
@@ -35,6 +36,7 @@ else
 {
     echo 'hidden';
 }
+//error banner formatting 
 ?>>
     <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -85,7 +87,7 @@ else
                             </tr>
                         </thead>
                         <tbody>
-
+                            <!--loop to get artical results-->
                             <?php
                             for ($i = 0; $i < count($data); $i++)
                             {
