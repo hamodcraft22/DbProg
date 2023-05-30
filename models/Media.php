@@ -67,6 +67,7 @@ class Media
         $this->articleID = $articleID;
     }
     
+    // constructer
     public function initMedia($mediaID, $mediaName, $mediaPath, $mediaType, $articleID)
     {
         $this->mediaID = $mediaID;
@@ -76,6 +77,7 @@ class Media
         $this->articleID = $articleID;
     }
     
+    // init media with an id 
     public function initMwithID()
     {
         try {
@@ -88,6 +90,7 @@ class Media
         }
     }
     
+    // save media to db
     public function saveMedia()
     {
         try {
@@ -101,6 +104,7 @@ class Media
         }
     }
     
+    // update media in db 
     public function updateMedia()
     {
         try {
@@ -114,6 +118,7 @@ class Media
         }
     }
     
+    // delete media from db
     public function deleteMedia()
     {
         try {
@@ -128,6 +133,7 @@ class Media
         }
     }
     
+    // retrive all the medais fro an article
     function getAllMedia()
     {
         try {
@@ -147,6 +153,7 @@ class Media
         }
     }
     
+    // get a video for a spisifc article (sed for home video)
     function getVideo()
     {
         try {
@@ -161,6 +168,7 @@ class Media
         }
     }
     
+    //get a photo for a an article (used for home when video is not found)
     function getPhoto()
     {
         try {

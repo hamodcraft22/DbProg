@@ -3,7 +3,7 @@
 class Article
 {
 
-    //put your code here
+    //attributes
     private $articleID;
     private $header;
     private $title;
@@ -33,6 +33,7 @@ class Article
         $this->userID = null;
     }
 
+    //getters and setters
     public function getArticleID()
     {
         return $this->articleID;
@@ -153,6 +154,7 @@ class Article
         $this->userID = $userID;
     }
 
+    // function to retrive status as name not id
     function getStatus()
     {
         try 
@@ -165,7 +167,8 @@ class Article
             echo 'Exception: ' . $e;
         }
     }
-
+    
+    // function to retrive category as name not id
     function getCategory()
     {
 
@@ -180,6 +183,7 @@ class Article
         }
     }
 
+    // function to retrive user full name as name not id
     function getUserFullName()
     {
         try 
@@ -192,7 +196,8 @@ class Article
             echo 'Exception: ' . $e;
         }
     }
-
+    
+    // constructer
     public function initArticle($articleID, $header, $title, $body, $date, $thumbnail, $rating, $rates, $views, $statusID, $categoryID, $userID)
     {
         $this->articleID = $articleID;
@@ -209,6 +214,7 @@ class Article
         $this->userID = $userID;
     }
 
+    //get article with id
     public function initAwithID()
     {
         try {
@@ -221,6 +227,7 @@ class Article
         }
     }
 
+    // save article to db
     public function saveArti()
     {
         try {
@@ -234,6 +241,7 @@ class Article
         }
     }
 
+    // update article in db
     public function updateArti()
     {
         try {
@@ -247,6 +255,7 @@ class Article
         }
     }
 
+    // delete article from db - actual delete
     public function deleteArti()
     {
         try {
@@ -260,12 +269,14 @@ class Article
         }
     }
 
+    // retrives all the articles
     function getAllArtis()
     {
         try {
             $db = Database::getInstance();
             $q = 'select * from dbProj_article ';
 
+            // if there is a user id set, get the articles for that user id
             if ($this->getUserID() != null)
             {
                 $q .= 'where userID =' . $this->getUserID();
@@ -281,6 +292,7 @@ class Article
         }
     }
     
+    //function to retrive articles by date (filter function for admin view)
     public function getAllbyDate($dateStart, $dateEnd)
     {
         try {
@@ -302,6 +314,7 @@ class Article
         }
     }
     
+    // retrive all of the published articles (with pagenation)
     function getPubArtis($start, $end, $catID)
     {
         try {
@@ -328,6 +341,7 @@ class Article
         }
     }
     
+    // function to get the home article (big article for the home with video)
     function getHomeArti()
     {
         try {
@@ -342,6 +356,7 @@ class Article
         }
     }
 
+    // retrive all the category names
     function getAllCategories()
     {
         try {
@@ -355,6 +370,7 @@ class Article
         }
     }
 
+    // call publish procd when article is published
     public function setPubDate()
     {
         try {
@@ -368,6 +384,7 @@ class Article
         }
     }
 
+    // function to add likes (increase rate)
     public function increaseRate()
     {
         try {
@@ -381,6 +398,7 @@ class Article
         }
     }
 
+    // function to remove like 
     public function decreaseRate()
     {
         try {
@@ -394,6 +412,7 @@ class Article
         }
     }
     
+    // function to increase the views of the article
     public function increaseViews()
     {
         try {
@@ -407,6 +426,7 @@ class Article
         }
     }
     
+    // function to keep the article as the main home article (call procd)
     public function setHome()
     {
         try {
@@ -420,6 +440,7 @@ class Article
         }
     }
     
+    // pricuder call to set the article as deleted (author delete)
     public function setDeleted()
     {
         try {
@@ -433,7 +454,7 @@ class Article
         }
     }
     
-    
+    // pricuder call to set the article as deleted (admin delete)
     public function setAdminDeleted()
     {
         try {

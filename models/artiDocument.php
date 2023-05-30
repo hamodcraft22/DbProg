@@ -67,6 +67,7 @@ class artiDocument
         $this->articleID = $articleID;
     }
     
+    // constructer 
     public function initDocument($documentID, $documentName, $documentPath, $documentType, $articleID)
     {
         $this->documentID = $documentID;
@@ -76,6 +77,7 @@ class artiDocument
         $this->articleID = $articleID;
     }
     
+    // get document by id
     public function initDwithID()
     {
         try {
@@ -88,6 +90,7 @@ class artiDocument
         }
     }
     
+    // save document to database (path)
     public function saveDocument()
     {
         try {
@@ -101,6 +104,7 @@ class artiDocument
         }
     }
     
+    // update document to database - name only 
     public function updateDocument()
     {
         try {
@@ -114,6 +118,7 @@ class artiDocument
         }
     }
     
+    // delete document from database 
     public function deleteDoc()
     {
         try {
@@ -128,6 +133,7 @@ class artiDocument
         }
     }
     
+    // get a list of all documents dor an article 
     function getAllDocument()
     {
         try {

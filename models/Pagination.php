@@ -1,6 +1,7 @@
 
 <?php
 
+// custome pageination 
 class Pagination
 {
 
@@ -78,7 +79,7 @@ class Pagination
     }
 
     
-    // determines the total number of records in table
+    // determines the total number of records in table (count of passed data)
     public function totalRecords($data)
     {
         $this->setTotal_records(count($data));
@@ -96,7 +97,7 @@ class Pagination
         }
     }
 
-    // determine what the current page is also, it returns the current page
+    // find out the starting point for each page 
     public function startIndex()
     {
         $startingIndex = (($this->where)-1) * ($this->limit);

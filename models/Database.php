@@ -32,6 +32,8 @@ class Database {
         mysqli_close($this->dblink);
     }
 
+    
+    // function to run a script
     function querySQL($sql) {
         if ($sql != null || $sql != '') {
             if(!mysqli_query($this->dblink, $sql))
@@ -40,6 +42,7 @@ class Database {
                 return FALSE; 
                 
             }
+            //upon a correct insert, retrive id  
             else { return $this->dblink->insert_id;}
         }
         else 

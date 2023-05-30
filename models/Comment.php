@@ -93,7 +93,8 @@ class Comment
     {
         $this->articleID = $articleID;
     }
-
+    
+    // function to retrive user full name as name not id
     function getUserFullName()
     {
         try {
@@ -106,6 +107,7 @@ class Comment
         }
     }
 
+    // constructer
     public function initComment($commentID, $commentTitle, $commentBody, $commentDate, $statusID, $userID, $articleID)
     {
         $this->commentID = $commentID;
@@ -117,6 +119,7 @@ class Comment
         $this->articleID = $articleID;
     }
 
+    // get comment with id
     public function initCwithID()
     {
         try {
@@ -129,6 +132,7 @@ class Comment
         }
     }
     
+    // save comment to db
     public function saveCom()
     {
         try {
@@ -149,6 +153,7 @@ class Comment
         }
     }
 
+    // delete comment 
     public function deleteCom()
     {
         try {
@@ -160,6 +165,7 @@ class Comment
         }
     }
     
+    // admin delete comment
     public function adminDeleteCom()
     {
         try {
@@ -171,6 +177,7 @@ class Comment
         }
     }
     
+    // retrive all the comments for an article 
     function getAllComms()
     {
         try {

@@ -77,6 +77,7 @@ class User {
 
     //custome mthods start
 
+    // get the role name 
     function getRole() {
         $db = Database::getInstance();
         $q = 'select roleName from dbProj_role where roleID = ' . $this->getRoleID() . ';';
@@ -84,6 +85,7 @@ class User {
         return $data->roleName;
     }
 
+    // constructer
     function initUser($userID, $username, $fullname, $password, $email, $phone, $roleID) {
         $this->userID = $userID;
         $this->username = $username;
@@ -94,6 +96,7 @@ class User {
         $this->roleID = $roleID;
     }
 
+    // get user by id
     function initWithID() {
         try {
             $db = Database::getInstance();
@@ -105,6 +108,7 @@ class User {
         }
     }
 
+    // get user by username
     function initWithUsername() {
         try {
             $db = Database::getInstance();
@@ -133,7 +137,8 @@ class User {
         }
     }
 
-    // add encrypt password methods
+    // register use and encrypt password methods - php password hashing 
+    // very secure as a password thats hashed cannot be reverted + even if the password was hashed again it dosent give the same hashed value
     function register() {
         try {
             $db = Database::getInstance();
@@ -148,6 +153,7 @@ class User {
         }
     }
 
+    // delete user 
     function deRegister() {
 
         try {
@@ -161,6 +167,7 @@ class User {
         }
     }
 
+    // update user information 
     function updateUser() {
         try {
             $db = Database::getInstance();
@@ -175,6 +182,7 @@ class User {
         }
     }
     
+    // update user with password chnage - not implemented (future updates)
     function updateUserWpass() {
         try {
             $db = Database::getInstance();
@@ -189,6 +197,7 @@ class User {
         }
     }
 
+    // login function - add user paramters to session variable
     function login() {
         try {
             $db = Database::getInstance();
@@ -218,6 +227,7 @@ class User {
         }
     }
 
+    // logout function
     function logout() {
         $_SESSION['userID'] = '';
         $_SESSION['username'] = '';
@@ -225,6 +235,7 @@ class User {
         session_destroy();
     }
     
+    // function to retrive all users (parameters for new updates)
     function getAllUsers($option)
     {
         try {

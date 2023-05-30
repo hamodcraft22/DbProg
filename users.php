@@ -6,7 +6,7 @@ if (isset($_SESSION['roleType']) && $_SESSION['roleType'] == 'admin')
 {
     $user = new User();
     $data = $user->getAllUsers(null);
-    // add a form to filter by type
+    // add a form to filter by type - for updaates 
 }
 
 if (isset($_POST['deleteUser']))

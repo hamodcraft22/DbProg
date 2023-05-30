@@ -3,6 +3,7 @@
 class Search
 {
 
+    // function to searchg by title
     public function byTitleDesc($text)
     {
         try {
@@ -16,6 +17,7 @@ class Search
         }
     }
 
+    // function to search by author
     public function byAuthor($text)
     {
         try {
@@ -33,6 +35,7 @@ class Search
         }
     }
 
+    // function to serach by date 
     public function byDate($date)
     {
         try {
@@ -46,6 +49,7 @@ class Search
         }
     }
 
+    // function to serach by date range
     public function byDateRange($dateStart, $dateEnd)
     {
         try {
@@ -60,6 +64,7 @@ class Search
         }
     }
     
+    // function to search by the most read artilces (limited to the top 5)
     public function byMostRead()
     {
         try {
@@ -74,6 +79,7 @@ class Search
         }
     }
 
+    // advance search functions
     function handleAll($text)
     {
 
