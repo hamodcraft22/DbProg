@@ -288,7 +288,7 @@ else
                                                 <a type="button" class="btn btn-success" href="addEditArticle.php?artiID=' . $newArtcl->getArticleID() . '"><i class="far fa-edit"></i></a>';
                                 }
 
-                                if ($newArtcl->getStatus() == 'published')
+                                if ($newArtcl->getStatus() == 'published' && $_SESSION['roleType'] == 'admin')
                                 {
                                     echo '
                                                 <button type="submit" class="btn btn-warning" name="homeArticle" onclick="setHome();" value="' . $newArtcl->getArticleID() . '"><i class="fa-solid fa-house"></i></button>';
